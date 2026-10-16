@@ -1,0 +1,23 @@
+{
+  "name": "farmdirect-cloud",
+  "version": "1.0.0",
+  "description": "FarmDirect Cloud — Cloud-Based Smart Marketplace for Local Farmers and Direct Consumers",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "functions"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "npm run dev --workspace=client",
+    "dev:server": "npm run dev --workspace=server",
+    "build": "npm run build --workspace=server && npm run build --workspace=client",
+    "test": "npm run test --workspace=server && npm run test --workspace=client",
+    "seed": "npm run seed --workspace=server",
+    "lint": "npm run lint --workspace=client && npm run lint --workspace=server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
