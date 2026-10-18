@@ -45,7 +45,8 @@ router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, r
     // Group by farmer (each farmer gets a separate order)
     const farmerGroups = new Map<string, typeof cart.items>();
     for (const item of cart.items) {
-      const fid = item.farmerIdSnapshot.toString();
+      const rawFid = item.farmerIdSnapshot as any;
+      const fid = (rawFid?._id || rawFid)?.toString() || '';
       if (!farmerGroups.has(fid)) farmerGroups.set(fid, []);
       farmerGroups.get(fid)!.push(item);
     }

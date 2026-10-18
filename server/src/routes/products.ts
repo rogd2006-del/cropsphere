@@ -38,7 +38,7 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response, next) => {
     const limitNum = Math.min(50, Math.max(1, parseInt(limit)));
     const skip = (pageNum - 1) * limitNum;
 
-    const sortOptions: Record<string, unknown> = {};
+    const sortOptions: Record<string, 1 | -1> = {};
     const validSorts = ['price', 'createdAt', 'rating', 'soldCount', 'name'];
     if (validSorts.includes(sort)) {
       sortOptions[sort] = order === 'asc' ? 1 : -1;
@@ -57,7 +57,13 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response, next) => {
     ]);
 
     // Enrich with farmer profile
-    const farmerIds = [...new Set(products.map(p => p.farmerId?.toString()))];
+    const getFarmerIdStr = (f: any): string => {
+      if (!f) return '';
+      if (typeof f === 'object' && f._id) return f._id.toString();
+      return f.toString();
+    };
+
+    const farmerIds = [...new Set(products.map(p => getFarmerIdStr(p.farmerId)).filter(Boolean))];
     const farmerProfiles = await FarmerProfile.find({ userId: { $in: farmerIds } })
       .select('userId farmName location.city location.state rating')
       .lean();
@@ -65,7 +71,7 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response, next) => {
     const profileMap = new Map(farmerProfiles.map(fp => [fp.userId.toString(), fp]));
     const enriched = products.map(p => ({
       ...p,
-      farmerProfile: profileMap.get(p.farmerId?.toString() || ''),
+      farmerProfile: profileMap.get(getFarmerIdStr(p.farmerId)),
     }));
 
     res.json({
@@ -118,7 +124,8 @@ router.get('/:id', optionalAuth, async (req: AuthRequest, res: Response, next) =
     // Increment view count
     await Product.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } });
     
-    const farmerProfile = await FarmerProfile.findOne({ userId: product.farmerId }).lean();
+    const farmerUserId = (product.farmerId as any)?._id || product.farmerId;
+    const farmerProfile = await FarmerProfile.findOne({ userId: farmerUserId }).lean();
     
     res.json({ success: true, data: { ...product, farmerProfile } });
   } catch (err) {

@@ -93,6 +93,7 @@ async function uploadToLocal(buffer: Buffer, key: string, ext: string): Promise<
 
 async function uploadToAzure(buffer: Buffer, key: string, contentType: string): Promise<UploadResult> {
   try {
+    // @ts-ignore
     const { BlobServiceClient } = await import('@azure/storage-blob');
     const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
     const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME || 'farmdirect-images';
@@ -117,6 +118,7 @@ async function uploadToAzure(buffer: Buffer, key: string, contentType: string): 
 
 async function uploadToS3(buffer: Buffer, key: string, contentType: string): Promise<UploadResult> {
   try {
+    // @ts-ignore
     const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3');
     const bucket = process.env.AWS_S3_BUCKET;
     const region = process.env.AWS_REGION || 'us-east-1';

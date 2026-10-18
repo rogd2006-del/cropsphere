@@ -50,6 +50,7 @@ router.post('/items', authenticate, authorize('CONSUMER'), async (req: AuthReque
     const existingIdx = cart.items.findIndex(i => i.productId.toString() === productId);
     const farmer = product.farmerId as any;
 
+    const farmerObjId = (farmer?._id || product.farmerId);
     if (existingIdx >= 0) {
       cart.items[existingIdx].quantity = quantity;
       cart.items[existingIdx].priceSnapshot = product.price;
@@ -60,9 +61,9 @@ router.post('/items', authenticate, authorize('CONSUMER'), async (req: AuthReque
         priceSnapshot: product.price,
         nameSnapshot: product.name,
         unitSnapshot: product.unit,
-        imageSnapshot: product.images[0],
-        farmerIdSnapshot: product.farmerId as any,
-        farmerNameSnapshot: farmer?.name || 'Unknown Farmer',
+        imageSnapshot: product.images?.[0] || '',
+        farmerIdSnapshot: farmerObjId as any,
+        farmerNameSnapshot: farmer?.name || 'Local Farmer',
       });
     }
 
