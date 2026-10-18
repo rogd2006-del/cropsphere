@@ -1,538 +1,447 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('learn');
-  const [streak, setStreak] = useState(5);
-  const [gems, setGems] = useState(480);
-  const [hearts, setHearts] = useState(5);
-  const [activeLesson, setActiveLesson] = useState(null);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [feedback, setFeedback] = useState(null); // 'correct' | 'incorrect' | null
-  const [progressIndex, setProgressIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState('marketplace'); // 'marketplace' | 'farmers' | 'orders'
+  const [products, setProducts] = useState([]);
+  const [farmers, setFarmers] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [cart, setCart] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckoutSuccess, setIsCheckoutSuccess] = useState(false);
+  const [user, setUser] = useState({ name: 'Alice Wong', email: 'alice@consumer.dev', role: 'CONSUMER' });
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
-  // Gamified lessons for CropSphere / Smart Agriculture & Cloud
-  const lessons = {
-    unit1: [
-      {
-        id: 1,
-        title: 'Crop Rotation 101',
-        icon: '🌱',
-        state: 'completed', // completed, active, locked
-        xp: 15,
-        questions: [
-          {
-            prompt: 'Which crop family adds nitrogen back into the soil?',
-            options: ['Legumes (Beans & Peas)', 'Cereals (Corn & Wheat)', 'Nightshades (Tomatoes)', 'Brassicas (Cabbage)'],
-            correct: 0,
-            tip: 'Legumes form symbiotic relationships with rhizobia bacteria to fix atmospheric nitrogen!'
-          },
-          {
-            prompt: 'What is the primary benefit of rotating crops each season?',
-            options: ['Prevents soil nutrient depletion', 'Makes watering unnecessary', 'Guarantees no insects will exist', 'Speeds up sun exposure'],
-            correct: 0,
-            tip: 'Different crops absorb different nutrients, preventing soil exhaustion.'
-          }
-        ]
-      },
-      {
-        id: 2,
-        title: 'Smart Soil Sensors',
-        icon: '📡',
-        state: 'active',
-        xp: 20,
-        questions: [
-          {
-            prompt: 'Which metric is most crucial for automated IoT drip irrigation?',
-            options: ['Volumetric Soil Moisture Content', 'Leaf Color Pigmentation', 'Wind Direction', 'Seed Shell Thickness'],
-            correct: 0,
-            tip: 'Soil moisture sensors report exact volumetric water percentage to prevent overwatering.'
-          },
-          {
-            prompt: 'What wireless protocol is best for long-range, low-power farm sensors?',
-            options: ['LoRaWAN', 'High-speed Bluetooth 5.0', '5G Ultra-Wideband only', 'HDMI over Air'],
-            correct: 0,
-            tip: 'LoRaWAN can transmit sensor telemetry across kilometers with multi-year battery life.'
-          }
-        ]
-      },
-      {
-        id: 3,
-        title: 'Cloud Marketplace Pricing',
-        icon: '💰',
-        state: 'locked',
-        xp: 25,
-        questions: [
-          {
-            prompt: 'How does FarmDirect Cloud help local farmers avoid middlemen fees?',
-            options: ['By providing direct farm-to-consumer escrow orders', 'By fixing prices nationally', 'By eliminating delivery shipping', 'By banning retail buyers'],
-            correct: 0,
-            tip: 'Direct cloud contracts connect buyers to harvest batches transparently.'
-          }
-        ]
-      },
-      {
-        id: 4,
-        title: 'Weather & Drone AI',
-        icon: '🛸',
-        state: 'locked',
-        xp: 30,
-        questions: []
-      },
-      {
-        id: 5,
-        title: 'Unit 1 Mastery Trophy',
-        icon: '🏆',
-        state: 'locked',
-        xp: 50,
-        questions: []
+  // Fallback demo data in case backend server is paused or offline
+  const fallbackProducts = [
+    { _id: '1', name: 'Heirloom Tomatoes', category: 'vegetables', price: 4.99, unit: 'lb', farmName: "Mary's Organic Garden", city: 'Austin, TX', organic: true, emoji: '🍅', description: 'Fresh, vine-ripened organic heirloom tomatoes grown sustainably.' },
+    { _id: '2', name: 'Fresh Chèvre Goat Cheese', category: 'dairy', price: 9.99, unit: 'piece', farmName: 'Green Meadows Dairy', city: 'Burlington, VT', organic: false, emoji: '🧀', description: 'Artisan soft, tangy fresh goat cheese from pasture-raised Nigerian Dwarf goats.' },
+    { _id: '3', name: 'Raw Wildflower Honey', category: 'honey', price: 12.99, unit: 'jar', farmName: 'Petrov Honey & Herbs', city: 'Asheville, NC', organic: true, emoji: '🍯', description: 'Unfiltered raw honey harvested from Blue Ridge mountain wildflowers.' },
+    { _id: '4', name: 'Honeycrisp Apples', category: 'fruits', price: 3.99, unit: 'lb', farmName: 'Johnson Family Orchards', city: 'Yakima, WA', organic: false, emoji: '🍎', description: 'Crisp, sweet-tart apples tree-ripened in Washington soil.' },
+    { _id: '5', name: 'Baby Spinach', category: 'vegetables', price: 3.49, unit: 'bunch', farmName: "Mary's Organic Garden", city: 'Austin, TX', organic: true, emoji: '🥬', description: 'Tender baby spinach leaves harvested twice weekly.' },
+    { _id: '6', name: 'Emmer Farro Heritage Grain', category: 'grains', price: 7.49, unit: 'kg', farmName: 'Mbeki Grain Co.', city: 'Wichita, KS', organic: false, emoji: '🌾', description: 'Nutty ancient whole grain rich in fiber and plant-based protein.' },
+    { _id: '7', name: 'Ataulfo Mangoes', category: 'fruits', price: 2.99, unit: 'piece', farmName: 'Sunrise Tropical Farm', city: 'Miami, FL', organic: false, emoji: '🥭', description: 'Sweet, fiberless tropical champagne mangoes at peak ripeness.' },
+    { _id: '8', name: 'Thai Fresh Basil', category: 'herbs', price: 1.99, unit: 'bunch', farmName: 'Chen Family Farm', city: 'Portland, OR', organic: false, emoji: '🌿', description: 'Aromatic authentic Thai basil essential for Southeast Asian culinary recipes.' }
+  ];
+
+  const fallbackFarmers = [
+    { id: 1, name: "Mary's Organic Garden", owner: 'Mary Okonkwo', location: 'Austin, TX', bio: 'Specializing in heirloom varieties and regeneratively farmed greens.', badge: 'USDA Organic' },
+    { id: 2, name: 'Green Meadows Dairy', owner: 'Rachel Green', location: 'Burlington, VT', bio: 'Small-batch artisan dairy producing award-winning raw milk cheeses.', badge: 'Animal Welfare Approved' },
+    { id: 3, name: 'Chen Family Farm', owner: 'James Chen', location: 'Portland, OR', bio: 'Specialty Asian vegetables and aromatic herbs for over 20 years.', badge: 'Naturally Grown' },
+    { id: 4, name: 'Petrov Honey & Herbs', owner: 'Elena Petrov', location: 'Asheville, NC', bio: 'Blue Ridge Mountain beekeepers producing raw, unpasteurized honey.', badge: 'Pure Raw' }
+  ];
+
+  // Fetch live products & farmers from the Express backend
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.data && data.data.length > 0) {
+          setProducts(data.data);
+        } else {
+          setProducts(fallbackProducts);
+        }
+      })
+      .catch(() => {
+        setProducts(fallbackProducts);
+      });
+
+    fetch('http://localhost:5000/api/farmers')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.data && data.data.length > 0) {
+          setFarmers(data.data);
+        } else {
+          setFarmers(fallbackFarmers);
+        }
+      })
+      .catch(() => {
+        setFarmers(fallbackFarmers);
+      });
+  }, []);
+
+  // Filter products by category & search query
+  const filteredProducts = products.filter(p => {
+    const matchesCat = selectedCategory === 'ALL' || (p.category && p.category.toLowerCase() === selectedCategory.toLowerCase());
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          (p.city && p.city.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCat && matchesSearch;
+  });
+
+  const addToCart = (product) => {
+    setCart(prev => {
+      const existing = prev.find(item => item._id === product._id);
+      if (existing) {
+        return prev.map(item => item._id === product._id ? { ...item, qty: item.qty + 1 } : item);
       }
-    ]
+      return [...prev, { ...product, qty: 1 }];
+    });
   };
 
-  const startLesson = (lesson) => {
-    if (lesson.state === 'locked') return;
-    setActiveLesson(lesson);
-    setProgressIndex(0);
-    setSelectedOption(null);
-    setFeedback(null);
+  const removeFromCart = (id) => {
+    setCart(prev => prev.filter(item => item._id !== id));
   };
 
-  const handleCheck = () => {
-    if (selectedOption === null) return;
-    const currentQ = activeLesson.questions[progressIndex];
-    if (selectedOption === currentQ.correct) {
-      setFeedback('correct');
-      setGems(g => g + 5);
-    } else {
-      setFeedback('incorrect');
-      setHearts(h => Math.max(0, h - 1));
-    }
-  };
+  const cartTotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-  const handleNext = () => {
-    if (feedback === 'correct') {
-      if (progressIndex + 1 < activeLesson.questions.length) {
-        setProgressIndex(p => p + 1);
-        setSelectedOption(null);
-        setFeedback(null);
-      } else {
-        // Complete lesson
-        setActiveLesson(null);
-        setStreak(s => s + 1);
-        alert('🎉 Lesson completed! +20 XP and Streak updated!');
-      }
-    } else {
-      setSelectedOption(null);
-      setFeedback(null);
-    }
+  const handleCheckout = () => {
+    setIsCheckoutSuccess(true);
+    setCart([]);
+    setTimeout(() => {
+      setIsCheckoutSuccess(false);
+      setIsCartOpen(false);
+    }, 2500);
   };
 
   return (
-    <div className="app-container">
-      {/* Duolingo Left Navigation Bar */}
-      <aside className="sidebar">
-        <div className="logo-area" onClick={() => setActiveTab('learn')}>
-          <span style={{ fontSize: '32px' }}>🦉</span>
-          <span className="logo-title">croplingo</span>
-        </div>
-
-        <nav className="nav-links">
-          <button 
-            className={`nav-item ${activeTab === 'learn' ? 'active' : ''}`}
-            onClick={() => setActiveTab('learn')}
-          >
-            <span className="nav-icon">🏡</span>
-            <span>LEARN</span>
-          </button>
-
-          <button 
-            className={`nav-item ${activeTab === 'leaderboard' ? 'active' : ''}`}
-            onClick={() => setActiveTab('leaderboard')}
-          >
-            <span className="nav-icon">🏆</span>
-            <span>LEADERBOARDS</span>
-          </button>
-
-          <button 
-            className={`nav-item ${activeTab === 'quests' ? 'active' : ''}`}
-            onClick={() => setActiveTab('quests')}
-          >
-            <span className="nav-icon">🎯</span>
-            <span>QUESTS</span>
-          </button>
-
-          <button 
-            className={`nav-item ${activeTab === 'shop' ? 'active' : ''}`}
-            onClick={() => setActiveTab('shop')}
-          >
-            <span className="nav-icon">🛒</span>
-            <span>MARKET</span>
-          </button>
-
-          <button 
-            className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => setActiveTab('profile')}
-          >
-            <span className="nav-icon">👤</span>
-            <span>PROFILE</span>
-          </button>
-        </nav>
-      </aside>
-
-      {/* Main Learning Map Area */}
-      <main className="main-viewport">
-        <div className="content-center">
-          {/* Top stats bar for mobile & desktop */}
-          <div className="stats-bar" style={{ width: '100%', justifyContent: 'space-between', marginBottom: '24px' }}>
-            <div className="stat-chip streak" title="Daily Farming Streak">
-              <span>🔥</span>
-              <span>{streak} DAYS</span>
-            </div>
-            <div className="stat-chip gems" title="AgriGems">
-              <span>💎</span>
-              <span>{gems}</span>
-            </div>
-            <div className="stat-chip hearts" title="Remaining Energy">
-              <span>❤️</span>
-              <span>{hearts}</span>
-            </div>
+    <div>
+      {/* Navigation Header */}
+      <header className="navbar">
+        <div className="nav-container">
+          <div className="brand" onClick={() => setActiveTab('marketplace')}>
+            <span className="brand-icon">🌱</span>
+            <span className="brand-name">FarmDirect</span>
+            <span className="brand-badge">Cloud</span>
           </div>
 
-          {activeTab === 'learn' && (
-            <>
-              {/* Unit 1 Header Banner */}
-              <div className="unit-banner">
-                <div>
-                  <h2>Section 1: Smart Agriculture Basics</h2>
-                  <p>Learn crop cycles, smart irrigation, and cloud telemetry</p>
-                </div>
-                <button className="duo-btn duo-btn-white" style={{ padding: '10px 16px', fontSize: '14px' }}>
-                  📖 GUIDEBOOK
+          <nav className="nav-links">
+            <button 
+              className={`nav-btn ${activeTab === 'marketplace' ? 'active' : ''}`}
+              onClick={() => setActiveTab('marketplace')}
+            >
+              Marketplace
+            </button>
+            <button 
+              className={`nav-btn ${activeTab === 'farmers' ? 'active' : ''}`}
+              onClick={() => setActiveTab('farmers')}
+            >
+              Local Producers
+            </button>
+            <button 
+              className={`nav-btn ${activeTab === 'cloud' ? 'active' : ''}`}
+              onClick={() => setActiveTab('cloud')}
+            >
+              Cloud & Telemetry
+            </button>
+          </nav>
+
+          <div className="nav-actions">
+            <button className="cart-btn" onClick={() => setIsCartOpen(true)}>
+              <span>🛒 Cart</span>
+              {cart.length > 0 && <span className="cart-badge">{cart.reduce((a, b) => a + b.qty, 0)}</span>}
+            </button>
+            
+            <button className="btn-outline" onClick={() => setIsAuthOpen(true)}>
+              👤 {user ? user.name : 'Sign In'}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      {activeTab === 'marketplace' && (
+        <section className="hero">
+          <div className="hero-inner">
+            <div>
+              <h1 className="hero-title">
+                Fresh from local farms, <span>delivered direct</span> to your door.
+              </h1>
+              <p className="hero-desc">
+                Support independent family growers. Cut out supermarket middlemen, reduce carbon footprints, and enjoy peak-fresh harvests powered by cloud transparency.
+              </p>
+              <div style={{ display: 'flex', gap: '16px' }}>
+                <button className="btn-primary" onClick={() => {
+                  const el = document.getElementById('browse-section');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}>
+                  Explore Fresh Harvests
+                </button>
+                <button className="btn-outline" onClick={() => setActiveTab('farmers')}>
+                  Meet Our Farmers
                 </button>
               </div>
 
-              {/* Stepping Stones / Duolingo Path */}
-              <div className="path-container">
-                {lessons.unit1.map((item, idx) => {
-                  // Duolingo characteristic winding path offsets
-                  const offsets = [0, 48, -48, 24, 0];
-                  const xOffset = offsets[idx % offsets.length];
+              <div className="hero-stats">
+                <div>
+                  <div className="stat-num">100%</div>
+                  <div className="stat-label">Transparent Sourcing</div>
+                </div>
+                <div>
+                  <div className="stat-num">&lt; 48 hrs</div>
+                  <div className="stat-label">Harvest to Delivery</div>
+                </div>
+                <div>
+                  <div className="stat-num">8+</div>
+                  <div className="stat-label">Regional Hubs</div>
+                </div>
+              </div>
+            </div>
 
-                  let btnClass = 'node-locked';
-                  if (item.state === 'completed') btnClass = 'node-gold';
-                  else if (item.state === 'active') btnClass = 'node-green';
+            <div className="hero-card">
+              <h3 style={{ marginBottom: '12px' }}>🌿 Live Harvest Guarantee</h3>
+              <p style={{ color: 'var(--gray-500)', fontSize: '14px', marginBottom: '20px' }}>
+                Every product is traced with automated temperature and soil telemetry. Guaranteed non-GMO or certified organic straight from regional growers.
+              </p>
+              <div style={{ background: 'var(--primary-light)', padding: '16px', borderRadius: '10px' }}>
+                <div style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '14px' }}>
+                  🚀 Free Express Delivery
+                </div>
+                <div style={{ fontSize: '13px', color: 'var(--gray-700)' }}>
+                  On all farm-direct grocery baskets over $35.00
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
-                  return (
-                    <div 
-                      key={item.id} 
-                      className="node-row" 
-                      style={{ transform: `translateX(${xOffset}px)` }}
-                    >
-                      <button 
-                        className={`node-btn ${btnClass}`}
-                        onClick={() => startLesson(item)}
-                      >
-                        {item.state === 'active' && (
-                          <div className="node-tooltip">
-                            START +{item.xp} XP
-                          </div>
-                        )}
-                        <span>{item.icon}</span>
+      {/* Main Content Area */}
+      <main className="main-content" id="browse-section">
+        {activeTab === 'marketplace' && (
+          <>
+            <div className="section-header">
+              <div>
+                <h2>Featured Fresh Produce</h2>
+                <p style={{ color: 'var(--gray-500)', fontSize: '14px' }}>Browse seasonal harvests sourced today</p>
+              </div>
+
+              <div className="search-bar">
+                <span>🔍</span>
+                <input 
+                  type="text" 
+                  placeholder="Search tomatoes, honey, dairy, cities..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="filter-pills">
+              {['ALL', 'VEGETABLES', 'FRUITS', 'DAIRY', 'GRAINS', 'HONEY', 'HERBS'].map(cat => (
+                <button 
+                  key={cat} 
+                  className={`pill ${selectedCategory === cat ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory(cat)}
+                >
+                  {cat.charAt(0) + cat.slice(1).toLowerCase()}
+                </button>
+              ))}
+            </div>
+
+            {/* Product Cards */}
+            <div className="products-grid">
+              {filteredProducts.map(p => (
+                <div key={p._id} className="product-card">
+                  <div className="product-img">
+                    {p.emoji || (
+                      p.category === 'vegetables' ? '🥦' :
+                      p.category === 'fruits' ? '🍎' :
+                      p.category === 'dairy' ? '🧀' :
+                      p.category === 'honey' ? '🍯' :
+                      p.category === 'grains' ? '🌾' : '🌱'
+                    )}
+                    {p.organic && <span className="product-badge">Organic</span>}
+                  </div>
+                  <div className="product-body">
+                    <span className="product-category">{p.category}</span>
+                    <h3 className="product-name">{p.name}</h3>
+                    <div className="product-origin">
+                      <span>📍</span> {p.farmName || p.city || 'Local Farm'}
+                    </div>
+                    <p className="product-desc">{p.description}</p>
+                    <div className="product-footer">
+                      <div className="product-price">
+                        ${p.price.toFixed(2)} <span>/ {p.unit}</span>
+                      </div>
+                      <button className="btn-primary" onClick={() => addToCart(p)}>
+                        + Add
                       </button>
                     </div>
-                  );
-                })}
-              </div>
-
-              {/* Unit 2 Preview Banner */}
-              <div className="unit-banner unit-banner-purple" style={{ marginTop: '24px' }}>
-                <div>
-                  <h2>Section 2: Precision Drones & AI Harvest</h2>
-                  <p>Master NDVI imaging, yield prediction & direct market escrow</p>
+                  </div>
                 </div>
-                <button className="duo-btn duo-btn-white" style={{ padding: '10px 16px', fontSize: '14px', opacity: 0.8 }}>
-                  🔒 LOCKED
-                </button>
-              </div>
-            </>
-          )}
+              ))}
+            </div>
+          </>
+        )}
 
-          {activeTab === 'leaderboard' && (
-            <div style={{ width: '100%' }}>
-              <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                <span style={{ fontSize: '64px' }}>🛡️</span>
-                <h2 style={{ fontSize: '28px', fontWeight: 900 }}>Emerald League</h2>
-                <p style={{ color: 'var(--text-muted)', fontWeight: 700 }}>Top 10 advance to the Diamond League!</p>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {[
-                  { rank: 1, name: 'Farmer_Joe99', xp: '1,420 XP', avatar: '👨‍🌾', badge: '🥇' },
-                  { rank: 2, name: 'You (Roger)', xp: '1,280 XP', avatar: '🦉', badge: '🥈', current: true },
-                  { rank: 3, name: 'AgriTech_Elena', xp: '1,150 XP', avatar: '👩‍🔬', badge: '🥉' },
-                  { rank: 4, name: 'GreenValley_Rob', xp: '940 XP', avatar: '🚜' },
-                  { rank: 5, name: 'OrganicMaya', xp: '820 XP', avatar: '🌻' }
-                ].map(user => (
-                  <div 
-                    key={user.rank}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '14px 20px',
-                      borderRadius: '16px',
-                      border: user.current ? '2px solid var(--color-primary)' : '2px solid var(--border-light)',
-                      backgroundColor: user.current ? '#f0fdf4' : '#ffffff',
-                      fontWeight: 800
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                      <span style={{ width: '24px', color: 'var(--text-muted)' }}>{user.badge || `#${user.rank}`}</span>
-                      <span style={{ fontSize: '24px' }}>{user.avatar}</span>
-                      <span style={{ fontSize: '16px', color: user.current ? 'var(--color-primary-dark)' : 'inherit' }}>{user.name}</span>
-                    </div>
-                    <span style={{ color: 'var(--text-muted)' }}>{user.xp}</span>
-                  </div>
-                ))}
+        {/* Local Farmers Directory */}
+        {activeTab === 'farmers' && (
+          <div>
+            <div className="section-header">
+              <div>
+                <h2>Partner Farmers & Producers</h2>
+                <p style={{ color: 'var(--gray-500)', fontSize: '14px' }}>Family-owned growers directly powering CropSphere</p>
               </div>
             </div>
-          )}
 
-          {activeTab === 'quests' && (
-            <div style={{ width: '100%' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: 900, marginBottom: '20px' }}>Daily Quests 🎯</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {[
-                  { title: 'Earn 50 XP in Soil Management', progress: 35, max: 50, reward: '💎 20' },
-                  { title: 'Complete 2 lessons with >90% accuracy', progress: 1, max: 2, reward: '⚡ 15m Boost' },
-                  { title: 'Spend 15 minutes learning telemetry', progress: 12, max: 15, reward: '❤️ Full Health' }
-                ].map((quest, i) => (
-                  <div key={i} className="widget-card">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                      <span style={{ fontWeight: 800 }}>{quest.title}</span>
-                      <span style={{ fontWeight: 800, color: 'var(--color-gold-dark)' }}>{quest.reward}</span>
-                    </div>
-                    <div className="progress-track" style={{ height: '14px' }}>
-                      <div className="progress-fill" style={{ width: `${(quest.progress / quest.max) * 100}%` }}></div>
-                    </div>
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)', marginTop: '6px' }}>
-                      {quest.progress} / {quest.max} completed
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'shop' && (
-            <div style={{ width: '100%' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: 900, marginBottom: '20px' }}>AgriPower Shop 🛒</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
-                {[
-                  { title: 'Refill Energy (5 Hearts)', cost: '💎 350', desc: 'Instantly restore your hearts so you can keep harvesting lessons.', icon: '❤️' },
-                  { title: 'Streak Freeze', cost: '💎 200', desc: 'Protect your farming streak if you miss a day in the fields.', icon: '🧊' },
-                  { title: 'Super Duo Agro Drone', cost: '💎 1200', desc: 'Unlock autonomous telemetry analysis & double XP on all units.', icon: '🛸' }
-                ].map((item, i) => (
-                  <div key={i} className="widget-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                      <span style={{ fontSize: '40px' }}>{item.icon}</span>
-                      <div>
-                        <h4 style={{ fontSize: '18px', fontWeight: 800 }}>{item.title}</h4>
-                        <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{item.desc}</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
+              {farmers.map(f => (
+                <div key={f.id || f._id} className="hero-card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                    <div>
+                      <h3 style={{ fontSize: '20px' }}>{f.farmName || f.name}</h3>
+                      <div style={{ color: 'var(--gray-500)', fontSize: '14px' }}>
+                        👤 Managed by {f.owner || f.name}
                       </div>
                     </div>
-                    <button className="duo-btn duo-btn-blue" style={{ padding: '10px 18px', whiteSpace: 'nowrap' }}>
-                      {item.cost}
-                    </button>
+                    <span className="brand-badge">{f.badge || 'Verified Partner'}</span>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'profile' && (
-            <div style={{ width: '100%' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px' }}>
-                <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#ddf4ff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '42px', border: '3px solid var(--color-blue)' }}>
-                  👨‍🌾
-                </div>
-                <div>
-                  <h2 style={{ fontSize: '24px', fontWeight: 900 }}>Roger's Smart Farm</h2>
-                  <p style={{ color: 'var(--text-muted)', fontWeight: 700 }}>Joined October 2026 • Emerald League</p>
-                </div>
-              </div>
-              <div className="widget-card">
-                <h3>Statistics</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-                  <div>
-                    <div style={{ fontSize: '24px', fontWeight: 900 }}>🔥 {streak}</div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: 700 }}>Day streak</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--primary)', fontWeight: 600, marginBottom: '12px' }}>
+                    📍 {f.location ? `${f.location.city}, ${f.location.state}` : f.city || 'Austin, TX'}
                   </div>
-                  <div>
-                    <div style={{ fontSize: '24px', fontWeight: 900 }}>⚡ 1,280</div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: 700 }}>Total XP</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '24px', fontWeight: 900 }}>💎 {gems}</div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: 700 }}>Gems collected</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '24px', fontWeight: 900 }}>🏆 #2</div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: 700 }}>League standing</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Right Sidebar Widgets */}
-        <aside className="content-right">
-          <div className="widget-card" style={{ background: '#f7f7f7', borderColor: '#e5e5e5' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <h3 style={{ margin: 0 }}>Unlock Super CropLingo</h3>
-              <span style={{ fontSize: '24px' }}>✨</span>
-            </div>
-            <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '16px', lineHeight: 1.4 }}>
-              Unlimited hearts, personalized mistakes review, and ad-free cloud telemetry!
-            </p>
-            <button className="duo-btn duo-btn-green" style={{ width: '100%', padding: '14px 0' }}>
-              TRY 2 WEEKS FREE
-            </button>
-          </div>
-
-          <div className="widget-card">
-            <h3>Active Farm Status</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 700 }}>
-                <span>🌱 Soil Moisture:</span>
-                <span style={{ color: 'var(--color-primary-dark)' }}>68% Optimal</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 700 }}>
-                <span>☁️ MongoDB Cloud sync:</span>
-                <span style={{ color: 'var(--color-blue)' }}>Live Connected</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 700 }}>
-                <span>🌤️ Microclimate:</span>
-                <span>24°C Sunny</span>
-              </div>
-            </div>
-          </div>
-        </aside>
-      </main>
-
-      {/* Interactive Duolingo Interactive Quiz Modal */}
-      {activeLesson && (
-        <div className="lesson-overlay">
-          <header className="lesson-header">
-            <button 
-              className="duo-btn duo-btn-white" 
-              style={{ padding: '8px 12px', fontSize: '18px', border: 'none', boxShadow: 'none' }}
-              onClick={() => setActiveLesson(null)}
-            >
-              ✕
-            </button>
-            <div className="progress-track">
-              <div 
-                className="progress-fill" 
-                style={{ 
-                  width: `${((progressIndex + (feedback === 'correct' ? 1 : 0)) / activeLesson.questions.length) * 100}%` 
-                }} 
-              />
-            </div>
-            <div className="stat-chip hearts" style={{ padding: 0 }}>
-              <span>❤️</span>
-              <span>{hearts}</span>
-            </div>
-          </header>
-
-          <div className="lesson-content">
-            <h2 className="question-title">
-              {activeLesson.questions[progressIndex]?.prompt}
-            </h2>
-
-            <div className="mascot-bubble">
-              <span style={{ fontSize: '64px', animation: 'bounce 2s infinite' }}>🦉</span>
-              <div className="speech-bubble">
-                Select the correct answer to grow your harvest!
-              </div>
-            </div>
-
-            <div className="options-grid">
-              {activeLesson.questions[progressIndex]?.options.map((opt, i) => (
-                <div 
-                  key={i}
-                  className={`option-card ${selectedOption === i ? 'selected' : ''}`}
-                  onClick={() => {
-                    if (feedback === null) setSelectedOption(i);
-                  }}
-                >
-                  <span>{opt}</span>
-                  <span style={{ 
-                    width: '28px', 
-                    height: '28px', 
-                    border: '2px solid var(--border-light)', 
-                    borderRadius: '8px', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center',
-                    fontSize: '13px',
-                    color: 'var(--text-muted)'
-                  }}>
-                    {i + 1}
-                  </span>
+                  <p style={{ fontSize: '14px', color: 'var(--gray-700)', marginBottom: '16px' }}>
+                    {f.bio}
+                  </p>
+                  <button className="btn-outline" style={{ width: '100%' }} onClick={() => setActiveTab('marketplace')}>
+                    Browse Farm Inventory
+                  </button>
                 </div>
               ))}
             </div>
           </div>
+        )}
 
-          <footer className={`lesson-footer ${
-            feedback === 'correct' ? 'footer-correct' : feedback === 'incorrect' ? 'footer-incorrect' : ''
-          }`}>
-            {feedback === null ? (
-              <>
-                <button 
-                  className="duo-btn duo-btn-white"
-                  style={{ padding: '14px 28px' }}
-                  onClick={() => setSelectedOption(0)}
+        {/* Cloud Architecture & Telemetry Tab */}
+        {activeTab === 'cloud' && (
+          <div>
+            <div className="section-header">
+              <div>
+                <h2>Cloud Architecture & IoT Telemetry</h2>
+                <p style={{ color: 'var(--gray-500)', fontSize: '14px' }}>Under the hood of FarmDirect's distributed cloud backend</p>
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+              <div className="hero-card">
+                <div style={{ fontSize: '32px', marginBottom: '12px' }}>🍃</div>
+                <h3>MongoDB Atlas DBaaS</h3>
+                <p style={{ fontSize: '14px', color: 'var(--gray-500)', margin: '8px 0 16px' }}>
+                  Managed multi-region database cluster with real-time replication, geo-indexing for local farm distance queries, and full audit trails.
+                </p>
+                <div style={{ background: 'var(--primary-light)', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', color: 'var(--primary)', fontWeight: 700 }}>
+                  ● Status: Live & Connected
+                </div>
+              </div>
+
+              <div className="hero-card">
+                <div style={{ fontSize: '32px', marginBottom: '12px' }}>⚡</div>
+                <h3>Serverless FaaS Pipelines</h3>
+                <p style={{ fontSize: '14px', color: 'var(--gray-500)', margin: '8px 0 16px' }}>
+                  Automated inventory depletion alert workers, async order status event processors, and webhook notifications on stock movements.
+                </p>
+                <div style={{ background: '#fef3c7', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', color: '#b45309', fontWeight: 700 }}>
+                  ● Queue Service: Local Event Bus Active
+                </div>
+              </div>
+
+              <div className="hero-card">
+                <div style={{ fontSize: '32px', marginBottom: '12px' }}>📡</div>
+                <h3>Swagger API Contracts</h3>
+                <p style={{ fontSize: '14px', color: 'var(--gray-500)', margin: '8px 0 16px' }}>
+                  Fully typed REST endpoints with input validation, JWT token security, role guards (Consumer, Farmer, Admin), and health telemetry.
+                </p>
+                <a 
+                  href="http://localhost:5000/api-docs" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="btn-outline" 
+                  style={{ display: 'inline-block', textAlign: 'center', width: '100%', textDecoration: 'none' }}
                 >
-                  SKIP
+                  Open Swagger API Docs ↗
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Shopping Cart Drawer Modal */}
+      {isCartOpen && (
+        <div className="modal-overlay" onClick={() => setIsCartOpen(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="close-btn" onClick={() => setIsCartOpen(false)}>✕</button>
+            <h2 style={{ marginBottom: '20px' }}>Your Farm Basket 🛒</h2>
+
+            {isCheckoutSuccess ? (
+              <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                <span style={{ fontSize: '48px' }}>🎉</span>
+                <h3 style={{ marginTop: '12px', color: 'var(--primary)' }}>Order Placed Successfully!</h3>
+                <p style={{ color: 'var(--gray-500)', fontSize: '14px', marginTop: '6px' }}>
+                  The grower has received your request and is preparing the harvest.
+                </p>
+              </div>
+            ) : cart.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--gray-500)' }}>
+                <span style={{ fontSize: '48px' }}>🧺</span>
+                <p style={{ marginTop: '12px' }}>Your basket is currently empty.</p>
+                <button className="btn-primary" style={{ marginTop: '16px' }} onClick={() => setIsCartOpen(false)}>
+                  Browse Products
                 </button>
-                <button 
-                  className={`duo-btn ${selectedOption !== null ? 'duo-btn-green' : 'duo-btn-white'}`}
-                  style={{ 
-                    padding: '14px 36px',
-                    opacity: selectedOption !== null ? 1 : 0.5,
-                    cursor: selectedOption !== null ? 'pointer' : 'not-allowed'
-                  }}
-                  disabled={selectedOption === null}
-                  onClick={handleCheck}
-                >
-                  CHECK
-                </button>
-              </>
+              </div>
             ) : (
               <>
-                <div className={`feedback-msg ${feedback === 'correct' ? 'feedback-correct' : 'feedback-incorrect'}`}>
-                  <span style={{ fontSize: '36px' }}>{feedback === 'correct' ? '🎉' : '❌'}</span>
-                  <div>
-                    <h3>{feedback === 'correct' ? 'Nicely done!' : 'Correct solution:'}</h3>
-                    <p style={{ fontWeight: 700, fontSize: '15px' }}>
-                      {feedback === 'correct' 
-                        ? activeLesson.questions[progressIndex].tip 
-                        : activeLesson.questions[progressIndex].options[activeLesson.questions[progressIndex].correct]}
-                    </p>
-                  </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '360px', overflowY: 'auto' }}>
+                  {cart.map(item => (
+                    <div key={item._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--gray-100)', paddingBottom: '12px' }}>
+                      <div>
+                        <div style={{ fontWeight: 600 }}>{item.name}</div>
+                        <div style={{ fontSize: '13px', color: 'var(--gray-500)' }}>
+                          ${item.price.toFixed(2)} × {item.qty}
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ fontWeight: 700 }}>${(item.price * item.qty).toFixed(2)}</span>
+                        <button 
+                          style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', fontSize: '16px' }}
+                          onClick={() => removeFromCart(item._id)}
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <button 
-                  className={`duo-btn ${feedback === 'correct' ? 'duo-btn-green' : 'duo-btn-red'}`}
-                  style={{ padding: '14px 40px' }}
-                  onClick={handleNext}
-                >
-                  CONTINUE
-                </button>
+
+                <div style={{ marginTop: '24px', borderTop: '2px solid var(--gray-100)', paddingTop: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: 800, marginBottom: '20px' }}>
+                    <span>Estimated Total:</span>
+                    <span style={{ color: 'var(--primary)' }}>${cartTotal.toFixed(2)}</span>
+                  </div>
+
+                  <button className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '14px' }} onClick={handleCheckout}>
+                    Confirm & Place Direct Order
+                  </button>
+                </div>
               </>
             )}
-          </footer>
+          </div>
+        </div>
+      )}
+
+      {/* Auth / Account Profile Modal */}
+      {isAuthOpen && (
+        <div className="modal-overlay" onClick={() => setIsAuthOpen(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="close-btn" onClick={() => setIsAuthOpen(false)}>✕</button>
+            <h2 style={{ marginBottom: '16px' }}>Consumer Account</h2>
+            <div style={{ background: 'var(--gray-100)', padding: '16px', borderRadius: '10px', marginBottom: '20px' }}>
+              <div style={{ fontWeight: 700, fontSize: '16px' }}>{user.name}</div>
+              <div style={{ fontSize: '14px', color: 'var(--gray-500)' }}>{user.email}</div>
+              <span className="brand-badge" style={{ marginTop: '8px', display: 'inline-block' }}>{user.role}</span>
+            </div>
+
+            <h4 style={{ marginBottom: '8px' }}>Preloaded Seed Credentials:</h4>
+            <div style={{ fontSize: '13px', color: 'var(--gray-500)', lineHeight: '1.6', background: 'var(--gray-50)', padding: '12px', borderRadius: '8px', border: '1px solid var(--gray-300)' }}>
+              <div>• <b>Admin:</b> admin@farmdirect.dev / Admin@FarmDirect2024!</div>
+              <div>• <b>Farmer:</b> mary@farmdirect.dev / FarmDirect@123</div>
+              <div>• <b>Consumer:</b> alice@consumer.dev / FarmDirect@123</div>
+            </div>
+
+            <button className="btn-primary" style={{ width: '100%', marginTop: '20px', justifyContent: 'center' }} onClick={() => setIsAuthOpen(false)}>
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>
