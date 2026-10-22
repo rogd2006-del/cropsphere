@@ -164,7 +164,7 @@ export default function ProductCard({ product, onSelect }) {
               Price
             </div>
             <div style={{ fontSize: '19px', fontWeight: 800, color: '#1b4332', fontFamily: 'var(--font-heading)' }}>
-              ${product.price.toFixed(2)}
+              ₹{product.price.toFixed(2)}
               <span style={{ fontSize: '12px', fontWeight: 500, color: '#52635a', marginLeft: '2px' }}>
                 /{product.unit}
               </span>

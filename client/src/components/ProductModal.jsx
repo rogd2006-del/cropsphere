@@ -163,7 +163,7 @@ export default function ProductModal({ product, onClose }) {
             fontFamily: 'var(--font-heading)',
             marginBottom: '16px'
           }}>
-            ${product.price.toFixed(2)}
+            ₹{product.price.toFixed(2)}
             <span style={{ fontSize: '14px', fontWeight: 500, color: '#52635a', marginLeft: '4px' }}>
               per {product.unit}
             </span>
@@ -267,7 +267,7 @@ export default function ProductModal({ product, onClose }) {
               </div>
 
               <span style={{ fontSize: '13px', color: '#7e9187' }}>
-                Total: ${(product.price * qty).toFixed(2)}
+                Total: ₹{(product.price * qty).toFixed(2)}
               </span>
             </div>
 

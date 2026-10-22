@@ -46,6 +46,7 @@ export const api = {
   // Auth
   login: (email, password) => apiRequest('/auth/login', { method: 'POST', body: { email, password } }),
   register: (userData) => apiRequest('/auth/register', { method: 'POST', body: userData }),
+  clerkSync: (clerkData) => apiRequest('/auth/clerk-sync', { method: 'POST', body: clerkData }),
   logout: () => apiRequest('/auth/logout', { method: 'POST' }),
   getMe: () => apiRequest('/auth/me'),
   updateProfile: (data) => apiRequest('/auth/me', { method: 'PUT', body: data }),

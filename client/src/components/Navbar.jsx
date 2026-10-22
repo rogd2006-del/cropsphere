@@ -131,30 +131,6 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
             Marketplace
           </button>
 
-          <button
-            onClick={() => handleNav('cloud')}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '8px',
-              fontWeight: 600,
-              fontSize: '14px',
-              color: activePage === 'cloud' ? '#1b4332' : '#52635a',
-              background: activePage === 'cloud' ? '#edfbf1' : 'transparent',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Cloud size={16} />
-            Cloud Architecture
-            <span style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: '#52b788',
-              display: 'inline-block'
-            }} />
-          </button>
 
           <button
             onClick={() => handleNav('about')}
@@ -469,12 +445,6 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
             style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'marketplace' ? '#1b4332' : '#52635a' }}
           >
             Marketplace
-          </button>
-          <button
-            onClick={() => handleNav('cloud')}
-            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'cloud' ? '#1b4332' : '#52635a' }}
-          >
-            Cloud Architecture
           </button>
           <button
             onClick={() => handleNav('about')}

@@ -3,19 +3,29 @@ import { api, setAuthToken, getAuthToken } from '../services/api';
 
 const AuthContext = createContext(null);
 
-export const DEMO_ACCOUNTS = {
-  ADMIN: { email: 'admin@farmdirect.dev', pass: 'Admin@FarmDirect2024!', label: 'Admin (Platform)' },
-  FARMER: { email: 'mary@farmdirect.dev', pass: 'FarmDirect@123', label: "Farmer (Mary's Organic)" },
-  CONSUMER: { email: 'alice@consumer.dev', pass: 'FarmDirect@123', label: 'Consumer (Alice Wong)' },
-};
-
-export function AuthProvider({ children }) {
+export function AuthProvider({ children, clerkBridge = null }) {
   const [user, setUser] = useState(null);
   const [farmerProfile, setFarmerProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState([]);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState('login'); // 'login' | 'register'
+  const [pendingClerkRole, setPendingClerkRole] = useState('CONSUMER');
+
+  // Clerk publishable key management (checks .env or localStorage for flexibility)
+  const [clerkPubKey, setClerkPubKey] = useState(
+    import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || localStorage.getItem('clerk_publishable_key') || ''
+  );
+
+  const saveClerkPublishableKey = (key) => {
+    const trimmed = (key || '').trim();
+    if (trimmed) {
+      localStorage.setItem('clerk_publishable_key', trimmed);
+    } else {
+      localStorage.removeItem('clerk_publishable_key');
+    }
+    setClerkPubKey(trimmed);
+  };
 
   const fetchCurrentUser = useCallback(async () => {
     const token = getAuthToken();
@@ -52,7 +62,7 @@ export function AuthProvider({ children }) {
         setNotifications(res.data || []);
       }
     } catch {
-      // ignore in background
+      // ignore background poll error
     }
   }, []);
 
@@ -91,6 +101,49 @@ export function AuthProvider({ children }) {
     return res;
   };
 
+  const syncClerkSession = async (clerkUserData, options = {}) => {
+    if (!clerkUserData) return;
+
+    try {
+      const email =
+        clerkUserData.primaryEmailAddress?.emailAddress ||
+        clerkUserData.emailAddresses?.[0]?.emailAddress ||
+        clerkUserData.email;
+
+      const name =
+        clerkUserData.fullName ||
+        [clerkUserData.firstName, clerkUserData.lastName].filter(Boolean).join(' ') ||
+        clerkUserData.name ||
+        email?.split('@')[0];
+
+      const avatar = clerkUserData.imageUrl || clerkUserData.avatar;
+      const role = options.role || pendingClerkRole || 'CONSUMER';
+
+      const res = await api.clerkSync({
+        clerkId: clerkUserData.id,
+        email,
+        name,
+        avatar,
+        role,
+        farmName: options.farmName,
+        city: options.city,
+        state: options.state,
+      });
+
+      if (res.success && res.token) {
+        setAuthToken(res.token);
+        setUser(res.user);
+        setFarmerProfile(res.farmerProfile || null);
+        setAuthModalOpen(false);
+        await fetchNotifications();
+        return res;
+      }
+    } catch (err) {
+      console.error('Clerk session synchronization failed:', err);
+      throw err;
+    }
+  };
+
   const logout = async () => {
     try {
       await api.logout();
@@ -101,13 +154,14 @@ export function AuthProvider({ children }) {
       setUser(null);
       setFarmerProfile(null);
       setNotifications([]);
+      if (clerkBridge?.signOut) {
+        try {
+          await clerkBridge.signOut();
+        } catch (e) {
+          console.warn('Clerk sign out:', e.message);
+        }
+      }
     }
-  };
-
-  const quickLogin = async (role) => {
-    const account = DEMO_ACCOUNTS[role];
-    if (!account) return;
-    return login(account.email, account.pass);
   };
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
@@ -123,12 +177,17 @@ export function AuthProvider({ children }) {
         login,
         register,
         logout,
-        quickLogin,
+        syncClerkSession,
         fetchNotifications,
         authModalOpen,
         setAuthModalOpen,
         authModalMode,
         setAuthModalMode,
+        clerkPubKey,
+        saveClerkPublishableKey,
+        pendingClerkRole,
+        setPendingClerkRole,
+        clerkBridge,
       }}
     >
       {children}

@@ -107,7 +107,7 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                 marginBottom: '30px',
                 maxWidth: '540px'
               }}>
-                Bypass traditional retail markups and support regenerative farmers. Powered by high-reliability cloud architecture across IaaS, PaaS, SaaS, and serverless FaaS event logistics.
+                Bypass traditional retail markups and support regenerative farmers with fresh produce, transparent pricing, and fast local harvest delivery.
               </p>
 
               {/* Search Box */}
@@ -433,87 +433,7 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
         </div>
       </section>
 
-      {/* Cloud Computing Architecture Callout */}
-      <section className="container">
-        <div style={{
-          background: 'linear-gradient(135deg, #081c15 0%, #1b4332 100%)',
-          borderRadius: '24px',
-          padding: '48px',
-          color: '#ffffff',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '36px',
-          alignItems: 'center',
-          boxShadow: '0 20px 40px rgba(8, 28, 21, 0.2)'
-        }}>
-          <div>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '4px 12px',
-              background: 'rgba(82, 183, 136, 0.2)',
-              borderRadius: '999px',
-              color: '#95d5b2',
-              fontSize: '12px',
-              fontWeight: 700,
-              marginBottom: '16px'
-            }}>
-              <Cloud size={14} /> Cloud Architecture Demonstration
-            </div>
-            <h2 style={{ fontSize: '32px', color: '#ffffff', fontWeight: 800, marginBottom: '14px', lineHeight: 1.2 }}>
-              Explore the Four Cloud Service Models
-            </h2>
-            <p style={{ color: '#b7e4c7', fontSize: '15px', lineHeight: 1.6, marginBottom: '24px' }}>
-              FarmDirect Cloud was purpose-built to prove how real enterprise agricultural logistics run across IaaS Virtual Machines, PaaS APIs, SaaS web frontends, and FaaS serverless event pipelines.
-            </p>
-            <button
-              onClick={() => onNavigate('cloud')}
-              className="btn btn-primary"
-              style={{
-                background: '#52b788',
-                color: '#081c15',
-                padding: '12px 24px',
-                fontSize: '14px',
-                fontWeight: 700
-              }}
-            >
-              Open Cloud Architecture Dashboard <ArrowRight size={16} />
-            </button>
-          </div>
 
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.06)',
-            borderRadius: '16px',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            padding: '24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '14px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge badge-green" style={{ background: '#52b788', color: '#081c15' }}>IaaS</span>
-              <span style={{ fontSize: '13px', color: '#d8f3dc' }}>Ubuntu Linux VM with systemd Process Guardian</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge badge-green" style={{ background: '#52b788', color: '#081c15' }}>PaaS</span>
-              <span style={{ fontSize: '13px', color: '#d8f3dc' }}>Managed Express REST API with Health & Metrics</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge badge-green" style={{ background: '#52b788', color: '#081c15' }}>SaaS</span>
-              <span style={{ fontSize: '13px', color: '#d8f3dc' }}>Browser-Hosted Consumer & Farmer Portal</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge badge-green" style={{ background: '#52b788', color: '#081c15' }}>FaaS</span>
-              <span style={{ fontSize: '13px', color: '#d8f3dc' }}>OrderEventProcessor & InventoryAlertProcessor</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge badge-green" style={{ background: '#52b788', color: '#081c15' }}>DBaaS</span>
-              <span style={{ fontSize: '13px', color: '#d8f3dc' }}>MongoDB Atlas Multi-Shard Cloud Cluster</span>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

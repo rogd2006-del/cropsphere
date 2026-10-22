@@ -86,6 +86,10 @@ export async function loginUser(email: string, password: string, ipAddress?: str
   if (!user) throw new AppError('Invalid email or password', 401);
   if (!user.isActive) throw new AppError('Account has been suspended', 403);
 
+  if (!user.password) {
+    throw new AppError('This account is registered via Google/Clerk. Please sign in with Google.', 400);
+  }
+
   const valid = await argon2.verify(user.password, password);
   if (!valid) {
     await AuditLog.create({
@@ -113,6 +117,96 @@ export async function loginUser(email: string, password: string, ipAddress?: str
   return user;
 }
 
+export async function syncClerkUser(data: {
+  clerkId: string;
+  email: string;
+  name?: string;
+  avatar?: string;
+  role?: 'CONSUMER' | 'FARMER';
+  phone?: string;
+  farmName?: string;
+  city?: string;
+  state?: string;
+  ipAddress?: string;
+}): Promise<IUser> {
+  const email = data.email.toLowerCase().trim();
+  let user = await User.findOne({
+    $or: [{ clerkId: data.clerkId }, { email }],
+  });
+
+  if (user) {
+    if (!user.clerkId) user.clerkId = data.clerkId;
+    if (data.name && (!user.name || user.name === email.split('@')[0])) user.name = data.name;
+    if (data.avatar && !user.avatar) user.avatar = data.avatar;
+    if (data.phone && !user.phone) user.phone = data.phone;
+    user.isEmailVerified = true;
+    user.lastLogin = new Date();
+    await user.save();
+
+    if (user.role === 'FARMER') {
+      const profile = await FarmerProfile.findOne({ userId: user._id });
+      if (!profile) {
+        await FarmerProfile.create({
+          userId: user._id,
+          farmName: data.farmName || `${user.name}'s Farm`,
+          bio: '',
+          location: { city: data.city || '', state: data.state || '' },
+        });
+      }
+    }
+
+    await AuditLog.create({
+      userId: user._id,
+      userEmail: user.email,
+      action: 'LOGIN_SUCCESS',
+      entity: 'User',
+      entityId: user._id.toString(),
+      metadata: { provider: 'clerk_oauth' },
+      ipAddress: data.ipAddress,
+    });
+
+    return user;
+  }
+
+  // Create new user authenticated via Clerk
+  const chosenRole = data.role === 'FARMER' ? 'FARMER' : 'CONSUMER';
+  user = new User({
+    clerkId: data.clerkId,
+    email,
+    name: data.name || email.split('@')[0],
+    role: chosenRole,
+    avatar: data.avatar,
+    phone: data.phone,
+    isActive: true,
+    isEmailVerified: true,
+    lastLogin: new Date(),
+  });
+  await user.save();
+
+  if (chosenRole === 'FARMER') {
+    await FarmerProfile.create({
+      userId: user._id,
+      farmName: data.farmName || `${user.name}'s Farm`,
+      bio: '',
+      location: { city: data.city || '', state: data.state || '' },
+    });
+  }
+
+  logger.info(`New Clerk user synchronized: ${user.email} (${user.role})`);
+
+  await AuditLog.create({
+    userId: user._id,
+    userEmail: user.email,
+    action: 'REGISTER_SUCCESS',
+    entity: 'User',
+    entityId: user._id.toString(),
+    metadata: { provider: 'clerk_oauth' },
+    ipAddress: data.ipAddress,
+  });
+
+  return user;
+}
+
 export function sanitizeUser(user: IUser) {
   return {
     _id: user._id,
@@ -121,6 +215,7 @@ export function sanitizeUser(user: IUser) {
     role: user.role,
     phone: user.phone,
     avatar: user.avatar,
+    clerkId: user.clerkId,
     isActive: user.isActive,
     isEmailVerified: user.isEmailVerified,
     createdAt: user.createdAt,

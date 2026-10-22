@@ -103,7 +103,6 @@ const OrderSchema = new Schema<IOrder>({
 OrderSchema.index({ consumerId: 1, createdAt: -1 });
 OrderSchema.index({ farmerId: 1, createdAt: -1 });
 OrderSchema.index({ status: 1 });
-OrderSchema.index({ orderNumber: 1 });
-OrderSchema.index({ idempotencyKey: 1 });
+// Note: orderNumber and idempotencyKey indexes are created by unique:true on those fields
 
 export const Order = mongoose.model<IOrder>('Order', OrderSchema);

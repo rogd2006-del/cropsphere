@@ -32,7 +32,7 @@ const CloudServiceEventSchema = new Schema<ICloudServiceEvent>({
 }, { timestamps: true });
 
 CloudServiceEventSchema.index({ processed: 1, createdAt: 1 });
-CloudServiceEventSchema.index({ idempotencyKey: 1 }, { unique: true });
+// Note: idempotencyKey index is created automatically by unique:true on the field
 CloudServiceEventSchema.index({ type: 1 });
 
 export const CloudServiceEvent = mongoose.model<ICloudServiceEvent>('CloudServiceEvent', CloudServiceEventSchema);

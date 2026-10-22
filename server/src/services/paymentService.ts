@@ -27,7 +27,7 @@ export interface PaymentResult {
 
 export async function createPaymentIntent(
   amount: number,
-  currency: string = 'USD',
+  currency: string = 'INR',
   metadata?: Record<string, unknown>,
 ): Promise<PaymentIntent> {
   const provider = process.env.PAYMENT_PROVIDER || 'demo';
