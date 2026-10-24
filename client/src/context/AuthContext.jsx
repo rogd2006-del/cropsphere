@@ -1,6 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { api, setAuthToken, getAuthToken } from '../services/api';
 
+export const DEMO_ACCOUNTS = {
+  ADMIN: { email: 'admin@farmdirect.dev', password: 'Password123!', role: 'ADMIN', name: 'Platform Admin' },
+  FARMER: { email: 'mary@farmdirect.dev', password: 'Password123!', role: 'FARMER', name: 'Mary Okonkwo' },
+  CONSUMER: { email: 'alice@farmdirect.dev', password: 'Password123!', role: 'CONSUMER', name: 'Alice Wong' }
+};
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children, clerkBridge = null }) {
@@ -164,6 +170,12 @@ export function AuthProvider({ children, clerkBridge = null }) {
     }
   };
 
+  const quickLogin = async (roleKey) => {
+    const creds = DEMO_ACCOUNTS[roleKey];
+    if (!creds) return;
+    return await login(creds.email, creds.password);
+  };
+
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   return (
@@ -176,6 +188,7 @@ export function AuthProvider({ children, clerkBridge = null }) {
         unreadCount,
         login,
         register,
+        quickLogin,
         logout,
         syncClerkSession,
         fetchNotifications,

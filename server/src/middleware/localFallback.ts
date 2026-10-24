@@ -9,6 +9,7 @@
 import { Router, Request, Response } from 'express';
 import { isDBConnected } from '../config/database';
 import { localStore } from '../services/localStore';
+import { askGemini } from '../services/geminiService';
 import jwt from 'jsonwebtoken';
 
 const router = Router();
@@ -284,6 +285,14 @@ router.delete('/products/:id', (req: Request, res: Response) => {
 });
 
 // ─── Farmers ─────────────────────────────────────────────────────────────────
+router.get('/farms/locations', (_req, res) => {
+  res.json({ success: true, data: localStore.getFarmLocations() });
+});
+
+router.get('/farmers/locations', (_req, res) => {
+  res.json({ success: true, data: localStore.getFarmLocations() });
+});
+
 router.get('/farmers', (_req, res) => {
   const data = localStore.getFarmers();
   res.json({ success: true, data });
@@ -540,30 +549,19 @@ router.post('/uploads', (_req, res) => {
   });
 });
 
-// ─── Map Data: Get all farm locations for the interactive map ────────────────
-router.get('/farms/locations', (_req, res) => {
-  const locations = localStore.farmerProfiles.map(fp => {
-    const productCount = localStore.products.filter(p => p.farmerId === fp.userId).length;
-    const topProducts = localStore.products
-      .filter(p => p.farmerId === fp.userId)
-      .slice(0, 3)
-      .map(p => ({ name: p.name, price: p.price, unit: p.unit }));
-    return {
-      _id: fp._id,
-      farmerId: fp.userId,
-      farmName: fp.farmName,
-      city: fp.location.city,
-      state: fp.location.state,
-      coordinates: fp.location.coordinates,
-      rating: fp.rating,
-      isVerified: fp.isVerified,
-      certifications: fp.certifications,
-      productCount,
-      topProducts,
-      coverImage: fp.coverImage,
-    };
-  });
-  res.json({ success: true, data: locations });
+// ─── Gemini AI Assistant ───────────────────────────────────────────────────
+router.post('/ai/ask', async (req: Request, res: Response) => {
+  try {
+    const { prompt } = req.body;
+    if (!prompt) {
+      return res.status(400).json({ success: false, message: 'Prompt is required' });
+    }
+    const sampleProducts = localStore.products.slice(0, 8).map(p => `${p.name} ($${p.price}/${p.unit}) from ${p.farmName}`).join(', ');
+    const answer = await askGemini(prompt, `Available fresh products: ${sampleProducts}`);
+    res.json({ success: true, answer });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message || 'AI request failed' });
+  }
 });
 
 export default router;

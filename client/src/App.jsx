@@ -8,6 +8,7 @@ import ProductModal from './components/ProductModal';
 import CartDrawer from './components/CartDrawer';
 import NotificationDrawer from './components/NotificationDrawer';
 import AuthModal from './components/AuthModal';
+import AIAssistantWidget from './components/AIAssistantWidget';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -109,6 +110,7 @@ function MainApp() {
       />
 
       <AuthModal />
+      <AIAssistantWidget />
     </div>
   );
 }

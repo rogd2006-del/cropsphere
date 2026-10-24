@@ -25,6 +25,7 @@ import notificationRoutes from './routes/notifications';
 import cloudRoutes from './routes/cloud';
 import uploadRoutes from './routes/uploads';
 import healthRoutes from './routes/health';
+import aiRoutes from './routes/ai';
 
 const app = express();
 
@@ -88,12 +89,14 @@ app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/farmers', farmerRoutes);
+app.use('/api/farms', farmerRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/cloud', cloudRoutes);
 app.use('/api/uploads', uploadRoutes);
+app.use('/api/ai', aiRoutes);
 
 // 404
 app.use((_req, res) => {

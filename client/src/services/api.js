@@ -112,4 +112,7 @@ export const api = {
 
   // Farm Locations (Map)
   getFarmLocations: () => apiRequest('/farms/locations'),
+
+  // Gemini AI Assistant
+  askAI: (prompt) => apiRequest('/ai/ask', { method: 'POST', body: { prompt } }),
 };

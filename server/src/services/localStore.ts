@@ -1003,6 +1003,34 @@ class LocalStore {
         .slice(0, 5),
     };
   }
+
+  public getFarmLocations() {
+    return this.farmerProfiles.map((fp) => {
+      const user = this.users.find((u) => u._id === fp.userId);
+      const farmProducts = this.products.filter((p) => p.farmerId === fp.userId);
+      return {
+        _id: fp._id,
+        farmerId: fp.userId,
+        farmName: fp.farmName,
+        farmerName: user?.name || fp.farmName,
+        bio: fp.bio,
+        address: fp.location.address,
+        city: fp.location.city,
+        state: fp.location.state,
+        coordinates: fp.location.coordinates,
+        rating: fp.rating,
+        totalReviews: fp.totalReviews,
+        yearsInFarming: fp.yearsInFarming,
+        certifications: fp.certifications,
+        productCount: farmProducts.length,
+        topProducts: farmProducts.slice(0, 3).map((p) => ({
+          name: p.name,
+          price: p.price,
+          unit: p.unit,
+        })),
+      };
+    });
+  }
 }
 
 export const localStore = new LocalStore();

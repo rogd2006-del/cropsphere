@@ -20,6 +20,42 @@ router.get('/', async (_req, res, next) => {
   }
 });
 
+// GET /api/farmers/locations — Public farm coordinates for interactive map
+router.get('/locations', async (_req, res, next) => {
+  try {
+    const profiles = await FarmerProfile.find()
+      .populate('userId', 'name')
+      .lean();
+    const locations = await Promise.all(
+      profiles.map(async (p: any) => {
+        const topProducts = await Product.find({ farmerId: p.userId?._id, availability: true })
+          .limit(3)
+          .select('name price unit')
+          .lean();
+        return {
+          _id: p._id,
+          farmerId: p.userId?._id || p._id,
+          farmName: p.farmName,
+          farmerName: p.userId?.name || p.farmName,
+          bio: p.bio,
+          address: p.location?.address || '',
+          city: p.location?.city || '',
+          state: p.location?.state || '',
+          coordinates: p.location?.coordinates || { lat: 0, lng: 0 },
+          rating: p.rating || 5.0,
+          totalReviews: p.totalReviews || 0,
+          yearsInFarming: p.yearsInFarming || 5,
+          certifications: p.certifications || [],
+          topProducts,
+        };
+      })
+    );
+    res.json({ success: true, data: locations });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // GET /api/farmers/:id — Public farmer profile
 router.get('/:id', async (req, res, next) => {
   try {
