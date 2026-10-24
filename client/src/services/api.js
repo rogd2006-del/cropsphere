@@ -109,4 +109,7 @@ export const api = {
 
   // Health
   getHealth: () => apiRequest('/health'),
+
+  // Farm Locations (Map)
+  getFarmLocations: () => apiRequest('/farms/locations'),
 };
