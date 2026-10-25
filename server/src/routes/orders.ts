@@ -96,7 +96,7 @@ router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, r
       const orderNumber = generateOrderNumber();
 
       // Create payment intent
-      const paymentIntent = await createPaymentIntent(total, 'USD', { orderNumber });
+      const paymentIntent = await createPaymentIntent(total, 'INR', { orderNumber });
       const paymentResult = await processPayment(paymentIntent.reference, total);
 
       const order = new Order({

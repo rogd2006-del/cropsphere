@@ -238,7 +238,7 @@ export default function ConsumerDashboard({ onNavigate }) {
 
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '20px', fontWeight: 800, color: '#E3266F' }}>
-                      ${order.total?.toFixed(2)}
+                      ₹{order.total?.toFixed(2)}
                     </div>
                     <div style={{ fontSize: '12px', color: '#52635a' }}>
                       {order.deliveryMethod === 'DELIVERY' ? 'Home Delivery' : 'Farm Pickup'} • {order.paymentStatus}
@@ -339,7 +339,7 @@ export default function ConsumerDashboard({ onNavigate }) {
                         </span>
                       </div>
                       <div style={{ fontWeight: 600, color: '#18231e' }}>
-                        ${((item.priceSnapshot || 0) * (item.quantity || 1)).toFixed(2)}
+                        ₹{((item.priceSnapshot || 0) * (item.quantity || 1)).toFixed(2)}
                       </div>
                     </div>
                   ))}
