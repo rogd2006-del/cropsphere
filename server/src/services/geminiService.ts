@@ -15,7 +15,7 @@ Use bullet points and formatting where appropriate. Context about current market
   const fullPrompt = `${systemInstruction}\n\nUser Question: ${prompt}`;
 
   // Try gemini-2.5-flash first, fallback to gemini-1.5-flash
-  const models = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-pro'];
+  const models = ['gemini-3.5-flash-lite'];
 
   for (const model of models) {
     try {
@@ -31,7 +31,7 @@ Use bullet points and formatting where appropriate. Context about current market
         },
         {
           headers: { 'Content-Type': 'application/json' },
-          timeout: 10000,
+          timeout: 60000,
         }
       );
 
