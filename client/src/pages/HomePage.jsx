@@ -139,7 +139,7 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                 marginBottom: '30px',
                 maxWidth: '540px'
               }}>
-                Bypass traditional retail markups and support regenerative farmers with fresh produce, transparent pricing, and fast local harvest delivery.
+                Bypass traditional retail markups and support regenerative farmers. Powered by high-reliability cloud architecture across IaaS, PaaS, SaaS, and serverless FaaS event logistics.
               </p>
 
               {/* Search Box */}
@@ -616,116 +616,6 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
           </div>
         )}
       </section>
-
-      {/* How FarmDirect Works (4 Steps) */}
-      <section style={{ backgroundColor: '#f5f4ee', padding: '70px 0', borderTop: '1px solid #ebe7dc', borderBottom: '1px solid #ebe7dc' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 48px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#2d6a4f', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              Simple, Transparent, Decentralized
-            </span>
-            <h2 style={{ fontSize: '30px', fontWeight: 800, color: '#081c15', marginTop: '4px' }}>
-              How FarmDirect Cloud Works
-            </h2>
-          </div>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '24px'
-          }}>
-            <div className="card" style={{ textAlign: 'center', padding: '32px 20px' }}>
-              <div style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '16px',
-                background: '#edfbf1',
-                color: '#2d6a4f',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-                fontSize: '22px',
-                fontWeight: 800
-              }}>
-                1
-              </div>
-              <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: '8px' }}>Farmers Harvest & List</h3>
-              <p style={{ fontSize: '13px', color: '#52635a', lineHeight: 1.5 }}>
-                Local farmers set their own transparent prices and upload current stock quantities with harvest dates.
-              </p>
-            </div>
-
-            <div className="card" style={{ textAlign: 'center', padding: '32px 20px' }}>
-              <div style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '16px',
-                background: '#edfbf1',
-                color: '#2d6a4f',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-                fontSize: '22px',
-                fontWeight: 800
-              }}>
-                2
-              </div>
-              <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: '8px' }}>Consumers Discover</h3>
-              <p style={{ fontSize: '13px', color: '#52635a', lineHeight: 1.5 }}>
-                Browse produce by freshness, organic status, distance, or farm story with complete origin transparency.
-              </p>
-            </div>
-
-            <div className="card" style={{ textAlign: 'center', padding: '32px 20px' }}>
-              <div style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '16px',
-                background: '#edfbf1',
-                color: '#2d6a4f',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-                fontSize: '22px',
-                fontWeight: 800
-              }}>
-                3
-              </div>
-              <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: '8px' }}>Cloud Event Queue</h3>
-              <p style={{ fontSize: '13px', color: '#52635a', lineHeight: 1.5 }}>
-                Serverless FaaS functions automatically process orders, decrement inventory, and notify farmers in real time.
-              </p>
-            </div>
-
-            <div className="card" style={{ textAlign: 'center', padding: '32px 20px' }}>
-              <div style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '16px',
-                background: '#edfbf1',
-                color: '#2d6a4f',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-                fontSize: '22px',
-                fontWeight: 800
-              }}>
-                4
-              </div>
-              <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: '8px' }}>Pickup or Direct Delivery</h3>
-              <p style={{ fontSize: '13px', color: '#52635a', lineHeight: 1.5 }}>
-                Collect your order at scheduled farm pickup locations or receive chilled front-door delivery.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
     </div>
   );
 }

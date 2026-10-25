@@ -30,7 +30,7 @@ export default function CartDrawer({ onOrderSuccess }) {
     removeFromCart,
     clearCart,
   } = useCart();
-  const { user, setAuthModalOpen, setAuthModalMode } = useAuth();
+  const { user, quickLogin, setAuthModalOpen, setAuthModalMode } = useAuth();
 
   const [deliveryMethod, setDeliveryMethod] = useState('DELIVERY');
   const [addressLine, setAddressLine] = useState('42 Harvest Way, Apt 3B');
@@ -253,7 +253,7 @@ export default function CartDrawer({ onOrderSuccess }) {
                         {item.name}
                       </div>
                       <div style={{ fontSize: '12px', color: '#52635a' }}>
-                        ₹{item.price.toFixed(2)} / {item.unit}
+                        ${item.price.toFixed(2)} / {item.unit}
                       </div>
                       <div style={{ fontSize: '11px', color: '#7e9187' }}>
                         {item.farmerName}
@@ -419,26 +419,23 @@ export default function CartDrawer({ onOrderSuccess }) {
               {/* Authentication check or Quick Switch helper */}
               {!user ? (
                 <div style={{
-                  backgroundColor: '#f0fdf4',
-                  border: '1px solid #bbf7d0',
+                  backgroundColor: '#fef3c7',
+                  border: '1px solid #fde68a',
                   borderRadius: '12px',
                   padding: '14px',
                   fontSize: '13px',
-                  color: '#166534'
+                  color: '#92400e'
                 }}>
                   <div style={{ fontWeight: 700, marginBottom: '4px' }}>Sign in required to checkout</div>
-                  <p style={{ marginBottom: '10px', color: '#15803d' }}>
-                    Sign in with Google or your account to complete your order.
+                  <p style={{ marginBottom: '10px' }}>
+                    You can use the 1-click Consumer Demo login below to test the checkout immediately.
                   </p>
                   <button
-                    onClick={() => {
-                      setAuthModalMode('login');
-                      setAuthModalOpen(true);
-                    }}
+                    onClick={() => quickLogin('CONSUMER')}
                     className="btn btn-primary btn-sm"
                     style={{ width: '100%' }}
                   >
-                    Sign In / Register to Checkout
+                    1-Click Login as Consumer Alice
                   </button>
                 </div>
               ) : user.role !== 'CONSUMER' ? (
@@ -450,25 +447,19 @@ export default function CartDrawer({ onOrderSuccess }) {
                   fontSize: '13px',
                   color: '#991b1b'
                 }}>
-                  You are currently signed in as <strong>{user.role}</strong>. Only <strong>CONSUMER</strong> buyer accounts can place orders.
+                  You are signed in as <strong>{user.role}</strong>. Only <strong>CONSUMER</strong> accounts can place orders.
                   <button
-                    onClick={() => {
-                      setAuthModalMode('register');
-                      setAuthModalOpen(true);
-                    }}
+                    onClick={() => quickLogin('CONSUMER')}
                     style={{
                       display: 'block',
                       marginTop: '8px',
                       color: '#081c15',
                       fontWeight: 700,
                       textDecoration: 'underline',
-                      cursor: 'pointer',
-                      background: 'none',
-                      border: 'none',
-                      padding: 0
+                      cursor: 'pointer'
                     }}
                   >
-                    Sign in or Register with a Consumer Account
+                    Switch to Consumer Alice Demo
                   </button>
                 </div>
               ) : null}
@@ -501,15 +492,15 @@ export default function CartDrawer({ onOrderSuccess }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px', fontSize: '13px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#52635a' }}>
                 <span>Subtotal</span>
-                <span>₹{subtotal.toFixed(2)}</span>
+                <span>${subtotal.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#52635a' }}>
                 <span>Delivery Fee</span>
-                <span>{deliveryFee === 0 ? <strong style={{ color: '#2d6a4f' }}>FREE</strong> : `₹${deliveryFee.toFixed(2)}`}</span>
+                <span>{deliveryFee === 0 ? <strong style={{ color: '#E3266F' }}>FREE</strong> : `$${deliveryFee.toFixed(2)}`}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#52635a' }}>
                 <span>Sales Tax (5%)</span>
-                <span>₹{tax.toFixed(2)}</span>
+                <span>${tax.toFixed(2)}</span>
               </div>
               <div style={{
                 display: 'flex',
@@ -522,7 +513,7 @@ export default function CartDrawer({ onOrderSuccess }) {
                 marginTop: '4px'
               }}>
                 <span>Total</span>
-                <span>₹{total.toFixed(2)}</span>
+                <span>${total.toFixed(2)}</span>
               </div>
             </div>
 
@@ -551,7 +542,7 @@ export default function CartDrawer({ onOrderSuccess }) {
                 cursor: submitting ? 'not-allowed' : 'pointer'
               }}
             >
-              {submitting ? 'Processing Order...' : `Complete Order — ₹${total.toFixed(2)}`}
+              {submitting ? 'Processing Order...' : `Complete Order — $${total.toFixed(2)}`}
               {!submitting && <ArrowRight size={16} />}
             </button>
           </div>

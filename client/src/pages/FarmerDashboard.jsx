@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import {
   Sprout,
-  IndianRupee,
+  DollarSign,
   Package,
   AlertTriangle,
   Plus,
@@ -225,10 +225,10 @@ export default function FarmerDashboard({ onNavigate }) {
         <div className="card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#52635a', marginBottom: '8px' }}>
             <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>Gross Revenue</span>
-            <IndianRupee size={18} style={{ color: '#2d6a4f' }} />
+            <DollarSign size={18} style={{ color: '#E3266F' }} />
           </div>
           <div style={{ fontSize: '26px', fontWeight: 800, color: '#081c15' }}>
-            ₹{(stats.totalRevenue || 0).toFixed(2)}
+            ${(stats.totalRevenue || 0).toFixed(2)}
           </div>
           <div style={{ fontSize: '12px', color: '#7e9187', marginTop: '4px' }}>
             Direct earnings from consumers
@@ -379,8 +379,8 @@ export default function FarmerDashboard({ onNavigate }) {
                       <td style={{ padding: '14px 20px', textTransform: 'capitalize', color: '#52635a' }}>
                         {prod.category}
                       </td>
-                      <td style={{ padding: '14px 20px', fontWeight: 700, color: '#1b4332' }}>
-                        ₹{prod.price.toFixed(2)} / {prod.unit}
+                      <td style={{ padding: '14px 20px', fontWeight: 700, color: '#E3266F' }}>
+                        ${prod.price.toFixed(2)} / {prod.unit}
                       </td>
                       <td style={{ padding: '14px 20px' }}>
                         <span style={{
@@ -456,8 +456,8 @@ export default function FarmerDashboard({ onNavigate }) {
                     </div>
                   </div>
 
-                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#1b4332' }}>
-                    ₹{order.total?.toFixed(2)}
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#E3266F' }}>
+                    ${order.total?.toFixed(2)}
                   </div>
                 </div>
 
@@ -466,7 +466,7 @@ export default function FarmerDashboard({ onNavigate }) {
                   {order.items?.map((item, idx) => (
                     <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
                       <span>{item.nameSnapshot} x {item.quantity} {item.unitSnapshot}</span>
-                      <strong>₹{((item.priceSnapshot || 0) * item.quantity).toFixed(2)}</strong>
+                      <strong>${((item.priceSnapshot || 0) * item.quantity).toFixed(2)}</strong>
                     </div>
                   ))}
                 </div>
@@ -623,7 +623,7 @@ export default function FarmerDashboard({ onNavigate }) {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
                 <div>
                   <label style={{ fontSize: '12px', fontWeight: 700, color: '#081c15', display: 'block', marginBottom: '4px' }}>
-                    Price (₹)
+                    Price ($)
                   </label>
                   <input
                     type="number"
@@ -631,7 +631,7 @@ export default function FarmerDashboard({ onNavigate }) {
                     required
                     value={formPrice}
                     onChange={e => setFormPrice(e.target.value)}
-                    placeholder="199"
+                    placeholder="4.99"
                     className="input-field"
                     style={{ fontSize: '13px' }}
                   />

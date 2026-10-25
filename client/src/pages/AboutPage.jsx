@@ -37,7 +37,7 @@ export default function AboutPage({ onNavigate }) {
           FarmDirect Cloud Project Documentation
         </h1>
         <p style={{ fontSize: '16px', color: '#52635a', maxWidth: '720px', margin: '0 auto', lineHeight: 1.6 }}>
-          Comprehensive smart marketplace directly connecting regional farmers with local consumers through verified digital orders, real-time inventory, and direct farm logistics.
+          Comprehensive cloud-based smart marketplace architecture directly connecting regional farmers with local consumers through verified IaaS, PaaS, SaaS, and serverless FaaS tiers.
         </p>
       </div>
 
@@ -176,17 +176,17 @@ export default function AboutPage({ onNavigate }) {
         textAlign: 'center'
       }}>
         <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#081c15', marginBottom: '8px' }}>
-          Explore the Marketplace
+          Ready to inspect the live cloud telemetry?
         </h3>
         <p style={{ fontSize: '14px', color: '#52635a', marginBottom: '20px' }}>
-          Support regional regenerative farming co-ops and order fresh local produce today.
+          Test the interactive probes, ping database health, and trigger serverless event executions on the Cloud Services dashboard.
         </p>
         <button
-          onClick={() => onNavigate('marketplace')}
+          onClick={() => onNavigate('cloud')}
           className="btn btn-primary"
           style={{ padding: '12px 24px' }}
         >
-          Browse Fresh Produce
+          Open Cloud Services Architecture Dashboard
         </button>
       </div>
     </div>
