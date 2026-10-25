@@ -34,7 +34,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
     switch (type) {
       case 'ORDER_PLACED':
       case 'ORDER_STATUS_CHANGED':
-        return <Package size={16} style={{ color: '#2d6a4f' }} />;
+        return <Package size={16} style={{ color: '#E3266F' }} />;
       case 'LOW_STOCK_ALERT':
         return <AlertTriangle size={16} style={{ color: '#d97706' }} />;
       default:
@@ -79,7 +79,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
           backgroundColor: '#fbfbf9'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Bell size={18} style={{ color: '#1b4332' }} />
+            <Bell size={18} style={{ color: '#E3266F' }} />
             <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081c15' }}>Activity Notifications</h3>
           </div>
 
@@ -117,7 +117,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
               onClick={handleMarkAllRead}
               disabled={marking}
               style={{
-                color: '#2d6a4f',
+                color: '#E3266F',
                 fontWeight: 700,
                 cursor: 'pointer'
               }}
@@ -148,8 +148,8 @@ export default function NotificationDrawer({ isOpen, onClose }) {
                   style={{
                     padding: '12px',
                     borderRadius: '12px',
-                    backgroundColor: n.isRead ? '#ffffff' : '#edfbf1',
-                    border: `1px solid ${n.isRead ? '#ebe7dc' : '#b7e4c7'}`,
+                    backgroundColor: n.isRead ? '#ffffff' : '#FDF0F5',
+                    border: `1px solid ${n.isRead ? '#ebe7dc' : '#F7A8C6'}`,
                     display: 'flex',
                     alignItems: 'flex-start',
                     gap: '10px',
@@ -187,7 +187,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
                       width: '8px',
                       height: '8px',
                       borderRadius: '50%',
-                      backgroundColor: '#52b788',
+                      backgroundColor: '#E3266F',
                       marginTop: '6px'
                     }} />
                   )}

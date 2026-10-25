@@ -129,8 +129,8 @@ export default function CartDrawer({ onOrderSuccess }) {
               width: '36px',
               height: '36px',
               borderRadius: '10px',
-              background: '#edfbf1',
-              color: '#1b4332',
+              background: '#FDF0F5',
+              color: '#E3266F',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -167,8 +167,8 @@ export default function CartDrawer({ onOrderSuccess }) {
                 width: '64px',
                 height: '64px',
                 borderRadius: '50%',
-                background: '#edfbf1',
-                color: '#2d6a4f',
+                background: '#FDF0F5',
+                color: '#E3266F',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -191,7 +191,7 @@ export default function CartDrawer({ onOrderSuccess }) {
                 textAlign: 'left'
               }}>
                 <div style={{ fontSize: '12px', color: '#7e9187' }}>Order Reference:</div>
-                <div style={{ fontWeight: 700, fontSize: '15px', color: '#1b4332' }}>
+                <div style={{ fontWeight: 700, fontSize: '15px', color: '#E3266F' }}>
                   {successOrder.orderNumber || 'FD-ORDER-SAVED'}
                 </div>
                 <div style={{ fontSize: '12px', color: '#52635a', marginTop: '6px' }}>
@@ -324,9 +324,9 @@ export default function CartDrawer({ onOrderSuccess }) {
                     style={{
                       padding: '10px',
                       borderRadius: '10px',
-                      border: `2px solid ${deliveryMethod === 'DELIVERY' ? '#2d6a4f' : '#ebe7dc'}`,
-                      background: deliveryMethod === 'DELIVERY' ? '#edfbf1' : '#ffffff',
-                      color: deliveryMethod === 'DELIVERY' ? '#1b4332' : '#52635a',
+                      border: `2px solid ${deliveryMethod === 'DELIVERY' ? '#E3266F' : '#ebe7dc'}`,
+                      background: deliveryMethod === 'DELIVERY' ? '#FDF0F5' : '#ffffff',
+                      color: deliveryMethod === 'DELIVERY' ? '#E3266F' : '#52635a',
                       fontWeight: 600,
                       fontSize: '13px',
                       display: 'flex',
@@ -342,9 +342,9 @@ export default function CartDrawer({ onOrderSuccess }) {
                     style={{
                       padding: '10px',
                       borderRadius: '10px',
-                      border: `2px solid ${deliveryMethod === 'PICKUP' ? '#2d6a4f' : '#ebe7dc'}`,
-                      background: deliveryMethod === 'PICKUP' ? '#edfbf1' : '#ffffff',
-                      color: deliveryMethod === 'PICKUP' ? '#1b4332' : '#52635a',
+                      border: `2px solid ${deliveryMethod === 'PICKUP' ? '#E3266F' : '#ebe7dc'}`,
+                      background: deliveryMethod === 'PICKUP' ? '#FDF0F5' : '#ffffff',
+                      color: deliveryMethod === 'PICKUP' ? '#E3266F' : '#52635a',
                       fontWeight: 600,
                       fontSize: '13px',
                       display: 'flex',
@@ -496,7 +496,7 @@ export default function CartDrawer({ onOrderSuccess }) {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#52635a' }}>
                 <span>Delivery Fee</span>
-                <span>{deliveryFee === 0 ? <strong style={{ color: '#2d6a4f' }}>FREE</strong> : `$${deliveryFee.toFixed(2)}`}</span>
+                <span>{deliveryFee === 0 ? <strong style={{ color: '#E3266F' }}>FREE</strong> : `$${deliveryFee.toFixed(2)}`}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#52635a' }}>
                 <span>Sales Tax (5%)</span>

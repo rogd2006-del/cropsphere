@@ -23,15 +23,15 @@ export default function AboutPage({ onNavigate }) {
           alignItems: 'center',
           gap: '6px',
           padding: '4px 12px',
-          background: '#edfbf1',
-          border: '1px solid #b7e4c7',
+          background: '#FDF0F5',
+          border: '1px solid #F7A8C6',
           borderRadius: '999px',
-          color: '#1b4332',
+          color: '#E3266F',
           fontSize: '12px',
           fontWeight: 700,
           marginBottom: '12px'
         }}>
-          <Award size={14} style={{ color: '#2d6a4f' }} /> Academic Cloud Computing Mini Project
+          <Award size={14} style={{ color: '#E3266F' }} /> Academic Cloud Computing Mini Project
         </div>
         <h1 style={{ fontSize: '36px', fontWeight: 800, color: '#081c15', marginBottom: '12px' }}>
           FarmDirect Cloud Project Documentation
@@ -46,7 +46,7 @@ export default function AboutPage({ onNavigate }) {
         {/* IaaS */}
         <div className="card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#edfbf1', color: '#1b4332', borderRadius: '10px' }}>
+            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
               <Server size={22} />
             </div>
             <div>
@@ -59,10 +59,10 @@ export default function AboutPage({ onNavigate }) {
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> Memory & vCPU spec isolation (Ubuntu Linux, 2 vCPUs, 4GB RAM)
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Memory & vCPU spec isolation (Ubuntu Linux, 2 vCPUs, 4GB RAM)
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> Systemd service guardian ensuring automated restart and zero-downtime restarts
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Systemd service guardian ensuring automated restart and zero-downtime restarts
             </li>
           </ul>
         </div>
@@ -70,7 +70,7 @@ export default function AboutPage({ onNavigate }) {
         {/* PaaS */}
         <div className="card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#edfbf1', color: '#1b4332', borderRadius: '10px' }}>
+            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
               <Layers size={22} />
             </div>
             <div>
@@ -83,10 +83,10 @@ export default function AboutPage({ onNavigate }) {
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> Centralized error handling, Zod schema validation, and rate limiting
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Centralized error handling, Zod schema validation, and rate limiting
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> Swagger OpenAPI documentation accessible at <code style={{ background: '#f5f4ee', padding: '2px 6px', borderRadius: '4px' }}>/api-docs</code>
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Swagger OpenAPI documentation accessible at <code style={{ background: '#f5f4ee', padding: '2px 6px', borderRadius: '4px' }}>/api-docs</code>
             </li>
           </ul>
         </div>
@@ -94,7 +94,7 @@ export default function AboutPage({ onNavigate }) {
         {/* SaaS */}
         <div className="card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#edfbf1', color: '#1b4332', borderRadius: '10px' }}>
+            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
               <Sprout size={22} />
             </div>
             <div>
@@ -107,10 +107,10 @@ export default function AboutPage({ onNavigate }) {
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> Zero installation required — fully browser-accessible with secure JWT session handling
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Zero installation required — fully browser-accessible with secure JWT session handling
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> Role-based views preventing consumers from altering farmer listings or admin controls
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Role-based views preventing consumers from altering farmer listings or admin controls
             </li>
           </ul>
         </div>
@@ -118,7 +118,7 @@ export default function AboutPage({ onNavigate }) {
         {/* FaaS */}
         <div className="card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#edfbf1', color: '#1b4332', borderRadius: '10px' }}>
+            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
               <Cpu size={22} />
             </div>
             <div>
@@ -131,13 +131,13 @@ export default function AboutPage({ onNavigate }) {
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> <strong>OrderEventProcessor:</strong> Triggered on <code style={{ background: '#f5f4ee', padding: '2px 4px', borderRadius: '4px' }}>ORDER_PLACED</code> to verify stock, create in-app notifications, and dispatch simulated email confirmations.
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> <strong>OrderEventProcessor:</strong> Triggered on <code style={{ background: '#f5f4ee', padding: '2px 4px', borderRadius: '4px' }}>ORDER_PLACED</code> to verify stock, create in-app notifications, and dispatch simulated email confirmations.
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> <strong>InventoryAlertProcessor:</strong> Triggered on inventory changes to detect items below safety thresholds and create automated low-stock warnings for farmers.
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> <strong>InventoryAlertProcessor:</strong> Triggered on inventory changes to detect items below safety thresholds and create automated low-stock warnings for farmers.
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> Idempotency verified via unique event keys to guarantee exactly-once processing semantics.
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Idempotency verified via unique event keys to guarantee exactly-once processing semantics.
             </li>
           </ul>
         </div>
@@ -145,7 +145,7 @@ export default function AboutPage({ onNavigate }) {
         {/* DBaaS */}
         <div className="card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#edfbf1', color: '#1b4332', borderRadius: '10px' }}>
+            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
               <Database size={22} />
             </div>
             <div>
@@ -158,10 +158,10 @@ export default function AboutPage({ onNavigate }) {
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> Historical orders snapshot product names and unit prices to prevent retroactive alteration
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Historical orders snapshot product names and unit prices to prevent retroactive alteration
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#2d6a4f' }} /> Object storage adapter supporting Azure Blob, AWS S3, and local uploads with strict MIME whitelist
+              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Object storage adapter supporting Azure Blob, AWS S3, and local uploads with strict MIME whitelist
             </li>
           </ul>
         </div>

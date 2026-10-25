@@ -4,52 +4,75 @@
    ========================================================================== */
 
 :root {
-  /* Color Palette */
-  --primary-900: #081c15;
-  --primary-800: #1b4332;
-  --primary-700: #2d6a4f;
-  --primary-600: #40916c;
-  --primary-500: #52b788;
-  --primary-400: #74c69d;
-  --primary-300: #95d5b2;
-  --primary-200: #b7e4c7;
-  --primary-100: #d8f3dc;
-  --primary-50:  #edfbf1;
+  /* Pantone Color Palette: Cannoli Cream, Amazon, Raspberry */
+  --cannoli-cream: #f0efe2;
+  --cannoli-cream-light: #f7f6ed;
+  --cannoli-cream-dark: #e5e3d1;
 
-  --accent-gold: #e9c46a;
-  --accent-orange: #f4a261;
-  --accent-terracotta: #e76f51;
+  --amazon-900: #061c12;
+  --amazon-800: #0d3b24;
+  --amazon-700: #124e30;  /* Pantone 18-6024 TCX Amazon */
+  --amazon-600: #1b633f;
+  --amazon-500: #298557;
+  --amazon-400: #42a975;
+  --amazon-300: #71c69a;
+  --amazon-200: #a7dfc2;
+  --amazon-100: #daf2e4;
+  --amazon-50:  #edf8f2;
 
-  --earth-50:  #fbfbf9;
-  --earth-100: #f5f4ee;
-  --earth-200: #ebe7dc;
-  --earth-300: #ddd7c6;
-  --earth-400: #c2b9a1;
+  --raspberry-primary: #E3266F; /* Pantone 18-1754 TCX Raspberry */
+  --raspberry-dark: #C2185B;
+  --raspberry-light: #EC5A92;
+  --raspberry-soft: #F7A8C6;
+  --raspberry-subtle: #FCE4EE;
+  --raspberry-wash: #FDF0F5;
 
-  --text-main: #18231e;
-  --text-muted: #52635a;
-  --text-light: #7e9187;
+  /* Primary system aliases (Raspberry accents, near-black headings) */
+  --primary-900: var(--amazon-900);
+  --primary-800: var(--raspberry-dark);
+  --primary-700: var(--raspberry-primary);
+  --primary-600: var(--raspberry-primary);
+  --primary-500: var(--raspberry-primary);
+  --primary-400: var(--raspberry-light);
+  --primary-300: var(--raspberry-soft);
+  --primary-200: var(--raspberry-soft);
+  --primary-100: var(--raspberry-subtle);
+  --primary-50:  var(--raspberry-wash);
+
+  --accent-gold: var(--raspberry-primary);
+  --accent-orange: var(--raspberry-primary);
+  --accent-terracotta: var(--raspberry-dark);
+
+  --earth-50:  var(--cannoli-cream-light);
+  --earth-100: var(--cannoli-cream);
+  --earth-200: var(--cannoli-cream-dark);
+  --earth-300: #d6d3bd;
+  --earth-400: #b8b398;
+
+  --text-main: #14231b;
+  --text-muted: #4e5e54;
+  --text-light: #7a8c81;
   --text-white: #ffffff;
 
-  --bg-page: #fbfbf9;
+  --bg-page: var(--cannoli-cream);
   --bg-surface: #ffffff;
-  --bg-surface-trans: rgba(255, 255, 255, 0.85);
+  --bg-surface-trans: rgba(240, 239, 226, 0.92);
   --bg-elevated: #ffffff;
 
-  --border-light: rgba(45, 106, 79, 0.12);
-  --border-subtle: #ebe7dc;
-  --border-focus: #40916c;
+  --border-light: rgba(227, 38, 111, 0.16);
+  --border-subtle: var(--cannoli-cream-dark);
+  --border-focus: var(--raspberry-primary);
 
   --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 1px 3px rgba(8, 28, 21, 0.05);
-  --shadow-md: 0 4px 14px rgba(8, 28, 21, 0.07);
-  --shadow-lg: 0 10px 25px rgba(8, 28, 21, 0.09);
-  --shadow-xl: 0 20px 40px rgba(8, 28, 21, 0.12);
+  --shadow-sm: 0 1px 3px rgba(6, 28, 18, 0.05);
+  --shadow-md: 0 4px 14px rgba(6, 28, 18, 0.07);
+  --shadow-lg: 0 10px 25px rgba(6, 28, 18, 0.09);
+  --shadow-xl: 0 20px 40px rgba(6, 28, 18, 0.12);
 
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-heading: 'Outfit', var(--font-sans);
@@ -146,56 +169,68 @@ input, select, textarea {
   justify-content: center;
   gap: 8px;
   font-weight: 600;
-  font-size: 14px;
-  padding: 10px 18px;
+  font-size: 13.5px;
+  letter-spacing: -0.1px;
+  padding: 9px 18px;
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
   white-space: nowrap;
 }
 
 .btn-sm {
-  padding: 6px 12px;
-  font-size: 13px;
+  padding: 5px 12px;
+  font-size: 12.5px;
   border-radius: var(--radius-sm);
 }
 
 .btn-lg {
-  padding: 14px 26px;
-  font-size: 16px;
+  padding: 12px 24px;
+  font-size: 15px;
   border-radius: var(--radius-lg);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+  background: var(--raspberry-primary);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.25);
+  box-shadow: 0 4px 12px rgba(227, 38, 111, 0.25);
 }
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  background: var(--raspberry-dark);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(45, 106, 79, 0.35);
+  box-shadow: 0 6px 16px rgba(227, 38, 111, 0.35);
 }
 .btn-primary:active {
   transform: translateY(0);
 }
 
+.btn-accent {
+  background: var(--raspberry-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(217, 36, 106, 0.25);
+}
+.btn-accent:hover {
+  background: var(--raspberry-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(217, 36, 106, 0.35);
+}
+
 .btn-secondary {
-  background: var(--primary-100);
-  color: var(--primary-800);
+  background: var(--raspberry-subtle);
+  color: var(--raspberry-dark);
 }
 .btn-secondary:hover {
-  background: var(--primary-200);
-  color: var(--primary-900);
+  background: var(--raspberry-soft);
+  color: var(--raspberry-dark);
 }
 
 .btn-outline {
   border: 1.5px solid var(--border-light);
   background: var(--bg-surface);
-  color: var(--primary-800);
+  color: var(--raspberry-primary);
 }
 .btn-outline:hover {
-  border-color: var(--primary-600);
-  background: var(--primary-50);
+  border-color: var(--raspberry-primary);
+  background: var(--cannoli-cream-light);
 }
 
 .btn-danger {
@@ -210,7 +245,7 @@ input, select, textarea {
   color: var(--text-muted);
 }
 .btn-ghost:hover {
-  background: var(--earth-100);
+  background: var(--cannoli-cream-dark);
   color: var(--text-main);
 }
 
@@ -273,7 +308,7 @@ input, select, textarea {
 }
 .input-field:focus {
   border-color: var(--primary-600);
-  box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.15);
+  box-shadow: 0 0 0 3px rgba(227, 38, 111, 0.15);
 }
 
 /* Glassmorphism */
@@ -286,9 +321,9 @@ input, select, textarea {
 
 /* Pulse animation for live cloud indicators */
 @keyframes pulseLive {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(82, 183, 136, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(82, 183, 136, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(82, 183, 136, 0); }
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(227, 38, 111, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(227, 38, 111, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(227, 38, 111, 0); }
 }
 
 .indicator-live {

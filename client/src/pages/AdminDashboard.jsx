@@ -286,9 +286,9 @@ export default function AdminDashboard() {
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '4px',
-                            background: u.isActive ? '#fee2e2' : '#edfbf1',
-                            color: u.isActive ? '#991b1b' : '#1b4332',
-                            border: `1px solid ${u.isActive ? '#fecaca' : '#b7e4c7'}`
+                            background: u.isActive ? '#fee2e2' : '#FDF0F5',
+                            color: u.isActive ? '#991b1b' : '#E3266F',
+                            border: `1px solid ${u.isActive ? '#fecaca' : '#F7A8C6'}`
                           }}
                         >
                           {u.isActive ? <Lock size={12} /> : <Unlock size={12} />}

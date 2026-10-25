@@ -1,133 +1,285 @@
-import React from 'react';
-import { useAuth, DEMO_ACCOUNTS } from '../context/AuthContext';
-import { ShieldCheck, UserCheck, Sprout, LogOut, CheckCircle2 } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { ShieldCheck, UserCheck, Sprout, LogOut, CheckCircle2, ChevronDown, User, LogIn } from 'lucide-react';
 
 export default function DemoBanner({ onNavigate }) {
-  const { user, quickLogin, logout } = useAuth();
+  const { user, quickLogin, logout, setAuthModalOpen, setAuthModalMode } = useAuth();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSelectRole = (roleKey) => {
+    quickLogin(roleKey);
+    setDropdownOpen(false);
+  };
+
+  const getRoleLabel = () => {
+    if (!user) return 'Select Demo Role';
+    if (user.role === 'ADMIN') return 'Admin Demo';
+    if (user.role === 'FARMER') return 'Farmer Demo (Mary)';
+    if (user.role === 'CONSUMER') return 'Consumer Demo (Alice)';
+    return user.role;
+  };
 
   return (
     <div style={{
-      background: 'linear-gradient(90deg, #081c15 0%, #1b4332 50%, #2d6a4f 100%)',
+      background: 'var(--amazon-900)',
       color: '#ffffff',
-      padding: '8px 16px',
-      fontSize: '13px',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+      padding: '7px 20px',
+      fontSize: '12.5px',
+      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+      position: 'relative',
+      zIndex: 80,
       flexWrap: 'wrap',
-      gap: '8px',
-      zIndex: 60,
-      position: 'relative'
+      gap: '10px'
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+      {/* Left side: Evaluation Mode & Role Dropdown + Sign In directly under/alongside */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
         <span style={{
-          background: 'rgba(82, 183, 136, 0.25)',
-          color: '#b7e4c7',
+          background: 'rgba(217, 36, 106, 0.2)',
+          color: 'var(--raspberry-light)',
           padding: '2px 8px',
           borderRadius: '999px',
           fontWeight: 700,
           fontSize: '11px',
-          letterSpacing: '0.5px',
+          letterSpacing: '0.4px',
           textTransform: 'uppercase',
-          border: '1px solid rgba(82, 183, 136, 0.4)'
+          border: '1px solid rgba(217, 36, 106, 0.35)'
         }}>
-          🎓 Academic Evaluator Quick-Switch
+          Evaluation Mode
         </span>
-        <span style={{ color: '#d8f3dc', opacity: 0.9 }}>
-          Current Role: <strong style={{ color: '#ffffff' }}>{user ? `${user.role} (${user.name})` : 'Guest / Visitor'}</strong>
-        </span>
+
+        {/* Demo Role Dropdown on the left */}
+        <div style={{ position: 'relative' }} ref={dropdownRef}>
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            style={{
+              background: user ? 'var(--raspberry-primary)' : 'rgba(255, 255, 255, 0.12)',
+              color: '#ffffff',
+              border: '1px solid rgba(255, 255, 255, 0.16)',
+              borderRadius: '8px',
+              padding: '5px 12px',
+              fontSize: '12.5px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.18s ease'
+            }}
+            title="Switch Demo Role"
+          >
+            {user?.role === 'ADMIN' && <ShieldCheck size={14} color="var(--raspberry-light)" />}
+            {user?.role === 'FARMER' && <Sprout size={14} color="#F7A8C6" />}
+            {user?.role === 'CONSUMER' && <UserCheck size={14} color="#FCE4EE" />}
+            <span>{getRoleLabel()}</span>
+            <ChevronDown
+              size={14}
+              style={{
+                transition: 'transform 0.2s ease',
+                transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+              }}
+            />
+          </button>
+
+          {dropdownOpen && (
+            <div style={{
+              position: 'absolute',
+              top: 'calc(100% + 6px)',
+              left: 0,
+              width: '230px',
+              backgroundColor: '#ffffff',
+              borderRadius: '12px',
+              boxShadow: '0 12px 28px rgba(6, 28, 18, 0.22)',
+              border: '1px solid var(--cannoli-cream-dark)',
+              padding: '6px',
+              zIndex: 100,
+              animation: 'fadeIn 0.15s ease'
+            }}>
+              <div style={{
+                padding: '6px 10px 4px',
+                fontSize: '11px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                color: 'var(--text-muted)'
+              }}>
+                Quick-Switch Persona
+              </div>
+
+              <button
+                onClick={() => handleSelectRole('ADMIN')}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '8px 10px',
+                  borderRadius: '8px',
+                  fontSize: '12.5px',
+                  fontWeight: 600,
+                  color: 'var(--amazon-900)',
+                  backgroundColor: user?.role === 'ADMIN' ? 'var(--raspberry-wash)' : 'transparent',
+                  textAlign: 'left',
+                  transition: 'background 0.15s'
+                }}
+                onMouseEnter={(e) => { if (user?.role !== 'ADMIN') e.currentTarget.style.backgroundColor = 'var(--cannoli-cream-light)'; }}
+                onMouseLeave={(e) => { if (user?.role !== 'ADMIN') e.currentTarget.style.backgroundColor = 'transparent'; }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <ShieldCheck size={15} color="var(--raspberry-primary)" />
+                  Admin Demo
+                </span>
+                {user?.role === 'ADMIN' && <CheckCircle2 size={14} color="var(--raspberry-primary)" />}
+              </button>
+
+              <button
+                onClick={() => handleSelectRole('FARMER')}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '8px 10px',
+                  borderRadius: '8px',
+                  fontSize: '12.5px',
+                  fontWeight: 600,
+                  color: 'var(--amazon-900)',
+                  backgroundColor: user?.role === 'FARMER' ? 'var(--raspberry-wash)' : 'transparent',
+                  textAlign: 'left',
+                  transition: 'background 0.15s'
+                }}
+                onMouseEnter={(e) => { if (user?.role !== 'FARMER') e.currentTarget.style.backgroundColor = 'var(--cannoli-cream-light)'; }}
+                onMouseLeave={(e) => { if (user?.role !== 'FARMER') e.currentTarget.style.backgroundColor = 'transparent'; }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Sprout size={15} color="var(--raspberry-primary)" />
+                  Farmer Demo (Mary)
+                </span>
+                {user?.role === 'FARMER' && <CheckCircle2 size={14} color="var(--raspberry-primary)" />}
+              </button>
+
+              <button
+                onClick={() => handleSelectRole('CONSUMER')}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '8px 10px',
+                  borderRadius: '8px',
+                  fontSize: '12.5px',
+                  fontWeight: 600,
+                  color: 'var(--amazon-900)',
+                  backgroundColor: user?.role === 'CONSUMER' ? 'var(--raspberry-wash)' : 'transparent',
+                  textAlign: 'left',
+                  transition: 'background 0.15s'
+                }}
+                onMouseEnter={(e) => { if (user?.role !== 'CONSUMER') e.currentTarget.style.backgroundColor = 'var(--cannoli-cream-light)'; }}
+                onMouseLeave={(e) => { if (user?.role !== 'CONSUMER') e.currentTarget.style.backgroundColor = 'transparent'; }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <UserCheck size={15} color="var(--raspberry-primary)" />
+                  Consumer Demo (Alice)
+                </span>
+                {user?.role === 'CONSUMER' && <CheckCircle2 size={14} color="var(--raspberry-primary)" />}
+              </button>
+
+              {user && (
+                <>
+                  <div style={{ height: '1px', backgroundColor: 'var(--cannoli-cream-dark)', margin: '4px 0' }} />
+                  <button
+                    onClick={() => { logout(); setDropdownOpen(false); }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      fontSize: '12.5px',
+                      fontWeight: 600,
+                      color: '#dc2626',
+                      backgroundColor: 'transparent',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                  >
+                    <LogOut size={14} />
+                    Reset to Guest
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Sign In Button on the left side right under / next to Select Demo Role */}
+        {!user && (
+          <button
+            onClick={() => {
+              setAuthModalMode('login');
+              setAuthModalOpen(true);
+            }}
+            style={{
+              background: 'var(--raspberry-primary)',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '5px 12px',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 2px 8px rgba(217, 36, 106, 0.35)',
+              transition: 'all 0.15s'
+            }}
+            title="Open Sign In Modal"
+          >
+            <LogIn size={13} />
+            Sign In / Register
+          </button>
+        )}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-        <button
-          onClick={() => quickLogin('ADMIN')}
-          style={{
-            background: user?.role === 'ADMIN' ? '#52b788' : 'rgba(255,255,255,0.12)',
-            color: user?.role === 'ADMIN' ? '#081c15' : '#ffffff',
-            border: 'none',
-            borderRadius: '6px',
-            padding: '4px 10px',
-            fontSize: '12px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '5px',
-            transition: 'all 0.2s'
-          }}
-          title="Login as Platform Administrator"
-        >
-          <ShieldCheck size={14} />
-          {user?.role === 'ADMIN' && <CheckCircle2 size={12} />}
-          Admin Demo
-        </button>
-
-        <button
-          onClick={() => quickLogin('FARMER')}
-          style={{
-            background: user?.role === 'FARMER' ? '#52b788' : 'rgba(255,255,255,0.12)',
-            color: user?.role === 'FARMER' ? '#081c15' : '#ffffff',
-            border: 'none',
-            borderRadius: '6px',
-            padding: '4px 10px',
-            fontSize: '12px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '5px',
-            transition: 'all 0.2s'
-          }}
-          title="Login as Farmer Mary Okonkwo"
-        >
-          <Sprout size={14} />
-          {user?.role === 'FARMER' && <CheckCircle2 size={12} />}
-          Farmer Demo (Mary)
-        </button>
-
-        <button
-          onClick={() => quickLogin('CONSUMER')}
-          style={{
-            background: user?.role === 'CONSUMER' ? '#52b788' : 'rgba(255,255,255,0.12)',
-            color: user?.role === 'CONSUMER' ? '#081c15' : '#ffffff',
-            border: 'none',
-            borderRadius: '6px',
-            padding: '4px 10px',
-            fontSize: '12px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '5px',
-            transition: 'all 0.2s'
-          }}
-          title="Login as Consumer Alice Wong"
-        >
-          <UserCheck size={14} />
-          {user?.role === 'CONSUMER' && <CheckCircle2 size={12} />}
-          Consumer Demo (Alice)
-        </button>
-
+      {/* Right side active role and sign out */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <span style={{ color: 'var(--cannoli-cream)', opacity: 0.9, fontSize: '12px' }}>
+          Active: <strong style={{ color: '#ffffff', fontWeight: 600 }}>{user ? `${user.role} (${user.name})` : 'Guest / Visitor'}</strong>
+        </span>
         {user && (
           <button
             onClick={logout}
             style={{
               background: 'rgba(239, 68, 68, 0.2)',
               color: '#fca5a5',
-              border: '1px solid rgba(239, 68, 68, 0.4)',
+              border: '1px solid rgba(239, 68, 68, 0.35)',
               borderRadius: '6px',
-              padding: '4px 8px',
-              fontSize: '12px',
+              padding: '3px 8px',
+              fontSize: '11px',
+              fontWeight: 600,
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '4px'
             }}
-            title="Reset to Guest"
           >
-            <LogOut size={13} />
-            Logout
+            <LogOut size={12} /> Logout
           </button>
         )}
       </div>
