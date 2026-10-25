@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { X, MapPin, Calendar, Award, CheckCircle2, AlertCircle, Plus, Minus, ShoppingBag } from 'lucide-react';
-import FarmMap from './FarmMap';
 
 const FALLBACK_IMAGES = {
   vegetables: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80',
@@ -164,8 +163,8 @@ export default function ProductModal({ product, onClose }) {
             fontFamily: 'var(--font-heading)',
             marginBottom: '16px'
           }}>
-            ₹{product.price.toFixed(2)}
-            <span style={{ fontSize: '14px', fontWeight: 500, color: '#52635a', marginLeft: '4px' }}>
+            ${product.price.toFixed(2)}
+            <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-muted)', marginLeft: '4px' }}>
               per {product.unit}
             </span>
           </div>
@@ -224,29 +223,6 @@ export default function ProductModal({ product, onClose }) {
             </div>
           </div>
 
-          {/* Farm Location Mini-Map */}
-          {product.coordinates && product.coordinates.lat ? (
-            <div style={{ marginBottom: '20px' }}>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#7e9187', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <MapPin size={12} /> Farm Location
-              </div>
-              <FarmMap
-                singleFarm={{
-                  _id: product._id,
-                  farmName: farmName,
-                  city: product.city,
-                  state: product.state,
-                  coordinates: product.coordinates,
-                  isVerified: product.farmerProfile?.isVerified,
-                  coverImage: product.images?.[0],
-                }}
-                height="160px"
-                showControls={false}
-                style={{ borderRadius: '12px' }}
-              />
-            </div>
-          ) : null}
-
           {/* Quantity and Actions */}
           <div style={{ marginTop: 'auto' }}>
             <div style={{
@@ -291,7 +267,7 @@ export default function ProductModal({ product, onClose }) {
               </div>
 
               <span style={{ fontSize: '13px', color: '#7e9187' }}>
-                Total: ₹{(product.price * qty).toFixed(2)}
+                Total: ${(product.price * qty).toFixed(2)}
               </span>
             </div>
 

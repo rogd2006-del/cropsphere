@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import ClerkWrapper from './components/ClerkWrapper';
+import DemoBanner from './components/DemoBanner';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProductModal from './components/ProductModal';
@@ -46,6 +47,9 @@ function MainApp() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      {/* 1-Click Academic Evaluation Demo Banner */}
+      <DemoBanner onNavigate={handleNavigate} />
+
       {/* Main Navigation Header */}
       <Navbar
         activePage={activePage}

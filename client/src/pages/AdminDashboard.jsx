@@ -162,7 +162,7 @@ export default function AdminDashboard() {
             {stats?.orders?.total || 0}
           </div>
           <div style={{ fontSize: '12px', color: '#7e9187', marginTop: '4px' }}>
-            ₹{(stats?.revenue?.total || 0).toFixed(2)} processed
+            ${(stats?.revenue?.total || 0).toFixed(2)} processed
           </div>
         </div>
 
