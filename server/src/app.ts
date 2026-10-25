@@ -12,6 +12,7 @@ import path from 'path';
 import { errorHandler } from './middleware/errorHandler';
 import { requestId } from './middleware/requestId';
 import { swaggerSpec } from './config/swagger';
+import localFallbackRouter from './middleware/localFallback';
 
 // Routes
 import authRoutes from './routes/auth';
@@ -24,6 +25,7 @@ import notificationRoutes from './routes/notifications';
 import cloudRoutes from './routes/cloud';
 import uploadRoutes from './routes/uploads';
 import healthRoutes from './routes/health';
+import aiRoutes from './routes/ai';
 
 const app = express();
 
@@ -79,17 +81,22 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customSiteTitle: 'FarmDirect API',
 }));
 
-// Routes
+// ── LOCAL FALLBACK: Intercepts all /api/* when MongoDB is disconnected ──
+app.use('/api', localFallbackRouter);
+
+// ── REAL DATABASE ROUTES (used when MongoDB IS connected) ──
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/farmers', farmerRoutes);
+app.use('/api/farms', farmerRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/cloud', cloudRoutes);
 app.use('/api/uploads', uploadRoutes);
+app.use('/api/ai', aiRoutes);
 
 // 404
 app.use((_req, res) => {

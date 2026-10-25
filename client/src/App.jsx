@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import DemoBanner from './components/DemoBanner';
+import ClerkWrapper from './components/ClerkWrapper';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProductModal from './components/ProductModal';
 import CartDrawer from './components/CartDrawer';
 import NotificationDrawer from './components/NotificationDrawer';
 import AuthModal from './components/AuthModal';
+import AIAssistantWidget from './components/AIAssistantWidget';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -45,9 +46,6 @@ function MainApp() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {/* 1-Click Academic Evaluation Banner */}
-      <DemoBanner onNavigate={handleNavigate} />
-
       {/* Main Navigation Header */}
       <Navbar
         activePage={activePage}
@@ -112,16 +110,17 @@ function MainApp() {
       />
 
       <AuthModal />
+      <AIAssistantWidget />
     </div>
   );
 }
 
 export default function App() {
   return (
-    <AuthProvider>
+    <ClerkWrapper>
       <CartProvider>
         <MainApp />
       </CartProvider>
-    </AuthProvider>
+    </ClerkWrapper>
   );
 }

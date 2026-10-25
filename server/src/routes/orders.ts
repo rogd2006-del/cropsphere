@@ -20,6 +20,7 @@ function generateOrderNumber(): string {
 // POST /api/orders — Place order (checkout)
 router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, res: Response, next) => {
   const session = await mongoose.startSession();
+  let transactionStarted = false;
   try {
     const { deliveryMethod, deliveryAddress, notes, idempotencyKey } = req.body;
     const userId = req.user!._id;
@@ -52,6 +53,7 @@ router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, r
     }
 
     session.startTransaction();
+    transactionStarted = true;
     const orders: any[] = [];
 
     for (const [farmerId, items] of farmerGroups) {
@@ -164,7 +166,7 @@ router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, r
       message: `${orders.length} order(s) placed successfully`,
     });
   } catch (err) {
-    await session.abortTransaction();
+    if (transactionStarted) await session.abortTransaction();
     next(err);
   } finally {
     session.endSession();
