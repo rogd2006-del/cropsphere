@@ -299,52 +299,7 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
         </div>
       </section>
 
-      {/* Category Pills Bar */}
-      <section className="container">
-        <div style={{
-          display: 'flex',
-          gap: '12px',
-          overflowX: 'auto',
-          paddingBottom: '8px',
-          scrollbarWidth: 'none'
-        }}>
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => onNavigate('marketplace', { category: cat.id === 'all' ? undefined : cat.id })}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '10px 18px',
-                borderRadius: '14px',
-                backgroundColor: '#ffffff',
-                border: '1.5px solid #ebe7dc',
-                color: '#18231e',
-                fontWeight: 600,
-                fontSize: '14px',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.03)',
-                transition: 'all 0.15s'
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = '#E3266F';
-                e.currentTarget.style.backgroundColor = '#FDF0F5';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = '#ebe7dc';
-                e.currentTarget.style.backgroundColor = '#ffffff';
-              }}
-            >
-              <span>{cat.icon}</span>
-              <span>{cat.label}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* How FarmDirect Cloud Works (4 Steps with Pink Connecting Arrows) */}
+      {/* How FarmDirect Cloud Works (4 Steps Connected with Pink Arrows) */}
       <section style={{ backgroundColor: 'var(--cannoli-cream-light)', padding: '70px 0', borderTop: '1px solid var(--cannoli-cream-dark)', borderBottom: '1px solid var(--cannoli-cream-dark)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 48px' }}>
@@ -357,27 +312,29 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
           </div>
 
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '16px',
-            position: 'relative',
-            alignItems: 'stretch'
+            display: 'flex',
+            alignItems: 'stretch',
+            justifyContent: 'center',
+            gap: '12px',
+            flexWrap: 'wrap',
+            position: 'relative'
           }}>
             {/* Step 1 */}
-            <div className="card" style={{ textAlign: 'center', padding: '28px 18px', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div className="card" style={{ flex: '1 1 220px', minWidth: '220px', maxWidth: '280px', textAlign: 'center', padding: '28px 18px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px solid var(--border-subtle)', boxShadow: '0 4px 14px rgba(6, 28, 18, 0.05)' }}>
               <div>
                 <div style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '14px',
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '16px',
                   background: 'var(--raspberry-subtle)',
                   color: 'var(--raspberry-primary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 14px',
-                  fontSize: '20px',
-                  fontWeight: 800
+                  fontSize: '22px',
+                  fontWeight: 800,
+                  boxShadow: '0 4px 12px rgba(227, 38, 111, 0.18)'
                 }}>
                   1
                 </div>
@@ -386,26 +343,47 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                   Local farmers set their own transparent prices and upload current stock quantities with harvest dates.
                 </p>
               </div>
-              <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'var(--raspberry-primary)', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase' }}>
-                Next <ArrowRight size={14} color="var(--raspberry-primary)" />
+            </div>
+
+            {/* Connecting Pink Arrow 1 -> 2 */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--raspberry-primary)',
+              padding: '0 4px'
+            }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                background: 'var(--raspberry-subtle)',
+                border: '1.5px solid var(--raspberry-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(227, 38, 111, 0.25)'
+              }}>
+                <ArrowRight size={20} color="var(--raspberry-primary)" strokeWidth={2.5} />
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="card" style={{ textAlign: 'center', padding: '28px 18px', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div className="card" style={{ flex: '1 1 220px', minWidth: '220px', maxWidth: '280px', textAlign: 'center', padding: '28px 18px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px solid var(--border-subtle)', boxShadow: '0 4px 14px rgba(6, 28, 18, 0.05)' }}>
               <div>
                 <div style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '14px',
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '16px',
                   background: 'var(--raspberry-subtle)',
                   color: 'var(--raspberry-primary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 14px',
-                  fontSize: '20px',
-                  fontWeight: 800
+                  fontSize: '22px',
+                  fontWeight: 800,
+                  boxShadow: '0 4px 12px rgba(227, 38, 111, 0.18)'
                 }}>
                   2
                 </div>
@@ -414,26 +392,47 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                   Browse produce by freshness, organic status, distance, or farm story with complete origin transparency.
                 </p>
               </div>
-              <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'var(--raspberry-primary)', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase' }}>
-                Next <ArrowRight size={14} color="var(--raspberry-primary)" />
+            </div>
+
+            {/* Connecting Pink Arrow 2 -> 3 */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--raspberry-primary)',
+              padding: '0 4px'
+            }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                background: 'var(--raspberry-subtle)',
+                border: '1.5px solid var(--raspberry-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(227, 38, 111, 0.25)'
+              }}>
+                <ArrowRight size={20} color="var(--raspberry-primary)" strokeWidth={2.5} />
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="card" style={{ textAlign: 'center', padding: '28px 18px', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div className="card" style={{ flex: '1 1 220px', minWidth: '220px', maxWidth: '280px', textAlign: 'center', padding: '28px 18px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px solid var(--border-subtle)', boxShadow: '0 4px 14px rgba(6, 28, 18, 0.05)' }}>
               <div>
                 <div style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '14px',
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '16px',
                   background: 'var(--raspberry-subtle)',
                   color: 'var(--raspberry-primary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 14px',
-                  fontSize: '20px',
-                  fontWeight: 800
+                  fontSize: '22px',
+                  fontWeight: 800,
+                  boxShadow: '0 4px 12px rgba(227, 38, 111, 0.18)'
                 }}>
                   3
                 </div>
@@ -442,26 +441,47 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                   Serverless FaaS functions automatically process orders, decrement inventory, and notify farmers in real time.
                 </p>
               </div>
-              <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'var(--raspberry-primary)', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase' }}>
-                Next <ArrowRight size={14} color="var(--raspberry-primary)" />
+            </div>
+
+            {/* Connecting Pink Arrow 3 -> 4 */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--raspberry-primary)',
+              padding: '0 4px'
+            }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                background: 'var(--raspberry-subtle)',
+                border: '1.5px solid var(--raspberry-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(227, 38, 111, 0.25)'
+              }}>
+                <ArrowRight size={20} color="var(--raspberry-primary)" strokeWidth={2.5} />
               </div>
             </div>
 
             {/* Step 4 */}
-            <div className="card" style={{ textAlign: 'center', padding: '28px 18px', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div className="card" style={{ flex: '1 1 220px', minWidth: '220px', maxWidth: '280px', textAlign: 'center', padding: '28px 18px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px solid var(--border-subtle)', boxShadow: '0 4px 14px rgba(6, 28, 18, 0.05)' }}>
               <div>
                 <div style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '14px',
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '16px',
                   background: 'var(--raspberry-subtle)',
                   color: 'var(--raspberry-primary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 14px',
-                  fontSize: '20px',
-                  fontWeight: 800
+                  fontSize: '22px',
+                  fontWeight: 800,
+                  boxShadow: '0 4px 12px rgba(227, 38, 111, 0.18)'
                 }}>
                   4
                 </div>
@@ -469,9 +489,6 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                 <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
                   Collect your order at scheduled farm pickup locations or receive chilled front-door delivery.
                 </p>
-              </div>
-              <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'var(--raspberry-primary)', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase' }}>
-                Complete <CheckCircle2 size={14} color="var(--raspberry-primary)" />
               </div>
             </div>
           </div>
@@ -561,13 +578,13 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
         </div>
       </section>
 
-      {/* Featured Seasonal Produce moved to the very last section */}
+      {/* Featured Seasonal Produce & Category Pills under Seasonal Highlights */}
       <section className="container">
         <div style={{
           display: 'flex',
           alignItems: 'flex-end',
           justifyContent: 'space-between',
-          marginBottom: '28px',
+          marginBottom: '20px',
           flexWrap: 'wrap',
           gap: '14px'
         }}>
@@ -594,6 +611,51 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
           >
             View All Marketplace Produce <ArrowRight size={15} color="var(--raspberry-primary)" />
           </button>
+        </div>
+
+        {/* Category Pills Bar positioned directly under Seasonal Highlights */}
+        <div style={{
+          display: 'flex',
+          gap: '12px',
+          overflowX: 'auto',
+          paddingBottom: '20px',
+          scrollbarWidth: 'none'
+        }}>
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => onNavigate('marketplace', { category: cat.id === 'all' ? undefined : cat.id })}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '9px 16px',
+                borderRadius: '14px',
+                backgroundColor: '#ffffff',
+                border: '1.5px solid var(--cannoli-cream-dark)',
+                color: 'var(--amazon-900)',
+                fontWeight: 600,
+                fontSize: '13.5px',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.03)',
+                transition: 'all 0.15s'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = 'var(--raspberry-primary)';
+                e.currentTarget.style.backgroundColor = 'var(--raspberry-wash)';
+                e.currentTarget.style.color = 'var(--raspberry-primary)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--cannoli-cream-dark)';
+                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.color = 'var(--amazon-900)';
+              }}
+            >
+              <span>{cat.icon}</span>
+              <span>{cat.label}</span>
+            </button>
+          ))}
         </div>
 
         {loading ? (
