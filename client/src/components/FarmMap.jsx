@@ -156,7 +156,7 @@ export default function FarmMap({
 
       // Popup
       const topProducts = (farm.topProducts || [])
-        .map((p) => `<span style="display:inline-block;background:#edfbf1;color:#2d6a4f;padding:2px 6px;border-radius:8px;font-size:11px;margin:2px;">${p.name} $${p.price}/${p.unit}</span>`)
+        .map((p) => `<span style="display:inline-block;background:#edfbf1;color:#2d6a4f;padding:2px 6px;border-radius:8px;font-size:11px;margin:2px;">${p.name} ₹${p.price}/${p.unit}</span>`)
         .join('');
 
       const popupHtml = `

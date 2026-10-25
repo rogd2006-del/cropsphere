@@ -253,7 +253,7 @@ export default function CartDrawer({ onOrderSuccess }) {
                         {item.name}
                       </div>
                       <div style={{ fontSize: '12px', color: '#52635a' }}>
-                        ${item.price.toFixed(2)} / {item.unit}
+                        ₹{item.price.toFixed(2)} / {item.unit}
                       </div>
                       <div style={{ fontSize: '11px', color: '#7e9187' }}>
                         {item.farmerName}
@@ -492,15 +492,15 @@ export default function CartDrawer({ onOrderSuccess }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px', fontSize: '13px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#52635a' }}>
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>₹{subtotal.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#52635a' }}>
                 <span>Delivery Fee</span>
-                <span>{deliveryFee === 0 ? <strong style={{ color: '#E3266F' }}>FREE</strong> : `$${deliveryFee.toFixed(2)}`}</span>
+                <span>{deliveryFee === 0 ? <strong style={{ color: '#E3266F' }}>FREE</strong> : `₹${deliveryFee.toFixed(2)}`}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#52635a' }}>
                 <span>Sales Tax (5%)</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>₹{tax.toFixed(2)}</span>
               </div>
               <div style={{
                 display: 'flex',
@@ -513,7 +513,7 @@ export default function CartDrawer({ onOrderSuccess }) {
                 marginTop: '4px'
               }}>
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>₹{total.toFixed(2)}</span>
               </div>
             </div>
 
@@ -542,7 +542,7 @@ export default function CartDrawer({ onOrderSuccess }) {
                 cursor: submitting ? 'not-allowed' : 'pointer'
               }}
             >
-              {submitting ? 'Processing Order...' : `Complete Order — $${total.toFixed(2)}`}
+              {submitting ? 'Processing Order...' : `Complete Order — ₹${total.toFixed(2)}`}
               {!submitting && <ArrowRight size={16} />}
             </button>
           </div>
