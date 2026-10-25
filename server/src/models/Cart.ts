@@ -35,6 +35,6 @@ const CartSchema = new Schema<ICart>({
   items: [CartItemSchema],
 }, { timestamps: true });
 
-CartSchema.index({ userId: 1 });
+// Note: userId index is created automatically by unique:true on the field
 
 export const Cart = mongoose.model<ICart>('Cart', CartSchema);

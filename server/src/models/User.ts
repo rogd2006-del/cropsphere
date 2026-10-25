@@ -5,7 +5,8 @@ export type UserRole = 'CONSUMER' | 'FARMER' | 'ADMIN';
 export interface IUser extends Document {
   _id: Types.ObjectId;
   email: string;
-  password: string;
+  password?: string;
+  clerkId?: string;
   role: UserRole;
   name: string;
   phone?: string;
@@ -30,10 +31,12 @@ export interface IUser extends Document {
  *         name: { type: string }
  *         phone: { type: string }
  *         isActive: { type: boolean }
+ *         clerkId: { type: string }
  */
 const UserSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-  password: { type: String, required: true, select: false },
+  password: { type: String, required: false, select: false },
+  clerkId: { type: String, sparse: true, index: true },
   role: { type: String, enum: ['CONSUMER', 'FARMER', 'ADMIN'], default: 'CONSUMER' },
   name: { type: String, required: true, trim: true },
   phone: { type: String, trim: true },
@@ -43,7 +46,7 @@ const UserSchema = new Schema<IUser>({
   lastLogin: { type: Date },
 }, { timestamps: true });
 
-UserSchema.index({ email: 1 });
+// Note: email index is created automatically by unique:true on the field
 UserSchema.index({ role: 1 });
 
 export const User = mongoose.model<IUser>('User', UserSchema);

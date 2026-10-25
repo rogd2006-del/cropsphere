@@ -8,16 +8,16 @@ const PORT = parseInt(process.env.PORT || '5000', 10);
 
 async function start() {
   try {
-    await connectDB();
-    await initQueue();
     app.listen(PORT, () => {
       logger.info(`🚀 FarmDirect API running on port ${PORT}`);
       logger.info(`🌿 Environment: ${process.env.NODE_ENV}`);
       logger.info(`📄 Swagger docs: http://localhost:${PORT}/api-docs`);
     });
+
+    await connectDB();
+    await initQueue();
   } catch (err) {
-    logger.error('Failed to start server:', err);
-    process.exit(1);
+    logger.error('Failed to initialize database or queue:', err);
   }
 }
 

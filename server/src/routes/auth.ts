@@ -6,6 +6,7 @@ import { authenticate, AuthRequest } from '../middleware/auth';
 import {
   registerUser,
   loginUser,
+  syncClerkUser,
   generateToken,
   setAuthCookie,
   sanitizeUser,
@@ -78,6 +79,46 @@ router.post('/login', authRateLimiter, validate(loginSchema), async (req: Reques
   }
 });
 
+const clerkSyncSchema = z.object({
+  body: z.object({
+    clerkId: z.string().min(1, 'Clerk ID is required'),
+    email: z.string().email('Invalid email address'),
+    name: z.string().optional(),
+    avatar: z.string().optional(),
+    role: z.enum(['CONSUMER', 'FARMER']).optional(),
+    phone: z.string().optional(),
+    farmName: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+  }),
+});
+
+router.post('/clerk-sync', validate(clerkSyncSchema), async (req: Request, res: Response, next) => {
+  try {
+    const user = await syncClerkUser({
+      ...req.body,
+      ipAddress: req.ip,
+    });
+    const token = generateToken(user);
+    setAuthCookie(res, token);
+
+    let farmerProfile = null;
+    if (user.role === 'FARMER') {
+      farmerProfile = await FarmerProfile.findOne({ userId: user._id });
+    }
+
+    res.json({
+      success: true,
+      message: 'Clerk authentication synchronized successfully',
+      token,
+      user: sanitizeUser(user),
+      farmerProfile,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/logout', (_req: Request, res: Response) => {
   res.clearCookie('token');
   res.json({ success: true, message: 'Logged out successfully' });
@@ -119,6 +160,11 @@ router.put('/change-password', authenticate, authRateLimiter, async (req: AuthRe
     const { currentPassword, newPassword } = req.body;
     if (!currentPassword || !newPassword) {
       res.status(400).json({ success: false, message: 'Both passwords required' });
+      return;
+    }
+
+    if (!user.password) {
+      res.status(400).json({ success: false, message: 'OAuth accounts do not use a password' });
       return;
     }
     

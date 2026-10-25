@@ -102,8 +102,8 @@ export default function Footer({ onNavigate }) {
             <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--cannoli-cream)', opacity: 0.9, marginBottom: '16px' }}>
               A cloud-native smart marketplace empowering local regenerative farmers with direct-to-consumer trade, transparent pricing, and automated inventory logistics.
             </p>
-            <div style={{ fontSize: '12px', color: 'var(--raspberry-light)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Shield size={14} /> Full Cloud Computing Architecture Project
+            <div style={{ fontSize: '12px', color: '#74c69d', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Shield size={14} /> Certified Organic & Direct Marketplace
             </div>
           </div>
 
@@ -137,17 +137,12 @@ export default function Footer({ onNavigate }) {
 
           <div>
             <h4 style={{ color: '#ffffff', fontSize: '14px', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              Cloud Computing
+              About Platform
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
               <li>
-                <button onClick={() => onNavigate('cloud')} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
-                  Architecture Dashboard
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onNavigate('about')} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
-                  Rubric & Cloud Service Models
+                <button onClick={() => onNavigate('about')} style={{ color: '#b7e4c7', cursor: 'pointer' }}>
+                  About & Overview
                 </button>
               </li>
               <li>
@@ -165,7 +160,7 @@ export default function Footer({ onNavigate }) {
 
           <div>
             <h4 style={{ color: '#ffffff', fontSize: '14px', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              Demo Credentials
+              Authentication & Security
             </h4>
             <div style={{
               background: 'rgba(255,255,255,0.05)',
@@ -175,11 +170,11 @@ export default function Footer({ onNavigate }) {
               fontSize: '12px',
               lineHeight: '1.6'
             }}>
-              <div><strong>Admin:</strong> admin@farmdirect.dev</div>
-              <div><strong>Farmer:</strong> mary@farmdirect.dev</div>
-              <div><strong>Consumer:</strong> alice@consumer.dev</div>
-              <div style={{ color: '#EC5A92', marginTop: '6px', fontSize: '11px' }}>
-                Use top banner for instant 1-click evaluation login.
+              <div><strong>Provider:</strong> Clerk Auth</div>
+              <div><strong>Single Sign-On:</strong> Google OAuth 2.0</div>
+              <div><strong>Roles:</strong> Consumer & Farmer</div>
+              <div style={{ color: '#74c69d', marginTop: '6px', fontSize: '11px' }}>
+                Enterprise JWT sessions synced with MongoDB Atlas.
               </div>
             </div>
           </div>

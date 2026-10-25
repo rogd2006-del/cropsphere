@@ -30,8 +30,8 @@ const FarmerProfileSchema = new Schema<IFarmerProfile>({
   bio: { type: String, default: '', maxlength: 1000 },
   location: {
     address: { type: String, default: '' },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
+    city: { type: String, default: '' },
+    state: { type: String, default: '' },
     coordinates: {
       lat: { type: Number },
       lng: { type: Number },
@@ -51,7 +51,7 @@ const FarmerProfileSchema = new Schema<IFarmerProfile>({
   },
 }, { timestamps: true });
 
-FarmerProfileSchema.index({ userId: 1 });
+// Note: userId index is created automatically by unique:true on the field
 FarmerProfileSchema.index({ 'location.city': 1 });
 FarmerProfileSchema.index({ rating: -1 });
 

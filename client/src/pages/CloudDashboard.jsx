@@ -159,7 +159,7 @@ export default function CloudDashboard() {
               <span className="indicator-live" /> LIVE CLOUD TELEMETRY & SERVICE MODELS
             </div>
             <h1 style={{ fontSize: '32px', color: '#ffffff', fontWeight: 800, letterSpacing: '-0.5px' }}>
-              Cloud Computing Architecture
+              Cloud Services & Telemetry
             </h1>
             <p style={{ color: '#FCE4EE', fontSize: '15px', maxWidth: '640px', lineHeight: 1.5 }}>
               Demonstrating full real-world execution across four core cloud service models (IaaS, PaaS, SaaS, FaaS), augmented with managed DBaaS and cloud object storage.
@@ -213,126 +213,7 @@ export default function CloudDashboard() {
         </div>
       )}
 
-      {/* Visual Architecture Flow Diagram */}
-      <section style={{
-        backgroundColor: '#ffffff',
-        border: '1.5px solid #ebe7dc',
-        borderRadius: '20px',
-        padding: '28px',
-        marginBottom: '40px',
-        boxShadow: 'var(--shadow-sm)'
-      }}>
-        <div style={{ marginBottom: '20px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#081c15' }}>
-            System Architecture & Data Flow
-          </h2>
-          <p style={{ fontSize: '13px', color: '#52635a' }}>
-            Interactive blueprint mapping consumer requests through cloud computing tiers
-          </p>
-        </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: '12px',
-          alignItems: 'center'
-        }}>
-          <div style={{
-            background: '#fbfbf9',
-            border: '1.5px solid #ebe7dc',
-            borderRadius: '14px',
-            padding: '16px',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#7e9187', textTransform: 'uppercase' }}>Client</div>
-            <div style={{ fontWeight: 800, fontSize: '14px', color: '#081c15', marginTop: '4px' }}>Web Browser</div>
-            <div style={{ fontSize: '11px', color: '#52635a', marginTop: '2px' }}>HTTP / HTTPS</div>
-          </div>
-
-          <div style={{ textAlign: 'center', color: '#E3266F', fontWeight: 700 }}>➔</div>
-
-          <div style={{
-            background: '#FDF0F5',
-            border: '1.5px solid #F7A8C6',
-            borderRadius: '14px',
-            padding: '16px',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#E3266F', textTransform: 'uppercase' }}>SaaS Tier</div>
-            <div style={{ fontWeight: 800, fontSize: '14px', color: '#E3266F', marginTop: '4px' }}>React Frontend</div>
-            <div style={{ fontSize: '11px', color: '#E3266F', marginTop: '2px' }}>Vite / Single Page App</div>
-          </div>
-
-          <div style={{ textAlign: 'center', color: '#E3266F', fontWeight: 700 }}>➔</div>
-
-          <div style={{
-            background: '#FDF0F5',
-            border: '1.5px solid #F7A8C6',
-            borderRadius: '14px',
-            padding: '16px',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#E3266F', textTransform: 'uppercase' }}>PaaS / IaaS Tier</div>
-            <div style={{ fontWeight: 800, fontSize: '14px', color: '#E3266F', marginTop: '4px' }}>Express API</div>
-            <div style={{ fontSize: '11px', color: '#E3266F', marginTop: '2px' }}>Port 5000 / Auth / Zod</div>
-          </div>
-
-          <div style={{ textAlign: 'center', color: '#E3266F', fontWeight: 700 }}>➔</div>
-
-          <div style={{
-            background: '#fef3c7',
-            border: '1.5px solid #fde68a',
-            borderRadius: '14px',
-            padding: '16px',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#92400e', textTransform: 'uppercase' }}>DBaaS & Storage</div>
-            <div style={{ fontWeight: 800, fontSize: '14px', color: '#78350f', marginTop: '4px' }}>MongoDB Atlas</div>
-            <div style={{ fontSize: '11px', color: '#92400e', marginTop: '2px' }}>Persistent Multi-Shard</div>
-          </div>
-        </div>
-
-        {/* FaaS Pipeline Branch */}
-        <div style={{
-          marginTop: '20px',
-          padding: '14px 20px',
-          background: '#f5f4ee',
-          borderRadius: '12px',
-          border: '1px dashed #c2b9a1',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '12px',
-          fontSize: '12px'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Zap size={16} style={{ color: '#d97706' }} />
-            <span>
-              <strong>Asynchronous Event Pipeline (FaaS):</strong> Orders & Inventory modifications publish to Queue ➔ Triggering <code style={{ background: '#ffffff', padding: '2px 6px', borderRadius: '4px' }}>OrderEventProcessor</code> & <code style={{ background: '#ffffff', padding: '2px 6px', borderRadius: '4px' }}>InventoryAlertProcessor</code>.
-            </span>
-          </div>
-
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button
-              onClick={() => runTest('faas-order')}
-              disabled={testingService === 'faas-order'}
-              className="btn btn-outline btn-sm"
-              style={{ padding: '4px 10px', fontSize: '11px' }}
-            >
-              Test Order Event
-            </button>
-            <button
-              onClick={() => runTest('faas-inventory')}
-              disabled={testingService === 'faas-inventory'}
-              className="btn btn-outline btn-sm"
-              style={{ padding: '4px 10px', fontSize: '11px' }}
-            >
-              Test Inventory Alert
-            </button>
-          </div>
-        </div>
-      </section>
 
       {/* 6 Cloud Service Model Cards */}
       <div style={{
