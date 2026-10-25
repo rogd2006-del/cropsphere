@@ -90,10 +90,10 @@ export default function MarketplacePage({ initialCategory, initialSearch, onSele
     <div className="container" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
       {/* Page Title */}
       <div style={{ marginBottom: '32px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#2d6a4f', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--raspberry-primary)', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
           <Store size={15} /> Direct Producer Marketplace
         </div>
-        <h1 style={{ fontSize: '36px', fontWeight: 800, color: '#081c15' }}>
+        <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--amazon-900)' }}>
           Fresh Farm Produce
         </h1>
         <p style={{ color: '#52635a', fontSize: '15px' }}>
@@ -127,7 +127,7 @@ export default function MarketplacePage({ initialCategory, initialSearch, onSele
           flex: '1 1 280px',
           maxWidth: '400px'
         }}>
-          <Search size={18} style={{ color: '#52b788', flexShrink: 0 }} />
+          <Search size={18} style={{ color: '#E3266F', flexShrink: 0 }} />
           <input
             type="text"
             value={search}
@@ -156,9 +156,9 @@ export default function MarketplacePage({ initialCategory, initialSearch, onSele
             style={{
               padding: '8px 14px',
               borderRadius: '10px',
-              border: `1.5px solid ${organicOnly ? '#2d6a4f' : '#ebe7dc'}`,
-              background: organicOnly ? '#edfbf1' : '#ffffff',
-              color: organicOnly ? '#1b4332' : '#52635a',
+              border: `1.5px solid ${organicOnly ? '#E3266F' : '#ebe7dc'}`,
+              background: organicOnly ? '#FDF0F5' : '#ffffff',
+              color: organicOnly ? '#E3266F' : '#52635a',
               fontWeight: 600,
               fontSize: '13px',
               display: 'flex',
@@ -166,7 +166,7 @@ export default function MarketplacePage({ initialCategory, initialSearch, onSele
               gap: '6px'
             }}
           >
-            <Sparkles size={14} style={{ color: organicOnly ? '#40916c' : '#7e9187' }} />
+            <Sparkles size={14} style={{ color: organicOnly ? '#E3266F' : '#7e9187' }} />
             Organic Only
           </button>
 

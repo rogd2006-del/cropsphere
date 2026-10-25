@@ -5,18 +5,18 @@ export default function Footer({ onNavigate }) {
   return (
     <footer style={{
       background: '#081c15',
-      color: '#d8f3dc',
+      color: '#FCE4EE',
       paddingTop: '60px',
       paddingBottom: '30px',
       marginTop: 'auto',
-      borderTop: '1px solid rgba(82, 183, 136, 0.2)'
+      borderTop: '1px solid rgba(227, 38, 111, 0.2)'
     }}>
       <div className="container">
         {/* Top Cloud Tier Highlights */}
         <div style={{
-          background: 'rgba(27, 67, 50, 0.5)',
+          background: 'rgba(227, 38, 111, 0.5)',
           borderRadius: '16px',
-          border: '1px solid rgba(82, 183, 136, 0.2)',
+          border: '1px solid rgba(227, 38, 111, 0.2)',
           padding: '24px',
           marginBottom: '50px',
           display: 'grid',
@@ -24,52 +24,52 @@ export default function Footer({ onNavigate }) {
           gap: '16px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(82, 183, 136, 0.15)', borderRadius: '10px', color: '#52b788' }}>
+            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
               <Server size={20} />
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>IaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#95d5b2' }}>Ubuntu Linux VM / systemd</div>
+              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Ubuntu Linux VM / systemd</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(82, 183, 136, 0.15)', borderRadius: '10px', color: '#52b788' }}>
+            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
               <Layers size={20} />
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>PaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#95d5b2' }}>Express API Platform</div>
+              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Express API Platform</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(82, 183, 136, 0.15)', borderRadius: '10px', color: '#52b788' }}>
+            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
               <Sprout size={20} />
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>SaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#95d5b2' }}>FarmDirect Marketplace</div>
+              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>FarmDirect Marketplace</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(82, 183, 136, 0.15)', borderRadius: '10px', color: '#52b788' }}>
+            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
               <Cpu size={20} />
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>FaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#95d5b2' }}>Serverless Event Handlers</div>
+              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Serverless Event Handlers</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(82, 183, 136, 0.15)', borderRadius: '10px', color: '#52b788' }}>
+            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
               <Database size={20} />
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>DBaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#95d5b2' }}>MongoDB Atlas Cluster</div>
+              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>MongoDB Atlas Cluster</div>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function Footer({ onNavigate }) {
                 width: '36px',
                 height: '36px',
                 borderRadius: '10px',
-                background: '#2d6a4f',
+                background: '#E3266F',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -96,13 +96,13 @@ export default function Footer({ onNavigate }) {
                 <Sprout size={20} />
               </div>
               <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '18px', color: '#ffffff' }}>
-                FarmDirect <span style={{ color: '#52b788' }}>Cloud</span>
+                FarmDirect <span style={{ color: 'var(--raspberry-primary)' }}>Cloud</span>
               </span>
             </div>
-            <p style={{ fontSize: '13px', lineHeight: '1.6', color: '#b7e4c7', marginBottom: '16px' }}>
+            <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--cannoli-cream)', opacity: 0.9, marginBottom: '16px' }}>
               A cloud-native smart marketplace empowering local regenerative farmers with direct-to-consumer trade, transparent pricing, and automated inventory logistics.
             </p>
-            <div style={{ fontSize: '12px', color: '#74c69d', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ fontSize: '12px', color: 'var(--raspberry-light)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Shield size={14} /> Full Cloud Computing Architecture Project
             </div>
           </div>
@@ -113,22 +113,22 @@ export default function Footer({ onNavigate }) {
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
               <li>
-                <button onClick={() => onNavigate('marketplace')} style={{ color: '#b7e4c7', cursor: 'pointer' }}>
+                <button onClick={() => onNavigate('marketplace')} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
                   Browse All Produce
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('marketplace', { category: 'vegetables' })} style={{ color: '#b7e4c7', cursor: 'pointer' }}>
+                <button onClick={() => onNavigate('marketplace', { category: 'vegetables' })} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
                   Organic Vegetables
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('marketplace', { category: 'fruits' })} style={{ color: '#b7e4c7', cursor: 'pointer' }}>
+                <button onClick={() => onNavigate('marketplace', { category: 'fruits' })} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
                   Orchard Fresh Fruits
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('marketplace', { category: 'dairy' })} style={{ color: '#b7e4c7', cursor: 'pointer' }}>
+                <button onClick={() => onNavigate('marketplace', { category: 'dairy' })} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
                   Artisan Dairy & Cheese
                 </button>
               </li>
@@ -141,22 +141,22 @@ export default function Footer({ onNavigate }) {
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
               <li>
-                <button onClick={() => onNavigate('cloud')} style={{ color: '#b7e4c7', cursor: 'pointer' }}>
+                <button onClick={() => onNavigate('cloud')} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
                   Architecture Dashboard
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('about')} style={{ color: '#b7e4c7', cursor: 'pointer' }}>
+                <button onClick={() => onNavigate('about')} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
                   Rubric & Cloud Service Models
                 </button>
               </li>
               <li>
-                <a href="/api/health" target="_blank" rel="noreferrer" style={{ color: '#b7e4c7' }}>
+                <a href="/api/health" target="_blank" rel="noreferrer" style={{ color: '#F7A8C6' }}>
                   Live API Health Probe ↗
                 </a>
               </li>
               <li>
-                <a href="/api-docs" target="_blank" rel="noreferrer" style={{ color: '#b7e4c7' }}>
+                <a href="/api-docs" target="_blank" rel="noreferrer" style={{ color: '#F7A8C6' }}>
                   Swagger OpenAPI Docs ↗
                 </a>
               </li>
@@ -169,7 +169,7 @@ export default function Footer({ onNavigate }) {
             </h4>
             <div style={{
               background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(82,183,136,0.2)',
+              border: '1px solid rgba(227, 38, 111,0.2)',
               borderRadius: '8px',
               padding: '12px',
               fontSize: '12px',
@@ -178,7 +178,7 @@ export default function Footer({ onNavigate }) {
               <div><strong>Admin:</strong> admin@farmdirect.dev</div>
               <div><strong>Farmer:</strong> mary@farmdirect.dev</div>
               <div><strong>Consumer:</strong> alice@consumer.dev</div>
-              <div style={{ color: '#74c69d', marginTop: '6px', fontSize: '11px' }}>
+              <div style={{ color: '#EC5A92', marginTop: '6px', fontSize: '11px' }}>
                 Use top banner for instant 1-click evaluation login.
               </div>
             </div>
@@ -187,7 +187,7 @@ export default function Footer({ onNavigate }) {
 
         {/* Bottom copyright */}
         <div style={{
-          borderTop: '1px solid rgba(82, 183, 136, 0.15)',
+          borderTop: '1px solid rgba(227, 38, 111, 0.15)',
           paddingTop: '24px',
           display: 'flex',
           justifyContent: 'space-between',
@@ -195,7 +195,7 @@ export default function Footer({ onNavigate }) {
           flexWrap: 'wrap',
           gap: '12px',
           fontSize: '12px',
-          color: '#74c69d'
+          color: '#EC5A92'
         }}>
           <div>
             © {new Date().getFullYear()} FarmDirect Cloud. Built with React, Express, MongoDB Atlas, and Serverless Cloud Functions.

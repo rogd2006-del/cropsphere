@@ -125,7 +125,7 @@ export default function CloudDashboard() {
     <div className="container" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
       {/* Cloud Header */}
       <div style={{
-        background: 'linear-gradient(135deg, #081c15 0%, #1b4332 50%, #2d6a4f 100%)',
+        background: 'linear-gradient(135deg, var(--amazon-900) 0%, var(--amazon-800) 100%)',
         borderRadius: '24px',
         padding: '36px',
         color: '#ffffff',
@@ -149,11 +149,11 @@ export default function CloudDashboard() {
               alignItems: 'center',
               gap: '6px',
               padding: '4px 12px',
-              background: 'rgba(82, 183, 136, 0.25)',
+              background: 'rgba(227, 38, 111, 0.25)',
               borderRadius: '999px',
               fontSize: '12px',
               fontWeight: 800,
-              color: '#b7e4c7',
+              color: '#F7A8C6',
               marginBottom: '10px'
             }}>
               <span className="indicator-live" /> LIVE CLOUD TELEMETRY & SERVICE MODELS
@@ -161,7 +161,7 @@ export default function CloudDashboard() {
             <h1 style={{ fontSize: '32px', color: '#ffffff', fontWeight: 800, letterSpacing: '-0.5px' }}>
               Cloud Computing Architecture
             </h1>
-            <p style={{ color: '#d8f3dc', fontSize: '15px', maxWidth: '640px', lineHeight: 1.5 }}>
+            <p style={{ color: '#FCE4EE', fontSize: '15px', maxWidth: '640px', lineHeight: 1.5 }}>
               Demonstrating full real-world execution across four core cloud service models (IaaS, PaaS, SaaS, FaaS), augmented with managed DBaaS and cloud object storage.
             </p>
           </div>
@@ -184,8 +184,8 @@ export default function CloudDashboard() {
       {/* Test Execution Result Banner */}
       {testResult && (
         <div style={{
-          backgroundColor: testResult.status === 'ERROR' ? '#fee2e2' : '#edfbf1',
-          border: `1.5px solid ${testResult.status === 'ERROR' ? '#fecaca' : '#b7e4c7'}`,
+          backgroundColor: testResult.status === 'ERROR' ? '#fee2e2' : '#FDF0F5',
+          border: `1.5px solid ${testResult.status === 'ERROR' ? '#fecaca' : '#F7A8C6'}`,
           borderRadius: '16px',
           padding: '16px 20px',
           marginBottom: '32px',
@@ -197,7 +197,7 @@ export default function CloudDashboard() {
           {testResult.status === 'ERROR' ? (
             <AlertCircle size={24} style={{ color: '#ef4444' }} />
           ) : (
-            <CheckCircle2 size={24} style={{ color: '#2d6a4f' }} />
+            <CheckCircle2 size={24} style={{ color: '#E3266F' }} />
           )}
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 800, fontSize: '14px', color: '#081c15' }}>
@@ -249,35 +249,35 @@ export default function CloudDashboard() {
             <div style={{ fontSize: '11px', color: '#52635a', marginTop: '2px' }}>HTTP / HTTPS</div>
           </div>
 
-          <div style={{ textAlign: 'center', color: '#40916c', fontWeight: 700 }}>➔</div>
+          <div style={{ textAlign: 'center', color: '#E3266F', fontWeight: 700 }}>➔</div>
 
           <div style={{
-            background: '#edfbf1',
-            border: '1.5px solid #b7e4c7',
+            background: '#FDF0F5',
+            border: '1.5px solid #F7A8C6',
             borderRadius: '14px',
             padding: '16px',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#2d6a4f', textTransform: 'uppercase' }}>SaaS Tier</div>
-            <div style={{ fontWeight: 800, fontSize: '14px', color: '#1b4332', marginTop: '4px' }}>React Frontend</div>
-            <div style={{ fontSize: '11px', color: '#40916c', marginTop: '2px' }}>Vite / Single Page App</div>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#E3266F', textTransform: 'uppercase' }}>SaaS Tier</div>
+            <div style={{ fontWeight: 800, fontSize: '14px', color: '#E3266F', marginTop: '4px' }}>React Frontend</div>
+            <div style={{ fontSize: '11px', color: '#E3266F', marginTop: '2px' }}>Vite / Single Page App</div>
           </div>
 
-          <div style={{ textAlign: 'center', color: '#40916c', fontWeight: 700 }}>➔</div>
+          <div style={{ textAlign: 'center', color: '#E3266F', fontWeight: 700 }}>➔</div>
 
           <div style={{
-            background: '#edfbf1',
-            border: '1.5px solid #b7e4c7',
+            background: '#FDF0F5',
+            border: '1.5px solid #F7A8C6',
             borderRadius: '14px',
             padding: '16px',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#2d6a4f', textTransform: 'uppercase' }}>PaaS / IaaS Tier</div>
-            <div style={{ fontWeight: 800, fontSize: '14px', color: '#1b4332', marginTop: '4px' }}>Express API</div>
-            <div style={{ fontSize: '11px', color: '#40916c', marginTop: '2px' }}>Port 5000 / Auth / Zod</div>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#E3266F', textTransform: 'uppercase' }}>PaaS / IaaS Tier</div>
+            <div style={{ fontWeight: 800, fontSize: '14px', color: '#E3266F', marginTop: '4px' }}>Express API</div>
+            <div style={{ fontSize: '11px', color: '#E3266F', marginTop: '2px' }}>Port 5000 / Auth / Zod</div>
           </div>
 
-          <div style={{ textAlign: 'center', color: '#40916c', fontWeight: 700 }}>➔</div>
+          <div style={{ textAlign: 'center', color: '#E3266F', fontWeight: 700 }}>➔</div>
 
           <div style={{
             background: '#fef3c7',
@@ -345,7 +345,7 @@ export default function CloudDashboard() {
         <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '10px', borderRadius: '12px', background: '#edfbf1', color: '#1b4332' }}>
+              <div style={{ padding: '10px', borderRadius: '12px', background: '#FDF0F5', color: '#E3266F' }}>
                 <Server size={22} />
               </div>
               <div>
@@ -401,7 +401,7 @@ export default function CloudDashboard() {
         <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '10px', borderRadius: '12px', background: '#edfbf1', color: '#1b4332' }}>
+              <div style={{ padding: '10px', borderRadius: '12px', background: '#FDF0F5', color: '#E3266F' }}>
                 <Layers size={22} />
               </div>
               <div>
@@ -457,7 +457,7 @@ export default function CloudDashboard() {
         <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '10px', borderRadius: '12px', background: '#edfbf1', color: '#1b4332' }}>
+              <div style={{ padding: '10px', borderRadius: '12px', background: '#FDF0F5', color: '#E3266F' }}>
                 <Sprout size={22} />
               </div>
               <div>
@@ -493,13 +493,13 @@ export default function CloudDashboard() {
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ color: '#7e9187' }}>Platform Status</span>
-              <strong style={{ color: '#2d6a4f' }}>Multi-Tenant Ready</strong>
+              <strong style={{ color: '#E3266F' }}>Multi-Tenant Ready</strong>
             </div>
           </div>
 
           <div style={{ marginTop: 'auto', paddingTop: '12px', borderTop: '1px solid #f5f4ee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '11px', color: '#7e9187' }}>Client: React 19 + Vite</span>
-            <span style={{ fontSize: '12px', color: '#2d6a4f', fontWeight: 700 }}>
+            <span style={{ fontSize: '12px', color: '#E3266F', fontWeight: 700 }}>
               ✓ Running Locally
             </span>
           </div>
@@ -509,7 +509,7 @@ export default function CloudDashboard() {
         <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '10px', borderRadius: '12px', background: '#edfbf1', color: '#1b4332' }}>
+              <div style={{ padding: '10px', borderRadius: '12px', background: '#FDF0F5', color: '#E3266F' }}>
                 <Cpu size={22} />
               </div>
               <div>
@@ -565,7 +565,7 @@ export default function CloudDashboard() {
         <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '10px', borderRadius: '12px', background: '#edfbf1', color: '#1b4332' }}>
+              <div style={{ padding: '10px', borderRadius: '12px', background: '#FDF0F5', color: '#E3266F' }}>
                 <Database size={22} />
               </div>
               <div>
@@ -623,7 +623,7 @@ export default function CloudDashboard() {
         <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '10px', borderRadius: '12px', background: '#edfbf1', color: '#1b4332' }}>
+              <div style={{ padding: '10px', borderRadius: '12px', background: '#FDF0F5', color: '#E3266F' }}>
                 <HardDrive size={22} />
               </div>
               <div>

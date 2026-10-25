@@ -115,7 +115,7 @@ export default function ProductModal({ product, onClose }) {
               position: 'absolute',
               top: '16px',
               left: '16px',
-              background: '#1b4332',
+              background: '#E3266F',
               color: '#ffffff',
               padding: '4px 10px',
               borderRadius: '999px',
@@ -136,7 +136,7 @@ export default function ProductModal({ product, onClose }) {
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            color: '#40916c',
+            color: '#E3266F',
             fontWeight: 600,
             fontSize: '13px',
             marginBottom: '6px'
@@ -159,12 +159,12 @@ export default function ProductModal({ product, onClose }) {
           <div style={{
             fontSize: '26px',
             fontWeight: 800,
-            color: '#1b4332',
+            color: 'var(--raspberry-primary)',
             fontFamily: 'var(--font-heading)',
             marginBottom: '16px'
           }}>
             ${product.price.toFixed(2)}
-            <span style={{ fontSize: '14px', fontWeight: 500, color: '#52635a', marginLeft: '4px' }}>
+            <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-muted)', marginLeft: '4px' }}>
               per {product.unit}
             </span>
           </div>

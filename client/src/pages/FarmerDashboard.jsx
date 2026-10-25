@@ -152,7 +152,7 @@ export default function FarmerDashboard({ onNavigate }) {
     <div className="container" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
       {/* Top Banner */}
       <div style={{
-        background: 'linear-gradient(135deg, #081c15 0%, #1b4332 100%)',
+        background: 'linear-gradient(135deg, var(--amazon-900) 0%, var(--amazon-800) 100%)',
         borderRadius: '20px',
         padding: '32px',
         color: '#ffffff',
@@ -168,8 +168,8 @@ export default function FarmerDashboard({ onNavigate }) {
             width: '56px',
             height: '56px',
             borderRadius: '16px',
-            background: 'rgba(82, 183, 136, 0.25)',
-            color: '#b7e4c7',
+            background: 'rgba(227, 38, 111, 0.25)',
+            color: '#F7A8C6',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -178,8 +178,8 @@ export default function FarmerDashboard({ onNavigate }) {
           </div>
           <div>
             <span style={{
-              background: '#52b788',
-              color: '#081c15',
+              background: 'var(--raspberry-primary)',
+              color: '#ffffff',
               padding: '2px 8px',
               borderRadius: '999px',
               fontSize: '11px',
@@ -191,7 +191,7 @@ export default function FarmerDashboard({ onNavigate }) {
             <h1 style={{ fontSize: '26px', color: '#ffffff', fontWeight: 800, marginTop: '2px' }}>
               {user?.name || 'Farmer'} Dashboard
             </h1>
-            <p style={{ color: '#b7e4c7', fontSize: '13px' }}>
+            <p style={{ color: 'var(--cannoli-cream)', opacity: 0.9, fontSize: '13px' }}>
               Manage crop inventories, fulfill consumer orders, and inspect automated cloud telemetry.
             </p>
           </div>
@@ -208,7 +208,7 @@ export default function FarmerDashboard({ onNavigate }) {
           <button
             onClick={handleOpenCreate}
             className="btn btn-primary btn-sm"
-            style={{ background: '#52b788', color: '#081c15' }}
+            style={{ background: 'var(--raspberry-primary)', color: '#ffffff' }}
           >
             <Plus size={15} /> Add Produce Listing
           </button>
@@ -225,7 +225,7 @@ export default function FarmerDashboard({ onNavigate }) {
         <div className="card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#52635a', marginBottom: '8px' }}>
             <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>Gross Revenue</span>
-            <DollarSign size={18} style={{ color: '#2d6a4f' }} />
+            <DollarSign size={18} style={{ color: '#E3266F' }} />
           </div>
           <div style={{ fontSize: '26px', fontWeight: 800, color: '#081c15' }}>
             ${(stats.totalRevenue || 0).toFixed(2)}
@@ -238,7 +238,7 @@ export default function FarmerDashboard({ onNavigate }) {
         <div className="card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#52635a', marginBottom: '8px' }}>
             <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>Active Listings</span>
-            <Sprout size={18} style={{ color: '#2d6a4f' }} />
+            <Sprout size={18} style={{ color: '#E3266F' }} />
           </div>
           <div style={{ fontSize: '26px', fontWeight: 800, color: '#081c15' }}>
             {stats.activeProducts ?? products.length}
@@ -314,8 +314,8 @@ export default function FarmerDashboard({ onNavigate }) {
             padding: '10px 18px',
             fontWeight: 700,
             fontSize: '14px',
-            color: activeTab === 'inventory' ? '#1b4332' : '#7e9187',
-            borderBottom: `2px solid ${activeTab === 'inventory' ? '#2d6a4f' : 'transparent'}`,
+            color: activeTab === 'inventory' ? '#E3266F' : '#7e9187',
+            borderBottom: `2px solid ${activeTab === 'inventory' ? '#E3266F' : 'transparent'}`,
             marginBottom: '-2px',
             display: 'flex',
             alignItems: 'center',
@@ -330,8 +330,8 @@ export default function FarmerDashboard({ onNavigate }) {
             padding: '10px 18px',
             fontWeight: 700,
             fontSize: '14px',
-            color: activeTab === 'orders' ? '#1b4332' : '#7e9187',
-            borderBottom: `2px solid ${activeTab === 'orders' ? '#2d6a4f' : 'transparent'}`,
+            color: activeTab === 'orders' ? '#E3266F' : '#7e9187',
+            borderBottom: `2px solid ${activeTab === 'orders' ? '#E3266F' : 'transparent'}`,
             marginBottom: '-2px',
             display: 'flex',
             alignItems: 'center',
@@ -371,7 +371,7 @@ export default function FarmerDashboard({ onNavigate }) {
                       <td style={{ padding: '14px 20px' }}>
                         <div style={{ fontWeight: 700, color: '#081c15' }}>{prod.name}</div>
                         {prod.organic && (
-                          <span style={{ fontSize: '11px', color: '#2d6a4f', fontWeight: 600 }}>
+                          <span style={{ fontSize: '11px', color: '#E3266F', fontWeight: 600 }}>
                             🌱 Certified Organic
                           </span>
                         )}
@@ -379,7 +379,7 @@ export default function FarmerDashboard({ onNavigate }) {
                       <td style={{ padding: '14px 20px', textTransform: 'capitalize', color: '#52635a' }}>
                         {prod.category}
                       </td>
-                      <td style={{ padding: '14px 20px', fontWeight: 700, color: '#1b4332' }}>
+                      <td style={{ padding: '14px 20px', fontWeight: 700, color: '#E3266F' }}>
                         ${prod.price.toFixed(2)} / {prod.unit}
                       </td>
                       <td style={{ padding: '14px 20px' }}>
@@ -402,7 +402,7 @@ export default function FarmerDashboard({ onNavigate }) {
                         <div style={{ display: 'inline-flex', gap: '8px' }}>
                           <button
                             onClick={() => handleOpenEdit(prod)}
-                            style={{ padding: '6px', color: '#2d6a4f' }}
+                            style={{ padding: '6px', color: '#E3266F' }}
                             title="Edit"
                           >
                             <Edit size={16} />
@@ -456,7 +456,7 @@ export default function FarmerDashboard({ onNavigate }) {
                     </div>
                   </div>
 
-                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#1b4332' }}>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#E3266F' }}>
                     ${order.total?.toFixed(2)}
                   </div>
                 </div>
@@ -514,14 +514,14 @@ export default function FarmerDashboard({ onNavigate }) {
                     <button
                       onClick={() => handleOrderStatusTransition(order._id, 'DELIVERED')}
                       className="btn btn-secondary btn-sm"
-                      style={{ background: '#2d6a4f', color: '#ffffff' }}
+                      style={{ background: '#E3266F', color: '#ffffff' }}
                     >
                       Confirm Delivered / Completed
                     </button>
                   )}
 
                   {['DELIVERED', 'COMPLETED'].includes(order.status) && (
-                    <span style={{ fontSize: '12px', color: '#2d6a4f', fontWeight: 700 }}>
+                    <span style={{ fontSize: '12px', color: '#E3266F', fontWeight: 700 }}>
                       ✓ Order Fulfilled
                     </span>
                   )}

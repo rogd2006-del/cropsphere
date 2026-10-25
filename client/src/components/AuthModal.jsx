@@ -62,13 +62,13 @@ export default function AuthModal() {
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(8, 28, 21, 0.65)',
+        backgroundColor: 'rgba(6, 28, 18, 0.65)',
         backdropFilter: 'blur(6px)',
         zIndex: 110,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px',
+        justifyContent: 'flex-start',
+        padding: '24px 32px',
         animation: 'fadeIn 0.2s ease'
       }}
     >
@@ -78,11 +78,13 @@ export default function AuthModal() {
           backgroundColor: '#ffffff',
           borderRadius: '20px',
           width: '100%',
-          maxWidth: '460px',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          maxWidth: '440px',
+          boxShadow: '0 25px 50px -12px rgba(6, 28, 18, 0.25)',
           overflow: 'hidden',
           position: 'relative',
-          padding: '28px'
+          padding: '28px',
+          border: '1px solid var(--cannoli-cream-dark)',
+          animation: 'slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
         <button
@@ -98,24 +100,24 @@ export default function AuthModal() {
         </button>
 
         {/* Modal Header */}
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <div style={{ textAlign: 'left', marginBottom: '18px' }}>
           <div style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #1b4332, #2d6a4f)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
+            background: 'var(--raspberry-primary)',
             color: '#ffffff',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: '0 auto 10px'
+            marginBottom: '10px'
           }}>
-            <Sprout size={24} />
+            <Sprout size={22} />
           </div>
-          <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#081c15' }}>
+          <h3 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--amazon-900)', letterSpacing: '-0.3px' }}>
             {mode === 'login' ? 'Welcome Back' : 'Create FarmDirect Account'}
           </h3>
-          <p style={{ fontSize: '13px', color: '#52635a', marginTop: '2px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px' }}>
             {mode === 'login' ? 'Access your cloud marketplace dashboard' : 'Join our network of regenerative farmers and local buyers'}
           </p>
         </div>
@@ -124,10 +126,10 @@ export default function AuthModal() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          backgroundColor: '#f5f4ee',
+          backgroundColor: 'var(--cannoli-cream-dark)',
           borderRadius: '10px',
-          padding: '4px',
-          marginBottom: '20px'
+          padding: '3px',
+          marginBottom: '18px'
         }}>
           <button
             type="button"
@@ -138,7 +140,7 @@ export default function AuthModal() {
               fontWeight: 700,
               fontSize: '13px',
               backgroundColor: mode === 'login' ? '#ffffff' : 'transparent',
-              color: mode === 'login' ? '#1b4332' : '#52635a',
+              color: mode === 'login' ? 'var(--raspberry-dark)' : 'var(--text-muted)',
               boxShadow: mode === 'login' ? '0 2px 4px rgba(0,0,0,0.06)' : 'none'
             }}
           >
@@ -153,7 +155,7 @@ export default function AuthModal() {
               fontWeight: 700,
               fontSize: '13px',
               backgroundColor: mode === 'register' ? '#ffffff' : 'transparent',
-              color: mode === 'register' ? '#1b4332' : '#52635a',
+              color: mode === 'register' ? 'var(--raspberry-dark)' : 'var(--text-muted)',
               boxShadow: mode === 'register' ? '0 2px 4px rgba(0,0,0,0.06)' : 'none'
             }}
           >
@@ -164,15 +166,15 @@ export default function AuthModal() {
         {/* Demo Fast Fill Buttons */}
         {mode === 'login' && (
           <div style={{
-            background: '#edfbf1',
-            border: '1px solid #b7e4c7',
+            background: 'var(--raspberry-wash)',
+            border: '1px solid var(--raspberry-soft)',
             borderRadius: '12px',
             padding: '10px 12px',
-            marginBottom: '18px',
+            marginBottom: '16px',
             fontSize: '12px'
           }}>
-            <div style={{ fontWeight: 700, color: '#1b4332', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Sparkles size={13} /> Fast Fill Demo Credentials:
+            <div style={{ fontWeight: 700, color: 'var(--raspberry-dark)', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Sparkles size={13} color="var(--raspberry-primary)" /> Fast Fill Demo Credentials:
             </div>
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               <button
@@ -180,12 +182,12 @@ export default function AuthModal() {
                 onClick={() => handleFillDemo('ADMIN')}
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #74c69d',
+                  border: '1px solid var(--raspberry-soft)',
                   borderRadius: '6px',
                   padding: '3px 8px',
                   fontSize: '11px',
                   fontWeight: 600,
-                  color: '#081c15'
+                  color: 'var(--amazon-900)'
                 }}
               >
                 Admin
@@ -195,12 +197,12 @@ export default function AuthModal() {
                 onClick={() => handleFillDemo('FARMER')}
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #74c69d',
+                  border: '1px solid var(--raspberry-soft)',
                   borderRadius: '6px',
                   padding: '3px 8px',
                   fontSize: '11px',
                   fontWeight: 600,
-                  color: '#081c15'
+                  color: 'var(--amazon-900)'
                 }}
               >
                 Farmer (Mary)
@@ -210,12 +212,12 @@ export default function AuthModal() {
                 onClick={() => handleFillDemo('CONSUMER')}
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #74c69d',
+                  border: '1px solid var(--raspberry-soft)',
                   borderRadius: '6px',
                   padding: '3px 8px',
                   fontSize: '11px',
                   fontWeight: 600,
-                  color: '#081c15'
+                  color: 'var(--amazon-900)'
                 }}
               >
                 Consumer (Alice)
@@ -270,9 +272,9 @@ export default function AuthModal() {
                     style={{
                       padding: '8px',
                       borderRadius: '8px',
-                      border: `1.5px solid ${role === 'CONSUMER' ? '#2d6a4f' : '#ebe7dc'}`,
-                      background: role === 'CONSUMER' ? '#edfbf1' : '#ffffff',
-                      color: role === 'CONSUMER' ? '#1b4332' : '#52635a',
+                      border: `1.5px solid ${role === 'CONSUMER' ? '#E3266F' : '#ebe7dc'}`,
+                      background: role === 'CONSUMER' ? '#FDF0F5' : '#ffffff',
+                      color: role === 'CONSUMER' ? '#E3266F' : '#52635a',
                       fontWeight: 600,
                       fontSize: '12px',
                       display: 'flex',
@@ -289,9 +291,9 @@ export default function AuthModal() {
                     style={{
                       padding: '8px',
                       borderRadius: '8px',
-                      border: `1.5px solid ${role === 'FARMER' ? '#2d6a4f' : '#ebe7dc'}`,
-                      background: role === 'FARMER' ? '#edfbf1' : '#ffffff',
-                      color: role === 'FARMER' ? '#1b4332' : '#52635a',
+                      border: `1.5px solid ${role === 'FARMER' ? '#E3266F' : '#ebe7dc'}`,
+                      background: role === 'FARMER' ? '#FDF0F5' : '#ffffff',
+                      color: role === 'FARMER' ? '#E3266F' : '#52635a',
                       fontWeight: 600,
                       fontSize: '12px',
                       display: 'flex',

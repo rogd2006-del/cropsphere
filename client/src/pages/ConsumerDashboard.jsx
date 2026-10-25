@@ -74,7 +74,7 @@ export default function ConsumerDashboard({ onNavigate }) {
     <div className="container" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
       {/* Header Profile Summary */}
       <div style={{
-        background: 'linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%)',
+        background: 'linear-gradient(135deg, #E3266F 0%, #E3266F 100%)',
         borderRadius: '20px',
         padding: '32px',
         color: '#ffffff',
@@ -92,7 +92,7 @@ export default function ConsumerDashboard({ onNavigate }) {
             height: '56px',
             borderRadius: '50%',
             background: '#ffffff',
-            color: '#1b4332',
+            color: '#E3266F',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -103,20 +103,21 @@ export default function ConsumerDashboard({ onNavigate }) {
           </div>
           <div>
             <span style={{
-              background: 'rgba(82, 183, 136, 0.25)',
-              color: '#d8f3dc',
+              background: 'rgba(217, 36, 106, 0.25)',
+              color: 'var(--raspberry-light)',
               padding: '2px 8px',
               borderRadius: '999px',
               fontSize: '11px',
               fontWeight: 700,
-              textTransform: 'uppercase'
+              textTransform: 'uppercase',
+              border: '1px solid rgba(217, 36, 106, 0.4)'
             }}>
               Consumer Account
             </span>
             <h1 style={{ fontSize: '26px', color: '#ffffff', fontWeight: 800, marginTop: '2px' }}>
               Welcome, {user?.name || 'Customer'}
             </h1>
-            <p style={{ color: '#b7e4c7', fontSize: '13px' }}>
+            <p style={{ color: 'var(--cannoli-cream)', opacity: 0.9, fontSize: '13px' }}>
               {user?.email} • Track your farm-direct produce orders & delivery timelines
             </p>
           </div>
@@ -124,8 +125,8 @@ export default function ConsumerDashboard({ onNavigate }) {
 
         <button
           onClick={() => onNavigate('marketplace')}
-          className="btn btn-secondary"
-          style={{ background: '#ffffff', color: '#1b4332' }}
+          className="btn btn-primary"
+          style={{ background: 'var(--raspberry-primary)', color: '#ffffff' }}
         >
           <ShoppingBag size={15} /> Browse Fresh Produce
         </button>
@@ -133,9 +134,9 @@ export default function ConsumerDashboard({ onNavigate }) {
 
       {message && (
         <div style={{
-          backgroundColor: '#edfbf1',
-          color: '#1b4332',
-          border: '1px solid #b7e4c7',
+          backgroundColor: '#FDF0F5',
+          color: '#E3266F',
+          border: '1px solid #F7A8C6',
           padding: '12px 18px',
           borderRadius: '12px',
           marginBottom: '24px',
@@ -236,7 +237,7 @@ export default function ConsumerDashboard({ onNavigate }) {
                   </div>
 
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '20px', fontWeight: 800, color: '#1b4332' }}>
+                    <div style={{ fontSize: '20px', fontWeight: 800, color: '#E3266F' }}>
                       ${order.total?.toFixed(2)}
                     </div>
                     <div style={{ fontSize: '12px', color: '#52635a' }}>
@@ -274,15 +275,15 @@ export default function ConsumerDashboard({ onNavigate }) {
                               width: '28px',
                               height: '28px',
                               borderRadius: '50%',
-                              backgroundColor: isCompleted ? '#2d6a4f' : '#ffffff',
-                              border: `2px solid ${isCompleted ? '#2d6a4f' : '#ebe7dc'}`,
+                              backgroundColor: isCompleted ? '#E3266F' : '#ffffff',
+                              border: `2px solid ${isCompleted ? '#E3266F' : '#ebe7dc'}`,
                               color: isCompleted ? '#ffffff' : '#7e9187',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               fontSize: '11px',
                               fontWeight: 700,
-                              boxShadow: isCurrent ? '0 0 0 4px rgba(82, 183, 136, 0.25)' : 'none'
+                              boxShadow: isCurrent ? '0 0 0 4px rgba(227, 38, 111, 0.25)' : 'none'
                             }}>
                               {isCompleted ? <CheckCircle2 size={16} /> : idx + 1}
                             </div>

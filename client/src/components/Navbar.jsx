@@ -33,15 +33,15 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
       position: 'sticky',
       top: 0,
       zIndex: 50,
-      backgroundColor: 'rgba(251, 251, 249, 0.95)',
+      backgroundColor: 'rgba(240, 239, 226, 0.95)',
       backdropFilter: 'blur(10px)',
-      borderBottom: '1px solid rgba(45, 106, 79, 0.12)',
+      borderBottom: '1px solid var(--cannoli-cream-dark)',
     }}>
       <div className="container" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: '72px',
+        height: '70px',
       }}>
         {/* Logo */}
         <div
@@ -55,36 +55,36 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
           }}
         >
           <div style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
+            background: 'var(--raspberry-primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: '#ffffff',
-            boxShadow: '0 4px 10px rgba(45, 106, 79, 0.25)',
+            boxShadow: '0 4px 10px rgba(227, 38, 111, 0.25)',
           }}>
-            <Sprout size={24} />
+            <Sprout size={22} />
           </div>
           <div>
             <div style={{
               fontFamily: 'var(--font-heading)',
               fontWeight: 800,
-              fontSize: '20px',
-              color: '#081c15',
-              letterSpacing: '-0.4px',
+              fontSize: '19px',
+              color: 'var(--amazon-900)',
+              letterSpacing: '-0.3px',
               display: 'flex',
               alignItems: 'center',
               gap: '6px'
             }}>
-              FarmDirect <span style={{ color: '#40916c', fontWeight: 600 }}>Cloud</span>
+              FarmDirect <span style={{ color: 'var(--raspberry-primary)', fontWeight: 700 }}>Cloud</span>
             </div>
             <div style={{
               fontSize: '11px',
-              color: '#52635a',
+              color: 'var(--text-muted)',
               letterSpacing: '0.4px',
-              fontWeight: 500,
+              fontWeight: 600,
               textTransform: 'uppercase'
             }}>
               Smart Cloud Marketplace
@@ -105,8 +105,8 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
               borderRadius: '8px',
               fontWeight: 600,
               fontSize: '14px',
-              color: activePage === 'home' ? '#1b4332' : '#52635a',
-              background: activePage === 'home' ? '#edfbf1' : 'transparent',
+              color: activePage === 'home' ? '#E3266F' : '#52635a',
+              background: activePage === 'home' ? '#FDF0F5' : 'transparent',
               transition: 'all 0.15s'
             }}
           >
@@ -120,8 +120,8 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
               borderRadius: '8px',
               fontWeight: 600,
               fontSize: '14px',
-              color: activePage === 'marketplace' ? '#1b4332' : '#52635a',
-              background: activePage === 'marketplace' ? '#edfbf1' : 'transparent',
+              color: activePage === 'marketplace' ? '#E3266F' : '#52635a',
+              background: activePage === 'marketplace' ? '#FDF0F5' : 'transparent',
               display: 'flex',
               alignItems: 'center',
               gap: '6px'
@@ -138,8 +138,8 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
               borderRadius: '8px',
               fontWeight: 600,
               fontSize: '14px',
-              color: activePage === 'cloud' ? '#1b4332' : '#52635a',
-              background: activePage === 'cloud' ? '#edfbf1' : 'transparent',
+              color: activePage === 'cloud' ? '#E3266F' : '#52635a',
+              background: activePage === 'cloud' ? '#FDF0F5' : 'transparent',
               display: 'flex',
               alignItems: 'center',
               gap: '6px'
@@ -151,7 +151,7 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
               width: '8px',
               height: '8px',
               borderRadius: '50%',
-              backgroundColor: '#52b788',
+              backgroundColor: '#E3266F',
               display: 'inline-block'
             }} />
           </button>
@@ -163,8 +163,8 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
               borderRadius: '8px',
               fontWeight: 600,
               fontSize: '14px',
-              color: activePage === 'about' ? '#1b4332' : '#52635a',
-              background: activePage === 'about' ? '#edfbf1' : 'transparent',
+              color: activePage === 'about' ? '#E3266F' : '#52635a',
+              background: activePage === 'about' ? '#FDF0F5' : 'transparent',
             }}
           >
             About & Rubric
@@ -185,7 +185,7 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#1b4332',
+                color: '#E3266F',
                 background: '#ffffff',
                 border: '1px solid #ebe7dc',
                 transition: 'all 0.15s'
@@ -224,23 +224,23 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              padding: '9px 15px',
+              padding: '8px 14px',
               borderRadius: '10px',
-              backgroundColor: '#1b4332',
+              backgroundColor: 'var(--raspberry-primary)',
               color: '#ffffff',
               fontWeight: 600,
-              fontSize: '14px',
-              boxShadow: '0 4px 10px rgba(27, 67, 50, 0.2)',
+              fontSize: '13.5px',
+              boxShadow: '0 4px 10px rgba(227, 38, 111, 0.2)',
               transition: 'all 0.15s'
             }}
           >
-            <ShoppingBag size={18} />
+            <ShoppingBag size={17} />
             <span className="cart-text">Cart</span>
             {itemCount > 0 && (
               <span style={{
-                background: '#52b788',
-                color: '#081c15',
-                fontSize: '12px',
+                background: 'var(--raspberry-primary)',
+                color: '#ffffff',
+                fontSize: '11px',
                 fontWeight: 800,
                 padding: '1px 7px',
                 borderRadius: '999px',
@@ -274,7 +274,7 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
                   width: '28px',
                   height: '28px',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #52b788, #2d6a4f)',
+                  background: 'linear-gradient(135deg, #E3266F, #E3266F)',
                   color: '#ffffff',
                   display: 'flex',
                   alignItems: 'center',
@@ -315,8 +315,8 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
                       fontWeight: 700,
                       padding: '2px 8px',
                       borderRadius: '999px',
-                      background: user.role === 'ADMIN' ? '#fee2e2' : user.role === 'FARMER' ? '#edfbf1' : '#e0f2fe',
-                      color: user.role === 'ADMIN' ? '#991b1b' : user.role === 'FARMER' ? '#1b4332' : '#0369a1'
+                      background: user.role === 'ADMIN' ? '#fee2e2' : user.role === 'FARMER' ? '#FDF0F5' : '#e0f2fe',
+                      color: user.role === 'ADMIN' ? '#991b1b' : user.role === 'FARMER' ? '#E3266F' : '#0369a1'
                     }}>
                       {user.role} ROLE
                     </span>
@@ -334,10 +334,10 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
                         gap: '8px',
                         fontSize: '13px',
                         fontWeight: 600,
-                        color: '#1b4332',
+                        color: '#E3266F',
                         borderRadius: '6px'
                       }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#edfbf1'}
+                      onMouseEnter={e => e.currentTarget.style.background = '#FDF0F5'}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                     >
                       <LayoutDashboard size={16} /> My Orders & Profile
@@ -356,10 +356,10 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
                         gap: '8px',
                         fontSize: '13px',
                         fontWeight: 600,
-                        color: '#1b4332',
+                        color: '#E3266F',
                         borderRadius: '6px'
                       }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#edfbf1'}
+                      onMouseEnter={e => e.currentTarget.style.background = '#FDF0F5'}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                     >
                       <LayoutDashboard size={16} /> Farmer Studio
@@ -460,25 +460,25 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
         }}>
           <button
             onClick={() => handleNav('home')}
-            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'home' ? '#1b4332' : '#52635a' }}
+            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'home' ? '#E3266F' : '#52635a' }}
           >
             Home
           </button>
           <button
             onClick={() => handleNav('marketplace')}
-            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'marketplace' ? '#1b4332' : '#52635a' }}
+            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'marketplace' ? '#E3266F' : '#52635a' }}
           >
             Marketplace
           </button>
           <button
             onClick={() => handleNav('cloud')}
-            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'cloud' ? '#1b4332' : '#52635a' }}
+            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'cloud' ? '#E3266F' : '#52635a' }}
           >
             Cloud Architecture
           </button>
           <button
             onClick={() => handleNav('about')}
-            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'about' ? '#1b4332' : '#52635a' }}
+            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'about' ? '#E3266F' : '#52635a' }}
           >
             About Project
           </button>
