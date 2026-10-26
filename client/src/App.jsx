@@ -8,7 +8,6 @@ import Footer from './components/Footer';
 import ProductModal from './components/ProductModal';
 import CartDrawer from './components/CartDrawer';
 import NotificationDrawer from './components/NotificationDrawer';
-import AuthModal from './components/AuthModal';
 import AIAssistantWidget from './components/AIAssistantWidget';
 
 // Pages
@@ -19,6 +18,7 @@ import FarmerDashboard from './pages/FarmerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import CloudDashboard from './pages/CloudDashboard';
 import AboutPage from './pages/AboutPage';
+import AuthPage from './pages/AuthPage';
 
 function MainApp() {
   const { user } = useAuth();
@@ -26,9 +26,21 @@ function MainApp() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [marketplaceParams, setMarketplaceParams] = useState({});
+  const [authParams, setAuthParams] = useState({ mode: 'login' });
 
   const handleNavigate = (page, params = {}) => {
-    setActivePage(page);
+    if (page === 'login') {
+      setActivePage('auth');
+      setAuthParams({ mode: 'login', ...params });
+    } else if (page === 'register') {
+      setActivePage('auth');
+      setAuthParams({ mode: 'register', ...params });
+    } else if (page === 'auth') {
+      setActivePage('auth');
+      setAuthParams(params.mode ? params : { mode: 'login', ...params });
+    } else {
+      setActivePage(page);
+    }
     if (page === 'marketplace') {
       setMarketplaceParams(params);
     }
@@ -93,6 +105,13 @@ function MainApp() {
         {activePage === 'about' && (
           <AboutPage onNavigate={handleNavigate} />
         )}
+
+        {activePage === 'auth' && (
+          <AuthPage
+            initialMode={authParams.mode || 'login'}
+            onNavigate={handleNavigate}
+          />
+        )}
       </main>
 
       {/* Footer */}
@@ -105,6 +124,7 @@ function MainApp() {
       />
 
       <CartDrawer
+        onNavigate={handleNavigate}
         onOrderSuccess={handleOrderSuccess}
       />
 
@@ -113,7 +133,6 @@ function MainApp() {
         onClose={() => setNotificationsOpen(false)}
       />
 
-      <AuthModal />
       <AIAssistantWidget />
     </div>
   );

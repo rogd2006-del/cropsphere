@@ -177,9 +177,23 @@ export default function Footer({ onNavigate }) {
             }}>
               <div><strong>Admin:</strong> admin@farmdirect.dev</div>
               <div><strong>Farmer:</strong> mary@farmdirect.dev</div>
-              <div><strong>Consumer:</strong> alice@consumer.dev</div>
-              <div style={{ color: '#EC5A92', marginTop: '6px', fontSize: '11px' }}>
-                Use top banner for instant 1-click evaluation login.
+              <div><strong>Consumer:</strong> alice@farmdirect.dev</div>
+              <div style={{ marginTop: '10px' }}>
+                <button
+                  onClick={() => onNavigate('login')}
+                  style={{
+                    background: 'var(--raspberry-primary)',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '5px 12px',
+                    fontSize: '11.5px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Sign In / Register →
+                </button>
               </div>
             </div>
           </div>

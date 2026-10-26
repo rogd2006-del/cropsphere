@@ -16,7 +16,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-export default function CartDrawer({ onOrderSuccess }) {
+export default function CartDrawer({ onOrderSuccess, onNavigate }) {
   const {
     items,
     itemCount,
@@ -30,7 +30,7 @@ export default function CartDrawer({ onOrderSuccess }) {
     removeFromCart,
     clearCart,
   } = useCart();
-  const { user, quickLogin, setAuthModalOpen, setAuthModalMode } = useAuth();
+  const { user, quickLogin } = useAuth();
 
   const [deliveryMethod, setDeliveryMethod] = useState('DELIVERY');
   const [addressLine, setAddressLine] = useState('42 Harvest Way, Apt 3B');
@@ -437,6 +437,28 @@ export default function CartDrawer({ onOrderSuccess }) {
                   >
                     1-Click Login as Consumer Alice
                   </button>
+                  {onNavigate && (
+                    <button
+                      onClick={() => {
+                        setCartDrawerOpen(false);
+                        onNavigate('login');
+                      }}
+                      style={{
+                        width: '100%',
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'var(--raspberry-primary)',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        marginTop: '8px',
+                        cursor: 'pointer',
+                        textAlign: 'center',
+                        textDecoration: 'underline'
+                      }}
+                    >
+                      Or sign in with another account
+                    </button>
+                  )}
                 </div>
               ) : user.role !== 'CONSUMER' ? (
                 <div style={{

@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { ShieldCheck, UserCheck, Sprout, LogOut, CheckCircle2, ChevronDown, User, LogIn } from 'lucide-react';
+import { ShieldCheck, UserCheck, Sprout, LogOut, CheckCircle2, ChevronDown, User } from 'lucide-react';
 
 export default function DemoBanner({ onNavigate }) {
-  const { user, quickLogin, logout, setAuthModalOpen, setAuthModalMode } = useAuth();
+  const { user, quickLogin, logout } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -226,35 +226,6 @@ export default function DemoBanner({ onNavigate }) {
             </div>
           )}
         </div>
-
-        {/* Sign In Button on the left side right under / next to Select Demo Role */}
-        {!user && (
-          <button
-            onClick={() => {
-              setAuthModalMode('login');
-              setAuthModalOpen(true);
-            }}
-            style={{
-              background: 'var(--raspberry-primary)',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '5px 12px',
-              fontSize: '12px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 2px 8px rgba(217, 36, 106, 0.35)',
-              transition: 'all 0.15s'
-            }}
-            title="Open Sign In Modal"
-          >
-            <LogIn size={13} />
-            Sign In / Register
-          </button>
-        )}
       </div>
 
       {/* Right side active role and sign out */}
