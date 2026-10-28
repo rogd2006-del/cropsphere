@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sprout, Server, Layers, Cpu, Database, HardDrive, Shield } from 'lucide-react';
+import { Sprout } from 'lucide-react';
 
 export default function Footer({ onNavigate }) {
   return (
@@ -12,68 +12,6 @@ export default function Footer({ onNavigate }) {
       borderTop: '1px solid rgba(227, 38, 111, 0.2)'
     }}>
       <div className="container">
-        {/* Top Cloud Tier Highlights */}
-        <div style={{
-          background: 'rgba(227, 38, 111, 0.5)',
-          borderRadius: '16px',
-          border: '1px solid rgba(227, 38, 111, 0.2)',
-          padding: '24px',
-          marginBottom: '50px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: '16px'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
-              <Server size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>IaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Ubuntu Linux VM / systemd</div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
-              <Layers size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>PaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Express API Platform</div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
-              <Sprout size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>SaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>FarmDirect Marketplace</div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
-              <Cpu size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>FaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Serverless Event Handlers</div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
-              <Database size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>DBaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>MongoDB Atlas Cluster</div>
-            </div>
-          </div>
-        </div>
-
         {/* Main Footer Links */}
         <div style={{
           display: 'grid',
@@ -102,9 +40,6 @@ export default function Footer({ onNavigate }) {
             <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--cannoli-cream)', opacity: 0.9, marginBottom: '16px' }}>
               A cloud-native smart marketplace empowering local regenerative farmers with direct-to-consumer trade, transparent pricing, and automated inventory logistics.
             </p>
-            <div style={{ fontSize: '12px', color: 'var(--raspberry-light)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Shield size={14} /> Full Cloud Computing Architecture Project
-            </div>
           </div>
 
           <div>
@@ -137,17 +72,12 @@ export default function Footer({ onNavigate }) {
 
           <div>
             <h4 style={{ color: '#ffffff', fontSize: '14px', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              Cloud Computing
+              Platform & Docs
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
               <li>
-                <button onClick={() => onNavigate('cloud')} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
-                  Architecture Dashboard
-                </button>
-              </li>
-              <li>
                 <button onClick={() => onNavigate('about')} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
-                  Rubric & Cloud Service Models
+                  Project Documentation
                 </button>
               </li>
               <li>
@@ -213,9 +143,6 @@ export default function Footer({ onNavigate }) {
         }}>
           <div>
             © {new Date().getFullYear()} FarmDirect Cloud. Built with React, Express, MongoDB Atlas, and Serverless Cloud Functions.
-          </div>
-          <div>
-            Academic Cloud Computing Capstone Project
           </div>
         </div>
       </div>

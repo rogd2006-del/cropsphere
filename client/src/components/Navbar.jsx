@@ -5,7 +5,6 @@ import {
   Sprout,
   ShoppingBag,
   Bell,
-  Cloud,
   User,
   LogOut,
   Menu,
@@ -129,31 +128,6 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
           >
             <Store size={16} />
             Marketplace
-          </button>
-
-          <button
-            onClick={() => handleNav('cloud')}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '8px',
-              fontWeight: 600,
-              fontSize: '14px',
-              color: activePage === 'cloud' ? '#E3266F' : '#52635a',
-              background: activePage === 'cloud' ? '#FDF0F5' : 'transparent',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Cloud size={16} />
-            Cloud Architecture
-            <span style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: '#E3266F',
-              display: 'inline-block'
-            }} />
           </button>
 
           <button
@@ -484,12 +458,6 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
             style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'marketplace' ? '#E3266F' : '#52635a' }}
           >
             Marketplace
-          </button>
-          <button
-            onClick={() => handleNav('cloud')}
-            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'cloud' ? '#E3266F' : '#52635a' }}
-          >
-            Cloud Architecture
           </button>
           <button
             onClick={() => handleNav('about')}

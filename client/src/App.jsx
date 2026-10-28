@@ -16,7 +16,6 @@ import MarketplacePage from './pages/MarketplacePage';
 import ConsumerDashboard from './pages/ConsumerDashboard';
 import FarmerDashboard from './pages/FarmerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
-import CloudDashboard from './pages/CloudDashboard';
 import AboutPage from './pages/AboutPage';
 import AuthPage from './pages/AuthPage';
 
@@ -96,10 +95,6 @@ function MainApp() {
 
         {activePage === 'admin-dashboard' && (
           <AdminDashboard />
-        )}
-
-        {activePage === 'cloud' && (
-          <CloudDashboard />
         )}
 
         {activePage === 'about' && (

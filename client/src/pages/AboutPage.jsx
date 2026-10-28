@@ -166,29 +166,6 @@ export default function AboutPage({ onNavigate }) {
           </ul>
         </div>
       </div>
-
-      {/* Evaluator Quick Reference */}
-      <div style={{
-        background: '#fbfbf9',
-        border: '1.5px solid #ebe7dc',
-        borderRadius: '20px',
-        padding: '32px',
-        textAlign: 'center'
-      }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#081c15', marginBottom: '8px' }}>
-          Ready to inspect the live cloud telemetry?
-        </h3>
-        <p style={{ fontSize: '14px', color: '#52635a', marginBottom: '20px' }}>
-          Test the interactive probes, ping database health, and trigger serverless event executions on the Cloud Services dashboard.
-        </p>
-        <button
-          onClick={() => onNavigate('cloud')}
-          className="btn btn-primary"
-          style={{ padding: '12px 24px' }}
-        >
-          Open Cloud Services Architecture Dashboard
-        </button>
-      </div>
     </div>
   );
 }
