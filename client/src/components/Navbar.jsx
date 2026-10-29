@@ -16,13 +16,13 @@ import {
 } from 'lucide-react';
 
 export default function Navbar({ activePage, onNavigate, onOpenNotifications }) {
-  const { user, logout, unreadCount, setAuthModalOpen, setAuthModalMode } = useAuth();
+  const { user, logout, unreadCount } = useAuth();
   const { itemCount, setCartDrawerOpen } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-  const handleNav = (page) => {
-    onNavigate(page);
+  const handleNav = (page, params = {}) => {
+    onNavigate(page, params);
     setMobileMenuOpen(false);
     setUserDropdownOpen(false);
   };
@@ -391,25 +391,23 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <button
-                onClick={() => {
-                  setAuthModalMode('login');
-                  setAuthModalOpen(true);
-                }}
+                onClick={() => handleNav('login')}
                 className="btn btn-outline btn-sm"
                 style={{
                   borderRadius: '10px',
-                  padding: '7px 12px',
-                  fontSize: '13px'
+                  padding: '7px 13px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  borderColor: 'var(--cannoli-cream-dark)',
+                  color: 'var(--amazon-900)',
+                  backgroundColor: '#ffffff'
                 }}
               >
                 <User size={14} />
                 Sign In
               </button>
               <button
-                onClick={() => {
-                  setAuthModalMode('register');
-                  setAuthModalOpen(true);
-                }}
+                onClick={() => handleNav('register')}
                 className="btn btn-primary btn-sm"
                 style={{
                   borderRadius: '10px',
@@ -470,6 +468,37 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
           >
             About Project
           </button>
+          {!user && (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              paddingTop: '8px',
+              borderTop: '1px solid #f0efe2'
+            }}>
+              <button
+                onClick={() => handleNav('login')}
+                style={{
+                  textAlign: 'left',
+                  padding: '10px',
+                  fontWeight: 700,
+                  color: 'var(--raspberry-primary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <User size={16} /> Sign In
+              </button>
+              <button
+                onClick={() => handleNav('register')}
+                className="btn btn-primary btn-sm"
+                style={{ width: '100%', padding: '10px', borderRadius: '8px', fontSize: '13px' }}
+              >
+                Register Account
+              </button>
+            </div>
+          )}
         </div>
       )}
 

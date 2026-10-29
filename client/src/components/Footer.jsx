@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sprout, Server, Layers, Cpu, Database, HardDrive, Shield } from 'lucide-react';
+import { Database, Layers, Shield, Sprout } from 'lucide-react';
 
 export default function Footer({ onNavigate }) {
   return (
@@ -63,7 +63,6 @@ export default function Footer({ onNavigate }) {
             </div>
           </div>
         </div>
-
         {/* Main Footer Links */}
         <div style={{
           display: 'grid',
@@ -92,9 +91,6 @@ export default function Footer({ onNavigate }) {
             <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--cannoli-cream)', opacity: 0.9, marginBottom: '16px' }}>
               A cloud-native smart marketplace empowering local regenerative farmers with direct-to-consumer trade, transparent pricing, and automated inventory logistics.
             </p>
-            <div style={{ fontSize: '12px', color: 'var(--raspberry-light)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Shield size={14} /> Full Cloud Computing Architecture Project
-            </div>
           </div>
 
           <div>
@@ -127,7 +123,7 @@ export default function Footer({ onNavigate }) {
 
           <div>
             <h4 style={{ color: '#ffffff', fontSize: '14px', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              About & Platform
+              About & Docs
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
               <li>

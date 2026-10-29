@@ -9,3 +9,9 @@ uploads/
 .DS_Store
 coverage/
 *.tsbuildinfo
+.env
+.env.*
+!.env.example.env
+.env.*
+!.env.example
+server/gemini-test.json
