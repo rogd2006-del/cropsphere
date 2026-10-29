@@ -192,7 +192,7 @@ export default function FarmerDashboard({ onNavigate }) {
               {user?.name || 'Farmer'} Dashboard
             </h1>
             <p style={{ color: 'var(--cannoli-cream)', opacity: 0.9, fontSize: '13px' }}>
-              Manage crop inventories, fulfill consumer orders, and inspect automated cloud telemetry.
+              Manage crop inventories, fulfill consumer orders, and track harvest sales in real time.
             </p>
           </div>
         </div>

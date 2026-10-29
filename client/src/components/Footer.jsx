@@ -12,64 +12,54 @@ export default function Footer({ onNavigate }) {
       borderTop: '1px solid rgba(227, 38, 111, 0.2)'
     }}>
       <div className="container">
-        {/* Top Cloud Tier Highlights */}
+        {/* Marketplace Value Pillars */}
         <div style={{
-          background: 'rgba(227, 38, 111, 0.5)',
+          background: 'rgba(227, 38, 111, 0.1)',
           borderRadius: '16px',
           border: '1px solid rgba(227, 38, 111, 0.2)',
           padding: '24px',
           marginBottom: '50px',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: '16px'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '20px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
-              <Server size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>IaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Ubuntu Linux VM / systemd</div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
-              <Layers size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>PaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Express API Platform</div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
+            <div style={{ padding: '10px', background: 'rgba(227, 38, 111, 0.2)', borderRadius: '10px', color: '#E3266F' }}>
               <Sprout size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>SaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>FarmDirect Marketplace</div>
+              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>100% Farm Direct</div>
+              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Harvested by local producers</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
-              <Cpu size={20} />
+            <div style={{ padding: '10px', background: 'rgba(227, 38, 111, 0.2)', borderRadius: '10px', color: '#E3266F' }}>
+              <Shield size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>FaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Serverless Event Handlers</div>
+              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>Verified Growers</div>
+              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Transparent farming practices</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(227, 38, 111, 0.15)', borderRadius: '10px', color: '#E3266F' }}>
+            <div style={{ padding: '10px', background: 'rgba(227, 38, 111, 0.2)', borderRadius: '10px', color: '#E3266F' }}>
               <Database size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>DBaaS Tier</div>
-              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>MongoDB Atlas Cluster</div>
+              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>Fair Pricing</div>
+              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Zero middleman deductions</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ padding: '10px', background: 'rgba(227, 38, 111, 0.2)', borderRadius: '10px', color: '#E3266F' }}>
+              <Layers size={20} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '13px', color: '#ffffff' }}>Traceable Harvest</div>
+              <div style={{ fontSize: '11px', color: '#F7A8C6' }}>Origin farm & batch verified</div>
             </div>
           </div>
         </div>
@@ -137,17 +127,12 @@ export default function Footer({ onNavigate }) {
 
           <div>
             <h4 style={{ color: '#ffffff', fontSize: '14px', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              Cloud Computing
+              About & Platform
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
               <li>
-                <button onClick={() => onNavigate('cloud')} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
-                  Architecture Dashboard
-                </button>
-              </li>
-              <li>
                 <button onClick={() => onNavigate('about')} style={{ color: '#F7A8C6', cursor: 'pointer' }}>
-                  Rubric & Cloud Service Models
+                  About FarmDirect & Mission
                 </button>
               </li>
               <li>
@@ -165,23 +150,27 @@ export default function Footer({ onNavigate }) {
 
           <div>
             <h4 style={{ color: '#ffffff', fontSize: '14px', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              Demo Credentials
+              Join the Community
             </h4>
-            <div style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(227, 38, 111,0.2)',
-              borderRadius: '8px',
-              padding: '12px',
-              fontSize: '12px',
-              lineHeight: '1.6'
-            }}>
-              <div><strong>Admin:</strong> admin@farmdirect.dev</div>
-              <div><strong>Farmer:</strong> mary@farmdirect.dev</div>
-              <div><strong>Consumer:</strong> alice@consumer.dev</div>
-              <div style={{ color: '#EC5A92', marginTop: '6px', fontSize: '11px' }}>
-                Use top banner for instant 1-click evaluation login.
-              </div>
-            </div>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
+              <li>
+                <span style={{ color: '#F7A8C6', fontSize: '12.5px' }}>Fresh harvests from local regenerative farms directly to your home.</span>
+              </li>
+              <li>
+                <div style={{
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(227, 38, 111, 0.25)',
+                  borderRadius: '10px',
+                  padding: '12px',
+                  fontSize: '12px',
+                  lineHeight: '1.5',
+                  color: '#ffffff'
+                }}>
+                  <div style={{ fontWeight: 700, marginBottom: '4px', color: 'var(--raspberry-light)' }}>Instant Account Access</div>
+                  <div>Sign in with Google or email to track orders and manage farm listings.</div>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -198,10 +187,10 @@ export default function Footer({ onNavigate }) {
           color: '#EC5A92'
         }}>
           <div>
-            © {new Date().getFullYear()} FarmDirect Cloud. Built with React, Express, MongoDB Atlas, and Serverless Cloud Functions.
+            © {new Date().getFullYear()} FarmDirect. Direct Farmer-to-Consumer Fresh Marketplace.
           </div>
           <div>
-            Academic Cloud Computing Capstone Project
+            React · TypeScript · Express · Node.js
           </div>
         </div>
       </div>

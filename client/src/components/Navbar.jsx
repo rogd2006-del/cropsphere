@@ -5,7 +5,6 @@ import {
   Sprout,
   ShoppingBag,
   Bell,
-  Cloud,
   User,
   LogOut,
   Menu,
@@ -78,7 +77,7 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
               alignItems: 'center',
               gap: '6px'
             }}>
-              FarmDirect <span style={{ color: 'var(--raspberry-primary)', fontWeight: 700 }}>Cloud</span>
+              FarmDirect <span style={{ color: 'var(--raspberry-primary)', fontWeight: 700 }}>Direct</span>
             </div>
             <div style={{
               fontSize: '11px',
@@ -87,7 +86,7 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
               fontWeight: 600,
               textTransform: 'uppercase'
             }}>
-              Smart Cloud Marketplace
+              Fresh Farmers Marketplace
             </div>
           </div>
         </div>
@@ -129,31 +128,6 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
           >
             <Store size={16} />
             Marketplace
-          </button>
-
-          <button
-            onClick={() => handleNav('cloud')}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '8px',
-              fontWeight: 600,
-              fontSize: '14px',
-              color: activePage === 'cloud' ? '#E3266F' : '#52635a',
-              background: activePage === 'cloud' ? '#FDF0F5' : 'transparent',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Cloud size={16} />
-            Cloud Architecture
-            <span style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: '#E3266F',
-              display: 'inline-block'
-            }} />
           </button>
 
           <button
@@ -415,21 +389,41 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
               )}
             </div>
           ) : (
-            <button
-              onClick={() => {
-                setAuthModalMode('login');
-                setAuthModalOpen(true);
-              }}
-              className="btn btn-outline btn-sm"
-              style={{
-                borderRadius: '10px',
-                padding: '8px 14px',
-                fontSize: '13px'
-              }}
-            >
-              <User size={15} />
-              Sign In
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                onClick={() => {
+                  setAuthModalMode('login');
+                  setAuthModalOpen(true);
+                }}
+                className="btn btn-outline btn-sm"
+                style={{
+                  borderRadius: '10px',
+                  padding: '7px 12px',
+                  fontSize: '13px'
+                }}
+              >
+                <User size={14} />
+                Sign In
+              </button>
+              <button
+                onClick={() => {
+                  setAuthModalMode('register');
+                  setAuthModalOpen(true);
+                }}
+                className="btn btn-primary btn-sm"
+                style={{
+                  borderRadius: '10px',
+                  padding: '7px 14px',
+                  fontSize: '13px',
+                  background: 'var(--raspberry-primary)',
+                  color: '#ffffff',
+                  fontWeight: 600,
+                  boxShadow: '0 2px 8px rgba(227, 38, 111, 0.25)'
+                }}
+              >
+                Register
+              </button>
+            </div>
           )}
 
           {/* Mobile Menu Toggle */}
@@ -469,12 +463,6 @@ export default function Navbar({ activePage, onNavigate, onOpenNotifications }) 
             style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'marketplace' ? '#E3266F' : '#52635a' }}
           >
             Marketplace
-          </button>
-          <button
-            onClick={() => handleNav('cloud')}
-            style={{ textAlign: 'left', padding: '10px', fontWeight: 600, color: activePage === 'cloud' ? '#E3266F' : '#52635a' }}
-          >
-            Cloud Architecture
           </button>
           <button
             onClick={() => handleNav('about')}

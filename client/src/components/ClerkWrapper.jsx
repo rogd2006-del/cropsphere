@@ -10,8 +10,8 @@ function ClerkSyncConsumer({ children, clerkPubKey }) {
 
   useEffect(() => {
     if (isLoaded && isSignedIn && clerkUser) {
-      // Sync with MongoDB backend if this Clerk user hasn't been synced this session
-      if (lastSyncedIdRef.current !== clerkUser.id) {
+      // Sync with backend whenever appUser is not yet populated or clerkUser ID changes
+      if (!appUser || lastSyncedIdRef.current !== clerkUser.id) {
         lastSyncedIdRef.current = clerkUser.id;
         syncClerkSession(clerkUser, { role: pendingClerkRole }).catch(err => {
           console.error('Failed to sync Clerk user with backend:', err);
@@ -20,7 +20,7 @@ function ClerkSyncConsumer({ children, clerkPubKey }) {
     } else if (isLoaded && !isSignedIn) {
       lastSyncedIdRef.current = null;
     }
-  }, [isLoaded, isSignedIn, clerkUser, pendingClerkRole, syncClerkSession]);
+  }, [isLoaded, isSignedIn, clerkUser, appUser, pendingClerkRole, syncClerkSession]);
 
   return children;
 }

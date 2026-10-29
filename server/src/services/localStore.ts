@@ -784,8 +784,9 @@ class LocalStore {
         ),
       })) as any;
 
-      if (params.maxDistanceMiles && params.maxDistanceMiles > 0) {
-        result = result.filter((p: any) => p.distanceMiles <= params.maxDistanceMiles);
+      const maxDist = params.maxDistanceMiles;
+      if (typeof maxDist === 'number' && maxDist > 0) {
+        result = result.filter((p: any) => p.distanceMiles <= maxDist);
       }
     }
 

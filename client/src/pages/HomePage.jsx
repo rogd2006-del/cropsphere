@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   Truck,
   HeartHandshake,
-  Cloud,
   CheckCircle2,
   Sparkles,
   MapPin,
@@ -30,7 +29,7 @@ const HERO_IMAGES = [
   {
     url: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=1000&q=80',
     alt: 'Organic Farm Harvest',
-    caption: 'Cloud-Managed Fresh Produce Dispatch'
+    caption: 'Fresh Harvest Direct Dispatch'
   },
   {
     url: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=80',
@@ -45,7 +44,7 @@ const HERO_IMAGES = [
   {
     url: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1000&q=80',
     alt: 'Lush Regenerative Farmland',
-    caption: 'Sustainable Agriculture to Consumer Cloud'
+    caption: 'Sustainable Agriculture Direct to Consumer'
   }
 ];
 
@@ -118,7 +117,7 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                 boxShadow: '0 2px 6px rgba(227, 38, 111, 0.08)'
               }}>
                 <Sparkles size={14} style={{ color: '#E3266F' }} />
-                Cloud-Native Smart Agricultural Marketplace
+                Smart Agricultural Marketplace
               </div>
 
               <h1 style={{
@@ -139,7 +138,7 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                 marginBottom: '30px',
                 maxWidth: '540px'
               }}>
-                Bypass traditional retail markups and support regenerative farmers. Powered by high-reliability cloud architecture across IaaS, PaaS, SaaS, and serverless FaaS event logistics.
+                Bypass traditional retail markups and support regenerative farmers. Directly connect with nearby growers for authentic, freshly harvested organic produce.
               </p>
 
               {/* Search Box */}
@@ -287,11 +286,11 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <Cloud size={20} />
+                  <Truck size={20} />
                 </div>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '13px', color: 'var(--amazon-900)' }}>Cloud-Managed Logistics</div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Automated FaaS Inventory Alerts & Queue</div>
+                  <div style={{ fontWeight: 700, fontSize: '13px', color: 'var(--amazon-900)' }}>Direct Farm Logistics</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Real-Time Harvest Updates & Fresh Delivery</div>
                 </div>
               </div>
             </div>
@@ -307,7 +306,7 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
               Simple, Transparent, Decentralized
             </span>
             <h2 style={{ fontSize: '30px', fontWeight: 800, color: 'var(--amazon-900)', marginTop: '4px' }}>
-              How FarmDirect Cloud Works
+              How FarmDirect Works
             </h2>
           </div>
 
@@ -436,9 +435,9 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                 }}>
                   3
                 </div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: 'var(--amazon-900)' }}>Cloud Event Queue</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: 'var(--amazon-900)' }}>Real-Time Processing</h3>
                 <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                  Serverless FaaS functions automatically process orders, decrement inventory, and notify farmers in real time.
+                  Orders are processed immediately, updating inventory and notifying local farmers instantly.
                 </p>
               </div>
             </div>
@@ -490,89 +489,6 @@ export default function HomePage({ onNavigate, onSelectProduct }) {
                   Collect your order at scheduled farm pickup locations or receive chilled front-door delivery.
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Cloud Computing Architecture Callout */}
-      <section className="container">
-        <div style={{
-          background: 'linear-gradient(135deg, var(--amazon-900) 0%, var(--amazon-800) 100%)',
-          borderRadius: '24px',
-          padding: '48px',
-          color: '#ffffff',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '36px',
-          alignItems: 'center',
-          boxShadow: '0 20px 40px rgba(6, 28, 18, 0.2)'
-        }}>
-          <div>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '4px 12px',
-              background: 'rgba(217, 36, 106, 0.2)',
-              borderRadius: '999px',
-              color: 'var(--raspberry-light)',
-              fontSize: '12px',
-              fontWeight: 700,
-              marginBottom: '16px'
-            }}>
-              <Cloud size={14} /> Cloud Architecture Demonstration
-            </div>
-            <h2 style={{ fontSize: '32px', color: '#ffffff', fontWeight: 800, marginBottom: '14px', lineHeight: 1.2 }}>
-              Explore the Four Cloud Service Models
-            </h2>
-            <p style={{ color: 'var(--cannoli-cream)', opacity: 0.9, fontSize: '15px', lineHeight: 1.6, marginBottom: '24px' }}>
-              FarmDirect Cloud was purpose-built to prove how real enterprise agricultural logistics run across IaaS Virtual Machines, PaaS APIs, SaaS web frontends, and FaaS serverless event pipelines.
-            </p>
-            <button
-              onClick={() => onNavigate('cloud')}
-              className="btn btn-primary"
-              style={{
-                background: 'var(--raspberry-primary)',
-                color: '#ffffff',
-                padding: '12px 24px',
-                fontSize: '14px',
-                fontWeight: 700,
-                boxShadow: '0 4px 14px rgba(217, 36, 106, 0.35)'
-              }}
-            >
-              Open Cloud Architecture Dashboard <ArrowRight size={16} />
-            </button>
-          </div>
-
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.06)',
-            borderRadius: '16px',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            padding: '24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '14px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge" style={{ background: 'var(--raspberry-primary)', color: '#ffffff' }}>IaaS</span>
-              <span style={{ fontSize: '13px', color: 'var(--cannoli-cream)' }}>Ubuntu Linux VM with systemd Process Guardian</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge" style={{ background: 'var(--raspberry-primary)', color: '#ffffff' }}>PaaS</span>
-              <span style={{ fontSize: '13px', color: 'var(--cannoli-cream)' }}>Managed Express REST API with Health & Metrics</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge" style={{ background: 'var(--raspberry-primary)', color: '#ffffff' }}>SaaS</span>
-              <span style={{ fontSize: '13px', color: 'var(--cannoli-cream)' }}>Browser-Hosted Consumer & Farmer Portal</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge" style={{ background: 'var(--raspberry-primary)', color: '#ffffff' }}>FaaS</span>
-              <span style={{ fontSize: '13px', color: 'var(--cannoli-cream)' }}>OrderEventProcessor & InventoryAlertProcessor</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge" style={{ background: 'var(--raspberry-primary)', color: '#ffffff' }}>DBaaS</span>
-              <span style={{ fontSize: '13px', color: 'var(--cannoli-cream)' }}>MongoDB Atlas Multi-Shard Cloud Cluster</span>
             </div>
           </div>
         </div>

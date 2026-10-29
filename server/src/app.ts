@@ -22,7 +22,6 @@ import cartRoutes from './routes/cart';
 import orderRoutes from './routes/orders';
 import adminRoutes from './routes/admin';
 import notificationRoutes from './routes/notifications';
-import cloudRoutes from './routes/cloud';
 import uploadRoutes from './routes/uploads';
 import healthRoutes from './routes/health';
 import aiRoutes from './routes/ai';
@@ -94,7 +93,6 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
-app.use('/api/cloud', cloudRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/ai', aiRoutes);
 

@@ -1,192 +1,212 @@
 import React from 'react';
 import {
-  Server,
-  Layers,
   Sprout,
-  Cpu,
-  Database,
-  HardDrive,
   ShieldCheck,
   CheckCircle2,
-  FileText,
-  BookOpen,
-  Award
+  HeartHandshake,
+  Truck,
+  Leaf,
+  Store,
+  ArrowRight,
+  Sparkles,
+  Lock,
+  Compass
 } from 'lucide-react';
 
 export default function AboutPage({ onNavigate }) {
   return (
     <div className="container" style={{ paddingTop: '40px', paddingBottom: '80px', maxWidth: '960px' }}>
       {/* Title */}
-      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '48px' }}>
         <div style={{
           display: 'inline-flex',
           alignItems: 'center',
           gap: '6px',
-          padding: '4px 12px',
-          background: '#FDF0F5',
-          border: '1px solid #F7A8C6',
+          padding: '4px 14px',
+          background: 'var(--raspberry-wash)',
+          border: '1px solid var(--raspberry-soft)',
           borderRadius: '999px',
-          color: '#E3266F',
-          fontSize: '12px',
+          color: 'var(--raspberry-dark)',
+          fontSize: '12.5px',
           fontWeight: 700,
-          marginBottom: '12px'
+          marginBottom: '14px'
         }}>
-          <Award size={14} style={{ color: '#E3266F' }} /> Academic Cloud Computing Mini Project
+          <Sparkles size={14} style={{ color: 'var(--raspberry-primary)' }} />
+          Empowering Local Growers & Direct Consumers
         </div>
-        <h1 style={{ fontSize: '36px', fontWeight: 800, color: '#081c15', marginBottom: '12px' }}>
-          FarmDirect Cloud Project Documentation
+        <h1 style={{ fontSize: '38px', fontWeight: 800, color: 'var(--amazon-900)', marginBottom: '14px', letterSpacing: '-0.8px' }}>
+          About FarmDirect Marketplace
         </h1>
-        <p style={{ fontSize: '16px', color: '#52635a', maxWidth: '720px', margin: '0 auto', lineHeight: 1.6 }}>
-          Comprehensive cloud-based smart marketplace architecture directly connecting regional farmers with local consumers through verified IaaS, PaaS, SaaS, and serverless FaaS tiers.
+        <p style={{ fontSize: '16.5px', color: 'var(--text-muted)', maxWidth: '720px', margin: '0 auto', lineHeight: 1.6 }}>
+          FarmDirect eliminates the 5 to 7 layers of traditional supermarket middlemen. We directly connect regional regenerative growers with conscious consumers for farm-fresh produce, fair farmer earnings, and complete harvest traceability.
         </p>
       </div>
 
-      {/* Cloud Model Breakdown Cards */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginBottom: '48px' }}>
-        {/* IaaS */}
-        <div className="card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
-              <Server size={22} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '18px', fontWeight: 800 }}>1. IaaS — Infrastructure as a Service</h3>
-              <div style={{ fontSize: '12px', color: '#52635a' }}>Virtual Machine Compute, Operating System & Process Supervision</div>
-            </div>
+      {/* 3 Core Value Cards */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '24px',
+        marginBottom: '54px'
+      }}>
+        <div className="card" style={{ padding: '28px', border: '1.5px solid var(--cannoli-cream-dark)', borderRadius: '18px' }}>
+          <div style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '12px',
+            background: 'var(--raspberry-wash)',
+            color: 'var(--raspberry-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '16px'
+          }}>
+            <HeartHandshake size={22} />
           </div>
-          <p style={{ fontSize: '14px', color: '#52635a', lineHeight: 1.6, marginBottom: '12px' }}>
-            <strong>Implementation:</strong> The backend runs in a Linux virtual environment configured with process supervision (<code style={{ background: '#f5f4ee', padding: '2px 6px', borderRadius: '4px' }}>systemd</code>) to maintain continuous uptime, automatic restarts upon failures, and OS-level network isolation.
+          <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--amazon-900)', marginBottom: '8px' }}>
+            Fair Prices for Farmers
+          </h3>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+            Traditional supermarkets return as little as 14¢ on the dollar to local farmers. On FarmDirect, producers set their own prices and keep over 90% of every sale.
           </p>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Memory & vCPU spec isolation (Ubuntu Linux, 2 vCPUs, 4GB RAM)
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Systemd service guardian ensuring automated restart and zero-downtime restarts
-            </li>
-          </ul>
         </div>
 
-        {/* PaaS */}
-        <div className="card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
-              <Layers size={22} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '18px', fontWeight: 800 }}>2. PaaS — Platform as a Service</h3>
-              <div style={{ fontSize: '12px', color: '#52635a' }}>Managed Application Platform hosting REST API</div>
-            </div>
+        <div className="card" style={{ padding: '28px', border: '1.5px solid var(--cannoli-cream-dark)', borderRadius: '18px' }}>
+          <div style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '12px',
+            background: 'var(--raspberry-wash)',
+            color: 'var(--raspberry-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '16px'
+          }}>
+            <Leaf size={22} />
           </div>
-          <p style={{ fontSize: '14px', color: '#52635a', lineHeight: 1.6, marginBottom: '12px' }}>
-            <strong>Implementation:</strong> Built on Node.js and Express in TypeScript. Exposes certified REST endpoints for authentication, products, order management, carts, farmer statistics, and cloud health monitoring.
+          <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--amazon-900)', marginBottom: '8px' }}>
+            Peak Freshness & Nutrition
+          </h3>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+            Produce travels an average of 1,500 miles and sits weeks in cold storage. FarmDirect harvests are prepared on-demand and dispatched within 24 to 48 hours.
           </p>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Centralized error handling, Zod schema validation, and rate limiting
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Swagger OpenAPI documentation accessible at <code style={{ background: '#f5f4ee', padding: '2px 6px', borderRadius: '4px' }}>/api-docs</code>
-            </li>
-          </ul>
         </div>
 
-        {/* SaaS */}
-        <div className="card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
-              <Sprout size={22} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '18px', fontWeight: 800 }}>3. SaaS — Software as a Service</h3>
-              <div style={{ fontSize: '12px', color: '#52635a' }}>End-User Multi-Role Agricultural Web Marketplace</div>
-            </div>
+        <div className="card" style={{ padding: '28px', border: '1.5px solid var(--cannoli-cream-dark)', borderRadius: '18px' }}>
+          <div style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '12px',
+            background: 'var(--raspberry-wash)',
+            color: 'var(--raspberry-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '16px'
+          }}>
+            <Compass size={22} />
           </div>
-          <p style={{ fontSize: '14px', color: '#52635a', lineHeight: 1.6, marginBottom: '12px' }}>
-            <strong>Implementation:</strong> The user-facing web software delivers tailored experiences for three distinct roles (Consumer, Farmer, Administrator) with responsive layouts, fluid cart checkouts, and live notifications.
+          <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--amazon-900)', marginBottom: '8px' }}>
+            Radical Traceability
+          </h3>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+            Every product listing features farm location coordinates, soil practices, harvest date, and farmer profile so you always know who grew your food.
           </p>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Zero installation required — fully browser-accessible with secure JWT session handling
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Role-based views preventing consumers from altering farmer listings or admin controls
-            </li>
-          </ul>
-        </div>
-
-        {/* FaaS */}
-        <div className="card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
-              <Cpu size={22} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '18px', fontWeight: 800 }}>4. FaaS — Function as a Service</h3>
-              <div style={{ fontSize: '12px', color: '#52635a' }}>Serverless Event Handlers & Asynchronous Queue Workers</div>
-            </div>
-          </div>
-          <p style={{ fontSize: '14px', color: '#52635a', lineHeight: 1.6, marginBottom: '12px' }}>
-            <strong>Implementation:</strong> Two distinct serverless functions handle asynchronous background processing decoupled from the primary HTTP request loop:
-          </p>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> <strong>OrderEventProcessor:</strong> Triggered on <code style={{ background: '#f5f4ee', padding: '2px 4px', borderRadius: '4px' }}>ORDER_PLACED</code> to verify stock, create in-app notifications, and dispatch simulated email confirmations.
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> <strong>InventoryAlertProcessor:</strong> Triggered on inventory changes to detect items below safety thresholds and create automated low-stock warnings for farmers.
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Idempotency verified via unique event keys to guarantee exactly-once processing semantics.
-            </li>
-          </ul>
-        </div>
-
-        {/* DBaaS */}
-        <div className="card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', background: '#FDF0F5', color: '#E3266F', borderRadius: '10px' }}>
-              <Database size={22} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '18px', fontWeight: 800 }}>5. DBaaS & Object Storage</h3>
-              <div style={{ fontSize: '12px', color: '#52635a' }}>Managed MongoDB Atlas Cluster & Cloud Media Storage</div>
-            </div>
-          </div>
-          <p style={{ fontSize: '14px', color: '#52635a', lineHeight: 1.6, marginBottom: '12px' }}>
-            <strong>Implementation:</strong> The database layer resides on MongoDB Atlas with connection pooling, IP whitelisting, replica set failover, and comprehensive schemas (User, FarmerProfile, Product, Cart, Order, Address, Notification, AuditLog, CloudServiceEvent).
-          </p>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#18231e' }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Historical orders snapshot product names and unit prices to prevent retroactive alteration
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle2 size={14} style={{ color: '#E3266F' }} /> Object storage adapter supporting Azure Blob, AWS S3, and local uploads with strict MIME whitelist
-            </li>
-          </ul>
         </div>
       </div>
 
-      {/* Evaluator Quick Reference */}
+      {/* Platform & Architecture Overview */}
       <div style={{
-        background: '#fbfbf9',
-        border: '1.5px solid #ebe7dc',
+        background: '#ffffff',
+        border: '1.5px solid var(--cannoli-cream-dark)',
         borderRadius: '20px',
-        padding: '32px',
-        textAlign: 'center'
+        padding: '36px',
+        marginBottom: '48px',
+        boxShadow: '0 8px 24px rgba(6, 28, 18, 0.04)'
       }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#081c15', marginBottom: '8px' }}>
-          Ready to inspect the live cloud telemetry?
-        </h3>
-        <p style={{ fontSize: '14px', color: '#52635a', marginBottom: '20px' }}>
-          Test the interactive probes, ping database health, and trigger serverless event executions on the Cloud Services dashboard.
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+          <div style={{ padding: '8px', background: 'var(--raspberry-wash)', color: 'var(--raspberry-primary)', borderRadius: '10px' }}>
+            <Sprout size={20} />
+          </div>
+          <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--amazon-900)' }}>
+            Platform Technology & Architecture
+          </h2>
+        </div>
+        <p style={{ fontSize: '14.5px', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '20px' }}>
+          FarmDirect is built with a modern, high-performance web stack engineered for simplicity, responsiveness, and resilient operation:
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
+          <div style={{ background: 'var(--cannoli-cream-light)', padding: '16px', borderRadius: '12px', border: '1px solid var(--cannoli-cream-dark)' }}>
+            <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--amazon-900)', marginBottom: '4px' }}>
+              ⚛️ Frontend Application
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+              React 19 & Vite with rich responsive styling, live shopping cart drawer, and interactive farm locator map.
+            </div>
+          </div>
+
+          <div style={{ background: 'var(--cannoli-cream-light)', padding: '16px', borderRadius: '12px', border: '1px solid var(--cannoli-cream-dark)' }}>
+            <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--amazon-900)', marginBottom: '4px' }}>
+              🛡️ Secure Clerk & Google Authentication
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+              1-click Google OAuth powered by Clerk integration alongside Argon2id password hashing and JWT sessions.
+            </div>
+          </div>
+
+          <div style={{ background: 'var(--cannoli-cream-light)', padding: '16px', borderRadius: '12px', border: '1px solid var(--cannoli-cream-dark)' }}>
+            <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--amazon-900)', marginBottom: '4px' }}>
+              ⚡ Node.js & Express API Backend
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+              TypeScript REST architecture with Zod request validation, rate limiting, and structured OpenAPI Swagger docs.
+            </div>
+          </div>
+
+          <div style={{ background: 'var(--cannoli-cream-light)', padding: '16px', borderRadius: '12px', border: '1px solid var(--cannoli-cream-dark)' }}>
+            <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--amazon-900)', marginBottom: '4px' }}>
+              📦 Resilient Storage & Fallback
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+              Seamless dual-mode storage engine supporting production MongoDB Atlas or an immediate local in-memory store.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Call to action */}
+      <div style={{
+        background: 'linear-gradient(135deg, var(--amazon-900) 0%, var(--amazon-800) 100%)',
+        borderRadius: '24px',
+        padding: '40px',
+        textAlign: 'center',
+        color: '#ffffff',
+        boxShadow: '0 16px 36px rgba(6, 28, 18, 0.15)'
+      }}>
+        <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#ffffff', marginBottom: '10px' }}>
+          Experience Direct Farm-to-Table Freshness
+        </h2>
+        <p style={{ color: 'var(--cannoli-cream)', opacity: 0.9, fontSize: '15px', maxWidth: '580px', margin: '0 auto 24px', lineHeight: 1.6 }}>
+          Browse organic produce harvested by certified local growers within your community.
         </p>
         <button
-          onClick={() => onNavigate('cloud')}
+          onClick={() => onNavigate('marketplace')}
           className="btn btn-primary"
-          style={{ padding: '12px 24px' }}
+          style={{
+            background: 'var(--raspberry-primary)',
+            color: '#ffffff',
+            padding: '12px 28px',
+            fontSize: '14.5px',
+            fontWeight: 700,
+            boxShadow: '0 4px 14px rgba(217, 36, 106, 0.35)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
         >
-          Open Cloud Services Architecture Dashboard
+          <Store size={16} /> Explore Produce Marketplace <ArrowRight size={16} />
         </button>
       </div>
     </div>

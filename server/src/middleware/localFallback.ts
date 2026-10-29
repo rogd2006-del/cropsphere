@@ -495,24 +495,6 @@ router.put('/notifications/read-all', (req: Request, res: Response) => {
   res.json({ success: true, message: 'All notifications marked as read' });
 });
 
-// ─── Cloud Status (mock) ────────────────────────────────────────────────────
-router.get('/cloud/status', (_req, res) => {
-  res.json({
-    success: true,
-    data: {
-      dbaas: { provider: 'Local (In-Memory)', status: 'active', latency: '< 1ms' },
-      storage: { provider: 'Local Uploads', status: 'active' },
-      compute: { provider: 'Local Node.js', status: 'running' },
-      queue: { provider: 'In-Memory Queue', status: 'active' },
-      uptime: process.uptime(),
-    },
-  });
-});
-
-router.post('/cloud/test-event', (req: Request, res: Response) => {
-  res.json({ success: true, message: `Test event "${req.body.type}" triggered (local mode)` });
-});
-
 // ─── Admin ───────────────────────────────────────────────────────────────────
 router.get('/admin/users', (req: Request, res: Response) => {
   const user = getUserFromToken(req);

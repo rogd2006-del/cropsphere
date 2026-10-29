@@ -14,8 +14,8 @@ Use bullet points and formatting where appropriate. Context about current market
 
   const fullPrompt = `${systemInstruction}\n\nUser Question: ${prompt}`;
 
-  // Try gemini-2.5-flash first, fallback to gemini-1.5-flash
-  const models = ['gemini-3.5-flash-lite'];
+  // Try gemini-2.0-flash-lite first, fallback to gemini-1.5-flash
+  const models = ['gemini-2.0-flash-lite', 'gemini-1.5-flash'];
 
   for (const model of models) {
     try {
