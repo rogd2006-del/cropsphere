@@ -980,6 +980,24 @@ class LocalStore {
     const products = this.products.filter((p) => p.farmerId === farmerId);
     const orders = this.orders.filter((o) => o.farmerId === farmerId);
     const totalRev = orders.reduce((sum, o) => sum + o.total, 0);
+    const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const salesByDate = new Map<string, { revenue: number; orders: number }>();
+
+    for (const order of orders) {
+      const createdAt = new Date(order.createdAt);
+      if (
+        createdAt.getTime() < thirtyDaysAgo ||
+        ['CANCELLED', 'REJECTED'].includes(order.status)
+      ) {
+        continue;
+      }
+
+      const date = createdAt.toISOString().slice(0, 10);
+      const dailySales = salesByDate.get(date) || { revenue: 0, orders: 0 };
+      dailySales.revenue += order.total;
+      dailySales.orders += 1;
+      salesByDate.set(date, dailySales);
+    }
 
     return {
       stats: {
@@ -996,13 +1014,9 @@ class LocalStore {
         totalSold: products.reduce((sum, p) => sum + p.soldCount, 0),
       },
       recentOrders: orders.slice(0, 5),
-      monthlySales: [
-        { _id: '2026-10-20', revenue: 120.5, orders: 4 },
-        { _id: '2026-10-21', revenue: 210.0, orders: 7 },
-        { _id: '2026-10-22', revenue: 185.2, orders: 6 },
-        { _id: '2026-10-23', revenue: 340.8, orders: 11 },
-        { _id: '2026-10-24', revenue: 290.4, orders: 9 },
-      ],
+      monthlySales: [...salesByDate.entries()]
+        .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
+        .map(([_id, sales]) => ({ _id, ...sales })),
       lowStockItems: products
         .filter((p) => p.stockQuantity <= p.lowStockThreshold)
         .slice(0, 5),

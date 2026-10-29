@@ -72,6 +72,10 @@ export const api = {
   getFarmerProfile: () => apiRequest('/farmers/me/profile'),
   updateFarmerProfile: (data) => apiRequest('/farmers/me/profile', { method: 'PUT', body: data }),
   getFarmerDashboard: () => apiRequest('/farmers/me/dashboard'),
+  getFarmerProducts: (params = { limit: 100 }) => {
+    const query = new URLSearchParams(params).toString();
+    return apiRequest(`/farmers/me/products?${query}`);
+  },
 
   // Cart
   getCart: () => apiRequest('/cart'),

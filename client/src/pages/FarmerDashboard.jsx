@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
+import FarmerSalesChart from '../components/FarmerSalesChart';
 import {
   Sprout,
   IndianRupee,
@@ -9,17 +10,13 @@ import {
   Plus,
   Edit,
   Trash2,
-  CheckCircle,
   Truck,
-  ArrowRight,
-  TrendingUp,
   X,
   RefreshCw,
   Clock,
-  Sparkles
 } from 'lucide-react';
 
-export default function FarmerDashboard({ onNavigate }) {
+export default function FarmerDashboard() {
   const { user } = useAuth();
   const [dashboardData, setDashboardData] = useState(null);
   const [products, setProducts] = useState([]);
@@ -46,18 +43,17 @@ export default function FarmerDashboard({ onNavigate }) {
       const [dashRes, ordersRes, productsRes] = await Promise.all([
         api.getFarmerDashboard().catch(() => ({})),
         api.getOrders().catch(() => ({})),
-        api.getProducts().catch(() => ({})),
+        api.getFarmerProducts().catch(() => ({})),
       ]);
 
-      if (dashRes.success) setDashboardData(dashRes.data);
-      if (ordersRes.success) setOrders(ordersRes.data || []);
-      if (productsRes.success) {
-        // filter by this farmer
-        const farmerProds = productsRes.data?.filter(p =>
-          (p.farmerId?._id || p.farmerId)?.toString() === user?._id?.toString()
-        ) || [];
-        setProducts(farmerProds);
+      if (dashRes.success) {
+        setDashboardData({
+          ...dashRes.data,
+          asOfDate: new Date().toISOString().slice(0, 10),
+        });
       }
+      if (ordersRes.success) setOrders(ordersRes.data || []);
+      if (productsRes.success) setProducts(productsRes.data || []);
     } catch (err) {
       console.error('Failed to load farmer dashboard:', err);
     } finally {
@@ -301,6 +297,12 @@ export default function FarmerDashboard({ onNavigate }) {
         </div>
       )}
 
+      <FarmerSalesChart
+        sales={dashboardData?.monthlySales || []}
+        endDate={dashboardData?.asOfDate}
+        loading={loading}
+      />
+
       {/* Tabs */}
       <div style={{
         display: 'flex',
@@ -349,17 +351,23 @@ export default function FarmerDashboard({ onNavigate }) {
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#f5f4ee', borderBottom: '1px solid #ebe7dc', color: '#52635a' }}>
-                  <th style={{ padding: '14px 20px', fontWeight: 700 }}>Produce</th>
-                  <th style={{ padding: '14px 20px', fontWeight: 700 }}>Category</th>
-                  <th style={{ padding: '14px 20px', fontWeight: 700 }}>Price</th>
-                  <th style={{ padding: '14px 20px', fontWeight: 700 }}>Stock Qty</th>
-                  <th style={{ padding: '14px 20px', fontWeight: 700 }}>Freshness</th>
-                  <th style={{ padding: '14px 20px', fontWeight: 700 }}>Status</th>
-                  <th style={{ padding: '14px 20px', fontWeight: 700, textAlign: 'right' }}>Actions</th>
+                  <th scope="col" style={{ padding: '14px 20px', fontWeight: 700 }}>Produce</th>
+                  <th scope="col" style={{ padding: '14px 20px', fontWeight: 700 }}>Category</th>
+                  <th scope="col" style={{ padding: '14px 20px', fontWeight: 700 }}>Price</th>
+                  <th scope="col" style={{ padding: '14px 20px', fontWeight: 700 }}>Stock Qty</th>
+                  <th scope="col" style={{ padding: '14px 20px', fontWeight: 700 }}>Freshness</th>
+                  <th scope="col" style={{ padding: '14px 20px', fontWeight: 700 }}>Status</th>
+                  <th scope="col" style={{ padding: '14px 20px', fontWeight: 700, textAlign: 'right' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {products.length === 0 ? (
+                {loading ? (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: 'center', padding: '40px', color: '#7e9187' }}>
+                      Loading your produce listings...
+                    </td>
+                  </tr>
+                ) : products.length === 0 ? (
                   <tr>
                     <td colSpan={7} style={{ textAlign: 'center', padding: '40px', color: '#7e9187' }}>
                       No listings registered under your farmer account. Click "+ Add Produce Listing" to begin selling!
@@ -387,7 +395,7 @@ export default function FarmerDashboard({ onNavigate }) {
                           fontWeight: 700,
                           color: prod.stockQuantity <= 15 ? '#ef4444' : '#081c15'
                         }}>
-                          {prod.stockQuantity} {prod.unit}s
+                          {prod.stockQuantity} {prod.unit === 'bunch' ? 'bunches' : prod.unit === 'lb' ? 'lbs' : `${prod.unit}s`}
                         </span>
                       </td>
                       <td style={{ padding: '14px 20px', textTransform: 'capitalize' }}>
@@ -404,6 +412,7 @@ export default function FarmerDashboard({ onNavigate }) {
                             onClick={() => handleOpenEdit(prod)}
                             style={{ padding: '6px', color: '#E3266F' }}
                             title="Edit"
+                            aria-label={`Edit ${prod.name}`}
                           >
                             <Edit size={16} />
                           </button>
@@ -411,6 +420,7 @@ export default function FarmerDashboard({ onNavigate }) {
                             onClick={() => handleDeleteProduct(prod._id)}
                             style={{ padding: '6px', color: '#ef4444' }}
                             title="Delete"
+                            aria-label={`Delete ${prod.name}`}
                           >
                             <Trash2 size={16} />
                           </button>
