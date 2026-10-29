@@ -772,7 +772,7 @@ class LocalStore {
       result = result.filter((p) => p.price <= params.maxPrice!);
     }
 
-    // Distance calculation & filter if user coordinates provided
+    // Distance calculation and filtering when user coordinates are provided.
     if (params.userLat !== undefined && params.userLng !== undefined) {
       result = result.map((p) => ({
         ...p,
@@ -784,8 +784,15 @@ class LocalStore {
         ),
       })) as any;
 
-      if (params.maxDistanceMiles && params.maxDistanceMiles > 0) {
-        result = result.filter((p: any) => p.distanceMiles <= params.maxDistanceMiles);
+      const maxDistanceMiles = params.maxDistanceMiles;
+
+      if (
+        maxDistanceMiles !== undefined &&
+        maxDistanceMiles > 0
+      ) {
+        result = result.filter(
+          (p: any) => p.distanceMiles <= maxDistanceMiles
+        );
       }
     }
 
@@ -980,13 +987,18 @@ class LocalStore {
     const orders = this.orders.filter((o) => o.farmerId === farmerId);
     const totalRev = orders.reduce((sum, o) => sum + o.total, 0);
 
+    
     return {
       stats: {
         totalProducts: products.length,
         activeProducts: products.filter((p) => p.availability).length,
-        lowStockProducts: products.filter((p) => p.stockQuantity <= p.lowStockThreshold).length,
+        lowStockProducts: products.filter(
+          (p) => p.stockQuantity <= p.lowStockThreshold
+        ).length,
         totalOrders: orders.length,
-        pendingOrders: orders.filter((o) => o.status === 'PENDING' || o.status === 'CONFIRMED').length,
+        pendingOrders: orders.filter(
+          (o) => o.status === 'PENDING' || o.status === 'CONFIRMED'
+        ).length,
         totalRevenue: Math.round(totalRev * 100) / 100,
         totalSold: products.reduce((sum, p) => sum + p.soldCount, 0),
       },
@@ -1003,11 +1015,13 @@ class LocalStore {
         .slice(0, 5),
     };
   }
-
   public getFarmLocations() {
     return this.farmerProfiles.map((fp) => {
       const user = this.users.find((u) => u._id === fp.userId);
-      const farmProducts = this.products.filter((p) => p.farmerId === fp.userId);
+      const farmProducts = this.products.filter(
+        (p) => p.farmerId === fp.userId
+      );
+
       return {
         _id: fp._id,
         farmerId: fp.userId,
