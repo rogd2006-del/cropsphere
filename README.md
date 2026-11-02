@@ -158,7 +158,7 @@ cropsphere/
 
 ## ☁️ Deploy to Render and Vercel
 
-Deploy the Express API to **Render** and the React/Vite frontend to **Vercel**. MongoDB Atlas remains the database. A Render Blueprint is included in [`render.yaml`](./render.yaml), and Vercel's SPA rewrite is in [`client/vercel.json`](./client/vercel.json).
+Deploy both the Express API and React/Vite frontend as services in one **Vercel** project, or deploy the API to **Render** and the frontend to Vercel separately. MongoDB Atlas remains the database. The Render Blueprint is in [`render.yaml`](./render.yaml), and the Vercel multi-service routing is configured in [`vercel.json`](./vercel.json).
 
 ### 1. Prepare MongoDB Atlas
 
@@ -175,7 +175,16 @@ Deploy the Express API to **Render** and the React/Vite frontend to **Vercel**. 
 
 The Blueprint builds with `npm ci && npm run build --workspace=@farmdirect/server` and starts with `npm run start --workspace=@farmdirect/server`. Render supplies the port automatically. Its free plan may spin down when idle, so the first request after inactivity can be slow.
 
-### 3. Deploy the frontend to Vercel
+### 3. Deploy with Vercel services
+
+1. In Vercel, import the repository and keep the project's **Root Directory** at the repository root (`.`), not `client`. The root [`vercel.json`](./vercel.json) defines the `client` Vite service and the `server` Express service. Setting the project root to `client` can make npm look for the workspace manifest outside Vercel's checked-out project (for example, `/vercel/package.json`).
+2. Vercel routes `/api/*` to the Express service and all other paths to the client service. The client already uses relative `/api` requests, so it needs no `VITE_API_BASE_URL` override; remove any old `VITE_API_BASE_URL` setting from this Vercel project.
+3. Configure the API's production environment variables in Vercel, including `CLIENT_URL` (the deployed Vercel origin), `MONGODB_URI`, `JWT_SECRET`, `COOKIE_SECRET`, and the Razorpay test credentials. Keep secrets out of the client build and never use `VITE_` variables for secrets.
+4. Deploy and verify `https://<your-vercel-domain>/api/health`, then test sign-in, product browsing, and Razorpay test checkout.
+
+The client calls the API through the public `/api/*` rewrite, and neither service makes a server-side call to the other. Therefore this configuration does not add a service binding. Both services receive public traffic only through their respective rewrite paths.
+
+### 4. Deploy the frontend to Vercel with a Render API
 
 1. In Vercel, import the same GitHub repository.
 2. Set **Root Directory** to `client` and select Vite if prompted. The build command is `npm run build`; the output directory is `dist`.
@@ -185,12 +194,12 @@ The Blueprint builds with `npm ci && npm run build --workspace=@farmdirect/serve
    https://<render-service>.onrender.com/api
    ```
 
-4. Deploy. Vercel uses `client/vercel.json` to send client-side routes back to `index.html`.
+4. Deploy the frontend.
 5. Copy the deployed Vercel origin (for example `https://cropsphere.vercel.app`) and set it as `CLIENT_URL` in Render. Redeploy the API after changing the value.
 
 `VITE_API_BASE_URL` is public and embedded in the frontend build; never put secrets in `VITE_` variables. If Clerk is enabled, configure its frontend publishable key in Vercel and its server-side secret in Render, and add your Vercel domain to Clerk's allowed origins.
 
-### 4. Verify production
+### 5. Verify production
 
 - Test account registration/login, product browsing, and cart behavior.
 - Complete a Razorpay test-mode payment and confirm the order is stored as paid.
