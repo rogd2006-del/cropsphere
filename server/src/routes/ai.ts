@@ -22,7 +22,10 @@ router.post('/ask', async (req: Request, res: Response) => {
     const answer = await askGemini(prompt, productContext ? `Available fresh products: ${productContext}` : '');
     res.json({ success: true, answer });
   } catch (err: any) {
-    res.status(500).json({ success: false, message: err.message || 'AI request failed' });
+    res.status(502).json({
+      success: false,
+      message: err instanceof Error ? err.message : 'The AI assistant is temporarily unavailable. Please try again later.',
+    });
   }
 });
 

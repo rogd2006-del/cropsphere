@@ -211,7 +211,7 @@ async function seed() {
         total: subtotal + deliveryFee,
         status,
         paymentStatus: status === 'CANCELLED' ? 'REFUNDED' : 'PAID',
-        paymentMethod: 'DEMO_PAYMENT',
+        paymentMethod: 'SEED_DATA',
         paymentReference: `DEMO-SEED-${i}`,
         deliveryMethod: i % 2 === 0 ? 'PICKUP' : 'DELIVERY',
         deliveryAddress: i % 2 !== 0 ? {

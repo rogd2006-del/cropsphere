@@ -101,7 +101,7 @@ export default function AIAssistantWidget() {
         ...prev,
         {
           role: 'assistant',
-          text: '⚠️ Unable to reach the AI service right now. This could be a temporary network issue.\n\nClick the **retry button** below or try again in a moment.',
+          text: `⚠️ ${err.message || 'Unable to reach the AI service right now. This could be a temporary network issue.'}\n\nClick the **retry button** below or try again in a moment.`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           isError: true
         }

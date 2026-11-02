@@ -1,12 +1,21 @@
 import { Router, Response } from 'express';
 import mongoose from 'mongoose';
 import { authenticate, authorize, AuthRequest } from '../middleware/auth';
-import { Order, OrderStatus } from '../models/Order';
-import { Cart } from '../models/Cart';
+import { Order, OrderStatus, IOrder } from '../models/Order';
+import { Cart, ICartItem } from '../models/Cart';
 import { Product } from '../models/Product';
 import { AppError } from '../middleware/errorHandler';
 import { publishEvent } from '../services/queueService';
-import { createPaymentIntent, processPayment } from '../services/paymentService';
+import {
+  captureRazorpayPayment,
+  createRazorpayOrder,
+  fetchRazorpayOrder,
+  fetchRazorpayPayment,
+  getRazorpayKeyId,
+  refundRazorpayPayment,
+  verifyRazorpaySignature,
+} from '../services/paymentService';
+import { logger } from '../config/logger';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
@@ -17,21 +26,104 @@ function generateOrderNumber(): string {
   return `FD-${ts}-${rand}`;
 }
 
-// POST /api/orders — Place order (checkout)
-router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, res: Response, next) => {
-  const session = await mongoose.startSession();
-  let transactionStarted = false;
-  try {
-    const { deliveryMethod, deliveryAddress, notes, idempotencyKey } = req.body;
-    const userId = req.user!._id;
+const toPaise = (amount: number) => Math.round(amount * 100);
 
-    // Idempotency check
-    const iKey = idempotencyKey || uuidv4();
-    const existing = await Order.findOne({ idempotencyKey: iKey });
-    if (existing) {
-      res.json({ success: true, data: existing, message: 'Order already placed (idempotent)' });
-      return;
+function calculateCartTotals(items: { priceSnapshot: number; quantity: number }[]) {
+  const subtotalPaise = items.reduce(
+    (sum, item) => sum + toPaise(item.priceSnapshot) * item.quantity,
+    0,
+  );
+  const deliveryFeePaise = subtotalPaise === 0 || subtotalPaise > 3500 ? 0 : 499;
+  const taxPaise = Math.round(subtotalPaise * 0.05);
+  return {
+    subtotalPaise,
+    deliveryFeePaise,
+    taxPaise,
+    totalPaise: subtotalPaise + deliveryFeePaise + taxPaise,
+  };
+}
+
+function groupItemsByFarmer(items: ICartItem[]) {
+  const groups = new Map<string, ICartItem[]>();
+  for (const item of items) {
+    const farmerId = item.farmerIdSnapshot.toString();
+    const group = groups.get(farmerId);
+    if (group) group.push(item);
+    else groups.set(farmerId, [item]);
+  }
+  return groups;
+}
+
+// POST /api/orders/payment-order — Create a Razorpay order for the current cart.
+router.post('/payment-order', authenticate, authorize('CONSUMER'), async (req: AuthRequest, res: Response, next) => {
+  try {
+    const { deliveryMethod } = req.body;
+    if (!['PICKUP', 'DELIVERY'].includes(deliveryMethod)) {
+      throw new AppError('Delivery method must be PICKUP or DELIVERY', 400);
     }
+
+    const userId = req.user!._id;
+    const cart = await Cart.findOne({ userId });
+    if (!cart || cart.items.length === 0) throw new AppError('Cart is empty', 400);
+
+    for (const item of cart.items) {
+      const product = await Product.findById(item.productId);
+      if (!product || !product.availability) {
+        throw new AppError(`Product "${item.nameSnapshot}" is no longer available`, 400);
+      }
+      if (product.stockQuantity < item.quantity) {
+        throw new AppError(`Only ${product.stockQuantity} units of "${item.nameSnapshot}" available`, 400);
+      }
+    }
+
+    const quote = calculateCartTotals(cart.items);
+    if (quote.totalPaise < 100) {
+      throw new AppError('The payment total must be at least ₹1.00', 400);
+    }
+
+    const keyId = getRazorpayKeyId();
+    const gatewayOrder = await createRazorpayOrder(quote.totalPaise, uuidv4(), {
+      consumerId: userId.toString(),
+      deliveryMethod,
+    });
+
+    res.status(201).json({
+      success: true,
+      data: {
+        keyId,
+        orderId: gatewayOrder.id,
+        amount: gatewayOrder.amount,
+        currency: gatewayOrder.currency,
+        mode: keyId.startsWith('rzp_test_') ? 'test' : 'live',
+        quote: {
+          subtotal: quote.subtotalPaise / 100,
+          deliveryFee: quote.deliveryFeePaise / 100,
+          tax: quote.taxPaise / 100,
+          total: quote.totalPaise / 100,
+        },
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/orders — Verify Razorpay payment and place the order.
+router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, res: Response, next) => {
+  let session: mongoose.ClientSession | null = null;
+  let transactionStarted = false;
+  let capturedPaymentId: string | null = null;
+  let capturedPaymentAmount = 0;
+  try {
+    const {
+      deliveryMethod,
+      deliveryAddress,
+      notes,
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature,
+    } = req.body;
+    const userId = req.user!._id;
 
     if (!['PICKUP', 'DELIVERY'].includes(deliveryMethod)) {
       throw new AppError('Delivery method must be PICKUP or DELIVERY', 400);
@@ -39,24 +131,91 @@ router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, r
     if (deliveryMethod === 'DELIVERY' && !deliveryAddress?.line1) {
       throw new AppError('Delivery address required for delivery orders', 400);
     }
+    if (
+      typeof razorpayOrderId !== 'string' ||
+      typeof razorpayPaymentId !== 'string' ||
+      typeof razorpaySignature !== 'string'
+    ) {
+      throw new AppError('Razorpay payment details are required', 400);
+    }
+
+    const existingOrders = await Order.find({
+      consumerId: userId,
+      paymentReference: razorpayPaymentId,
+    });
+    if (existingOrders.length) {
+      res.json({ success: true, data: existingOrders, message: 'Order already placed' });
+      return;
+    }
+
+    if (!verifyRazorpaySignature(razorpayOrderId, razorpayPaymentId, razorpaySignature)) {
+      throw new AppError('Razorpay payment signature verification failed', 400);
+    }
+
+    const [gatewayOrder, payment] = await Promise.all([
+      fetchRazorpayOrder(razorpayOrderId),
+      fetchRazorpayPayment(razorpayPaymentId),
+    ]);
+
+    if (gatewayOrder.notes?.consumerId !== userId.toString()) {
+      throw new AppError('This Razorpay order does not belong to the signed-in user', 403);
+    }
+    if (gatewayOrder.notes?.deliveryMethod !== deliveryMethod) {
+      throw new AppError('Checkout details changed. Please start checkout again.', 400);
+    }
+    if (payment.order_id !== razorpayOrderId) {
+      throw new AppError('Razorpay payment does not match the checkout order', 400);
+    }
+    if (gatewayOrder.currency !== 'INR' || payment.currency !== 'INR') {
+      throw new AppError('Razorpay returned an unexpected payment currency', 400);
+    }
+    if (payment.status === 'captured' || payment.captured) {
+      capturedPaymentId = payment.id;
+      capturedPaymentAmount = payment.amount;
+    }
 
     const cart = await Cart.findOne({ userId });
     if (!cart || cart.items.length === 0) throw new AppError('Cart is empty', 400);
-
-    // Group by farmer (each farmer gets a separate order)
-    const farmerGroups = new Map<string, typeof cart.items>();
-    for (const item of cart.items) {
-      const rawFid = item.farmerIdSnapshot as any;
-      const fid = (rawFid?._id || rawFid)?.toString() || '';
-      if (!farmerGroups.has(fid)) farmerGroups.set(fid, []);
-      farmerGroups.get(fid)!.push(item);
+    const quote = calculateCartTotals(cart.items);
+    if (
+      gatewayOrder.amount !== quote.totalPaise ||
+      payment.amount !== quote.totalPaise
+    ) {
+      throw new AppError('The cart total changed during checkout. Please review your cart and try again.', 409);
     }
 
+    if (payment.status === 'authorized') {
+      try {
+        const captured = await captureRazorpayPayment(payment.id, payment.amount);
+        if (captured.status !== 'captured' && !captured.captured) {
+          throw new AppError('Razorpay did not confirm payment capture', 402);
+        }
+        capturedPaymentId = captured.id;
+        capturedPaymentAmount = captured.amount;
+      } catch (error) {
+        if (!capturedPaymentId) {
+          const currentPayment = await fetchRazorpayPayment(payment.id);
+          if (currentPayment.status === 'captured' || currentPayment.captured) {
+            capturedPaymentId = currentPayment.id;
+            capturedPaymentAmount = currentPayment.amount;
+          }
+        }
+        throw error;
+      }
+    } else if (payment.status !== 'captured' && !payment.captured) {
+      throw new AppError('Razorpay payment has not been authorized', 402);
+    }
+
+    const farmerGroups = groupItemsByFarmer(cart.items);
+    const farmerEntries = Array.from(farmerGroups.entries());
+    const orders: IOrder[] = [];
+    let remainingTaxPaise = quote.taxPaise;
+
+    session = await mongoose.startSession();
     session.startTransaction();
     transactionStarted = true;
-    const orders: any[] = [];
 
-    for (const [farmerId, items] of farmerGroups) {
+    for (const [index, [farmerId, items]] of farmerEntries.entries()) {
       // Validate and lock stock
       for (const item of items) {
         const product = await Product.findById(item.productId).session(session);
@@ -90,14 +249,20 @@ router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, r
         subtotal: item.priceSnapshot * item.quantity,
       }));
 
-      const subtotal = orderItems.reduce((s, i) => s + i.subtotal, 0);
-      const deliveryFee = deliveryMethod === 'DELIVERY' ? 5.00 : 0;
-      const total = subtotal + deliveryFee;
+      const groupSubtotalPaise = items.reduce(
+        (sum, item) => sum + toPaise(item.priceSnapshot) * item.quantity,
+        0,
+      );
+      const taxPaise = index === farmerEntries.length - 1
+        ? remainingTaxPaise
+        : Math.round(quote.taxPaise * groupSubtotalPaise / quote.subtotalPaise);
+      remainingTaxPaise -= taxPaise;
+      const deliveryFeePaise = index === 0 ? quote.deliveryFeePaise : 0;
+      const subtotal = groupSubtotalPaise / 100;
+      const deliveryFee = deliveryFeePaise / 100;
+      const tax = taxPaise / 100;
+      const total = (groupSubtotalPaise + deliveryFeePaise + taxPaise) / 100;
       const orderNumber = generateOrderNumber();
-
-      // Create payment intent
-      const paymentIntent = await createPaymentIntent(total, 'INR', { orderNumber });
-      const paymentResult = await processPayment(paymentIntent.reference, total);
 
       const order = new Order({
         orderNumber,
@@ -106,48 +271,50 @@ router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, r
         items: orderItems,
         subtotal,
         deliveryFee,
+        tax,
         total,
         status: 'PENDING',
-        paymentStatus: paymentResult.status,
-        paymentMethod: 'DEMO_PAYMENT',
-        paymentReference: paymentIntent.reference,
+        paymentStatus: 'PENDING',
+        paymentMethod: 'RAZORPAY',
+        paymentReference: razorpayPaymentId,
         deliveryMethod,
         deliveryAddress: deliveryMethod === 'DELIVERY' ? deliveryAddress : undefined,
         notes,
-        statusHistory: [{ status: 'PENDING', timestamp: new Date(), note: 'Order placed' }],
-        idempotencyKey: iKey,
+        statusHistory: [{ status: 'PENDING', timestamp: new Date(), note: 'Razorpay payment captured; order placed' }],
+        idempotencyKey: `${razorpayOrderId}:${farmerId}`,
       });
-
-      if (paymentResult.status === 'FAILED') {
-        // Revert stock
-        for (const item of items) {
-          await Product.findByIdAndUpdate(
-            item.productId,
-            { $inc: { stockQuantity: item.quantity, soldCount: -item.quantity } },
-            { session }
-          );
-        }
-        throw new AppError(`Payment failed: ${paymentResult.message}`, 402);
-      }
-
       await order.save({ session });
       orders.push(order);
+    }
 
-      // Publish FaaS event
+    if (orders.length && capturedPaymentId) {
+      for (const order of orders) {
+        order.paymentStatus = 'PAID';
+        await order.save({ session });
+      }
+    } else {
+      throw new AppError('Razorpay payment capture could not be confirmed', 402);
+    }
+
+    // Clear cart
+    await Cart.findOneAndUpdate({ userId }, { items: [] }, { session });
+    await session.commitTransaction();
+    transactionStarted = false;
+    capturedPaymentId = null;
+
+    for (const order of orders) {
       await publishEvent({
         type: 'ORDER_PLACED',
         payload: {
           orderId: order._id.toString(),
-          orderNumber,
+          orderNumber: order.orderNumber,
           consumerId: userId.toString(),
-          farmerId,
-          total,
+          farmerId: order.farmerId.toString(),
+          total: order.total,
         },
         idempotencyKey: `order-placed-${order._id}`,
       });
-
-      // Check inventory after order
-      for (const item of items) {
+      for (const item of order.items) {
         await publishEvent({
           type: 'INVENTORY_CHANGED',
           payload: { productId: item.productId.toString() },
@@ -156,20 +323,35 @@ router.post('/', authenticate, authorize('CONSUMER'), async (req: AuthRequest, r
       }
     }
 
-    // Clear cart
-    await Cart.findOneAndUpdate({ userId }, { items: [] }, { session });
-    await session.commitTransaction();
-
     res.status(201).json({
       success: true,
       data: orders,
       message: `${orders.length} order(s) placed successfully`,
     });
   } catch (err) {
-    if (transactionStarted) await session.abortTransaction();
+    if (transactionStarted && session) {
+      try {
+        await session.abortTransaction();
+      } catch (abortError) {
+        logger.error('Failed to abort order transaction after checkout error', abortError);
+      }
+    }
+    if (capturedPaymentId) {
+      try {
+        await refundRazorpayPayment(capturedPaymentId, capturedPaymentAmount);
+        logger.warn(`Refunded Razorpay payment ${capturedPaymentId} after order creation failed`);
+      } catch (refundError) {
+        logger.error(`Razorpay payment ${capturedPaymentId} could not be refunded after order creation failed`, refundError);
+        next(new AppError(
+          `Payment was captured but the order could not be completed. Contact support with payment reference ${capturedPaymentId}.`,
+          502,
+        ));
+        return;
+      }
+    }
     next(err);
   } finally {
-    session.endSession();
+    await session?.endSession();
   }
 });
 

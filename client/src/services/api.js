@@ -2,7 +2,7 @@
  * FarmDirect Cloud — API Client Service
  */
 
-const API_BASE = '/api';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
 
 export const getAuthToken = () => localStorage.getItem('farmdirect_token');
 export const setAuthToken = (token) => {
@@ -89,6 +89,7 @@ export const api = {
     return apiRequest(`/orders?${query}`);
   },
   getOrderById: (id) => apiRequest(`/orders/${id}`),
+  createRazorpayOrder: (checkoutData) => apiRequest('/orders/payment-order', { method: 'POST', body: checkoutData }),
   createOrder: (orderData) => apiRequest('/orders', { method: 'POST', body: orderData }),
   updateOrderStatus: (id, status, notes) => apiRequest(`/orders/${id}/status`, { method: 'PUT', body: { status, notes } }),
   cancelOrder: (id, reason) => apiRequest(`/orders/${id}/cancel`, { method: 'POST', body: { reason } }),

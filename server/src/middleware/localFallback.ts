@@ -3,7 +3,8 @@
  * 
  * When MongoDB Atlas is unavailable (IP not whitelisted, network issues, etc.),
  * this middleware intercepts API requests and serves data from the in-memory
- * localStore — giving a fully interactive demo experience without any database.
+ * localStore — keeping browsing available without a database. Checkout remains
+ * disabled because orders and real payment state must be stored durably.
  */
 
 import { Router, Request, Response } from 'express';
@@ -35,10 +36,10 @@ function getUserFromToken(req: Request) {
   }
 }
 
-// ─── Guard: Only intercept when DB is NOT connected ──────────────────────────
+// ─── Guard: Only intercept in non-production when DB is disconnected ─────────
 router.use((req, res, next) => {
-  if (isDBConnected()) {
-    return next('router'); // Skip entire fallback router, use real routes
+  if (process.env.NODE_ENV === 'production' || isDBConnected()) {
+    return next('router');
   }
   next();
 });
@@ -386,6 +387,15 @@ router.delete('/cart', (req: Request, res: Response) => {
 });
 
 // ─── Orders ──────────────────────────────────────────────────────────────────
+router.post('/orders/payment-order', (req: Request, res: Response) => {
+  const user = getUserFromToken(req);
+  if (!user) return res.status(401).json({ success: false, message: 'Not authenticated' });
+  res.status(503).json({
+    success: false,
+    message: 'Checkout requires a connected database. Please try again when the service is available.',
+  });
+});
+
 router.get('/orders', (req: Request, res: Response) => {
   const user = getUserFromToken(req);
   if (!user) return res.status(401).json({ success: false, message: 'Not authenticated' });
@@ -404,53 +414,9 @@ router.get('/orders/:id', (req: Request, res: Response) => {
 router.post('/orders', (req: Request, res: Response) => {
   const user = getUserFromToken(req);
   if (!user) return res.status(401).json({ success: false, message: 'Not authenticated' });
-  const cart = localStore.getCart(user._id);
-  if (cart.items.length === 0) {
-    return res.status(400).json({ success: false, message: 'Cart is empty' });
-  }
-
-  // Group by farmer
-  const farmerGroups = new Map<string, typeof cart.items>();
-  cart.items.forEach(item => {
-    const fid = item.product.farmerId;
-    if (!farmerGroups.has(fid)) farmerGroups.set(fid, []);
-    farmerGroups.get(fid)!.push(item);
-  });
-
-  const createdOrders: any[] = [];
-  for (const [farmerId, items] of farmerGroups) {
-    const subtotal = Math.round(items.reduce((s, i) => s + i.product.price * i.quantity, 0) * 100) / 100;
-    const deliveryFee = req.body.fulfillmentType === 'PICKUP' ? 0 : 4.99;
-    const platformFee = Math.round(subtotal * 0.05 * 100) / 100;
-    const total = Math.round((subtotal + deliveryFee + platformFee) * 100) / 100;
-
-    const order = localStore.createOrder(user._id, {
-      farmerId,
-      farmName: items[0].product.farmName,
-      items: items.map(i => ({
-        productId: i.productId,
-        name: i.product.name,
-        price: i.product.price,
-        quantity: i.quantity,
-        unit: i.product.unit,
-        total: Math.round(i.product.price * i.quantity * 100) / 100,
-      })),
-      subtotal,
-      deliveryFee,
-      platformFee,
-      total,
-      fulfillmentType: req.body.fulfillmentType || 'DELIVERY',
-      shippingAddress: req.body.shippingAddress,
-      pickupTime: req.body.pickupTime,
-      notes: req.body.notes,
-    });
-    createdOrders.push(order);
-  }
-
-  res.status(201).json({
-    success: true,
-    data: createdOrders.length === 1 ? createdOrders[0] : createdOrders,
-    message: `🌿 Order placed successfully! ${createdOrders.length} order(s) created.`,
+  res.status(503).json({
+    success: false,
+    message: 'Checkout requires a connected database and verified Razorpay payment. Please try again when the service is available.',
   });
 });
 
@@ -542,7 +508,10 @@ router.post('/ai/ask', async (req: Request, res: Response) => {
     const answer = await askGemini(prompt, `Available fresh products: ${sampleProducts}`);
     res.json({ success: true, answer });
   } catch (err: any) {
-    res.status(500).json({ success: false, message: err.message || 'AI request failed' });
+    res.status(502).json({
+      success: false,
+      message: err instanceof Error ? err.message : 'The AI assistant is temporarily unavailable. Please try again later.',
+    });
   }
 });
 

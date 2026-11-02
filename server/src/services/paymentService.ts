@@ -1,76 +1,119 @@
-/**
- * Payment Service — Demo payment provider abstraction.
- * 
- * IMPORTANT: This is a DEMO payment implementation. No real money is transferred.
- * Replace the 'demo' provider with Stripe, PayPal, or another gateway
- * by setting PAYMENT_PROVIDER env var and implementing the interface below.
- */
-
-import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+import { createHmac, timingSafeEqual } from 'crypto';
+import { AppError } from '../middleware/errorHandler';
 import { logger } from '../config/logger';
 
-export interface PaymentIntent {
-  reference: string;
-  status: 'PENDING' | 'PAID' | 'FAILED';
-  provider: string;
+const RAZORPAY_API_URL = 'https://api.razorpay.com/v1';
+
+interface RazorpayCredentials {
+  keyId: string;
+  keySecret: string;
+}
+
+export interface RazorpayOrder {
+  id: string;
   amount: number;
   currency: string;
-  metadata?: Record<string, unknown>;
+  status: string;
+  notes?: Record<string, string>;
 }
 
-export interface PaymentResult {
-  success: boolean;
-  reference: string;
-  status: 'PAID' | 'FAILED';
-  message: string;
+export interface RazorpayPayment {
+  id: string;
+  order_id: string;
+  amount: number;
+  currency: string;
+  status: string;
+  captured: boolean;
 }
 
-export async function createPaymentIntent(
-  amount: number,
-  currency: string = 'INR',
-  metadata?: Record<string, unknown>,
-): Promise<PaymentIntent> {
-  const provider = process.env.PAYMENT_PROVIDER || 'demo';
-  
-  logger.info(`[DEMO PAYMENT] Creating payment intent for ${currency} ${amount.toFixed(2)}`);
-  
-  if (provider === 'demo') {
-    return {
-      reference: `DEMO-${uuidv4().toUpperCase().slice(0, 8)}`,
-      status: 'PENDING',
-      provider: 'demo',
-      amount,
-      currency,
-      metadata,
-    };
+function getCredentials(): RazorpayCredentials {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) {
+    throw new AppError('Razorpay is not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET.', 503);
   }
-  
-  // TODO: Implement Stripe: await stripe.paymentIntents.create(...)
-  throw new Error(`Payment provider "${provider}" not implemented`);
+  return { keyId, keySecret };
 }
 
-export async function processPayment(
-  reference: string,
-  amount: number,
-): Promise<PaymentResult> {
-  const provider = process.env.PAYMENT_PROVIDER || 'demo';
-  
-  if (provider === 'demo') {
-    // Simulate async payment processing with ~95% success rate for demo
-    await new Promise(resolve => setTimeout(resolve, 200));
-    const success = Math.random() > 0.05;
-    
-    logger.info(`[DEMO PAYMENT] Payment ${reference}: ${success ? 'PAID' : 'FAILED'} — $${amount.toFixed(2)}`);
-    
-    return {
-      success,
-      reference,
-      status: success ? 'PAID' : 'FAILED',
-      message: success 
-        ? `Demo payment of $${amount.toFixed(2)} processed successfully.`
-        : 'Demo payment declined (simulated failure).',
-    };
+export function getRazorpayKeyId(): string {
+  return getCredentials().keyId;
+}
+
+async function razorpayRequest<T>(
+  method: 'GET' | 'POST',
+  path: string,
+  data?: Record<string, unknown>,
+): Promise<T> {
+  const { keyId, keySecret } = getCredentials();
+  try {
+    const response = await axios.request<T>({
+      method,
+      url: `${RAZORPAY_API_URL}${path}`,
+      data,
+      auth: { username: keyId, password: keySecret },
+      timeout: 15000,
+    });
+    return response.data;
+  } catch (error) {
+    const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+    logger.error(`Razorpay API request failed${status ? ` with status ${status}` : ''}`);
+    const description = axios.isAxiosError(error)
+      ? error.response?.data?.error?.description
+      : undefined;
+    throw new AppError(
+      typeof description === 'string' ? `Razorpay: ${description}` : 'Razorpay payment service is unavailable.',
+      502,
+    );
   }
-  
-  throw new Error(`Payment provider "${provider}" not implemented`);
+}
+
+export async function createRazorpayOrder(
+  amount: number,
+  receipt: string,
+  notes: Record<string, string>,
+): Promise<RazorpayOrder> {
+  return razorpayRequest<RazorpayOrder>('POST', '/orders', {
+    amount,
+    currency: 'INR',
+    receipt,
+    notes,
+  });
+}
+
+export function verifyRazorpaySignature(orderId: string, paymentId: string, signature: string): boolean {
+  const { keySecret } = getCredentials();
+  if (!/^[a-f0-9]{64}$/i.test(signature)) return false;
+
+  const expected = createHmac('sha256', keySecret)
+    .update(`${orderId}|${paymentId}`)
+    .digest();
+  const received = Buffer.from(signature, 'hex');
+  return received.length === expected.length && timingSafeEqual(received, expected);
+}
+
+export async function fetchRazorpayOrder(orderId: string): Promise<RazorpayOrder> {
+  return razorpayRequest<RazorpayOrder>('GET', `/orders/${encodeURIComponent(orderId)}`);
+}
+
+export async function fetchRazorpayPayment(paymentId: string): Promise<RazorpayPayment> {
+  return razorpayRequest<RazorpayPayment>('GET', `/payments/${encodeURIComponent(paymentId)}`);
+}
+
+export async function captureRazorpayPayment(
+  paymentId: string,
+  amount: number,
+): Promise<RazorpayPayment> {
+  return razorpayRequest<RazorpayPayment>(
+    'POST',
+    `/payments/${encodeURIComponent(paymentId)}/capture`,
+    { amount, currency: 'INR' },
+  );
+}
+
+export async function refundRazorpayPayment(
+  paymentId: string,
+  amount: number,
+): Promise<void> {
+  await razorpayRequest('POST', `/payments/${encodeURIComponent(paymentId)}/refund`, { amount });
 }

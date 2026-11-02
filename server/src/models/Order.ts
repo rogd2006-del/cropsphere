@@ -26,6 +26,7 @@ export interface IOrder extends Document {
   items: IOrderItem[];
   subtotal: number;
   deliveryFee: number;
+  tax: number;
   total: number;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
@@ -67,6 +68,7 @@ const OrderSchema = new Schema<IOrder>({
   items: [OrderItemSchema],
   subtotal: { type: Number, required: true },
   deliveryFee: { type: Number, default: 0 },
+  tax: { type: Number, default: 0 },
   total: { type: Number, required: true },
   status: {
     type: String,
@@ -78,7 +80,7 @@ const OrderSchema = new Schema<IOrder>({
     enum: ['PENDING', 'PAID', 'REFUNDED', 'FAILED'],
     default: 'PENDING',
   },
-  paymentMethod: { type: String, default: 'DEMO_PAYMENT' },
+  paymentMethod: { type: String, default: 'RAZORPAY' },
   paymentReference: { type: String },
   deliveryMethod: { type: String, enum: ['PICKUP', 'DELIVERY'], required: true },
   deliveryAddress: {

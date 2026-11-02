@@ -16,6 +16,18 @@ import {
   ArrowRight
 } from 'lucide-react';
 
+function loadRazorpayCheckout() {
+  if (window.Razorpay) return Promise.resolve();
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Could not load Razorpay Checkout. Check your connection and try again.'));
+    document.body.appendChild(script);
+  });
+}
+
 export default function CartDrawer({ onOrderSuccess, onNavigate }) {
   const {
     items,
@@ -29,8 +41,9 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
     updateQuantity,
     removeFromCart,
     clearCart,
+    fetchServerCart,
   } = useCart();
-  const { user, quickLogin } = useAuth();
+  const { user, logout } = useAuth();
 
   const [deliveryMethod, setDeliveryMethod] = useState('DELIVERY');
   const [addressLine, setAddressLine] = useState('42 Harvest Way, Apt 3B');
@@ -41,8 +54,26 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [successOrder, setSuccessOrder] = useState(null);
+  const [gatewayMode, setGatewayMode] = useState(null);
+  const [pendingPayment, setPendingPayment] = useState(null);
 
   if (!cartDrawerOpen) return null;
+
+  const verifyPaymentAndPlaceOrder = async ({ orderPayload, payment }) => {
+    const res = await api.createOrder({
+      ...orderPayload,
+      razorpayOrderId: payment.razorpay_order_id,
+      razorpayPaymentId: payment.razorpay_payment_id,
+      razorpaySignature: payment.razorpay_signature,
+    });
+    if (!res.success) throw new Error(res.message || 'Could not verify the Razorpay payment.');
+
+    const placedOrder = Array.isArray(res.data) ? res.data[0] : res.data;
+    setSuccessOrder(placedOrder || { orderNumber: 'FD-CONFIRMED' });
+    setPendingPayment(null);
+    clearCart();
+    if (onOrderSuccess) onOrderSuccess(res.data);
+  };
 
   const handleCheckout = async () => {
     if (!user) {
@@ -58,7 +89,6 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
     setError(null);
 
     try {
-      const idempotencyKey = `fd-order-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
       const orderPayload = {
         deliveryMethod,
         deliveryAddress: deliveryMethod === 'DELIVERY' ? {
@@ -69,16 +99,57 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
           country: 'US',
         } : undefined,
         notes,
-        idempotencyKey,
       };
 
-      const res = await api.createOrder(orderPayload);
-      if (res.success) {
-        setSuccessOrder(res.data?.[0] || res.data || { orderNumber: 'FD-CONFIRMED' });
-        clearCart();
-        if (onOrderSuccess) onOrderSuccess(res.data);
-      } else {
-        throw new Error(res.message || 'Failed to place order');
+      if (pendingPayment) {
+        await verifyPaymentAndPlaceOrder(pendingPayment);
+        return;
+      }
+
+      const paymentOrderResponse = await api.createRazorpayOrder({ deliveryMethod });
+      if (!paymentOrderResponse.success || !paymentOrderResponse.data) {
+        throw new Error(paymentOrderResponse.message || 'Could not start Razorpay Checkout.');
+      }
+      const paymentOrder = paymentOrderResponse.data;
+      setGatewayMode(paymentOrder.mode);
+
+      if (paymentOrder.amount !== Math.round(total * 100)) {
+        await fetchServerCart();
+        throw new Error('Cart prices changed. Review the refreshed cart total and try checkout again.');
+      }
+
+      await loadRazorpayCheckout();
+      const payment = await new Promise((resolve, reject) => {
+        const checkout = new window.Razorpay({
+          key: paymentOrder.keyId,
+          amount: paymentOrder.amount,
+          currency: paymentOrder.currency,
+          name: 'FarmDirect',
+          description: 'Farm marketplace order',
+          order_id: paymentOrder.orderId,
+          prefill: {
+            name: user.name,
+            email: user.email,
+            contact: user.phone || '',
+          },
+          theme: { color: '#E3266F' },
+          modal: {
+            ondismiss: () => reject(new Error('Payment cancelled. No order was placed.')),
+          },
+          handler: resolve,
+        });
+        checkout.on('payment.failed', response => {
+          reject(new Error(response.error?.description || 'Razorpay could not complete the payment.'));
+        });
+        checkout.open();
+      });
+
+      const verification = { orderPayload, payment };
+      setPendingPayment(verification);
+      try {
+        await verifyPaymentAndPlaceOrder(verification);
+      } catch {
+        setError('Razorpay returned a payment response, but order confirmation is pending. Retry confirmation below; do not pay again.');
       }
     } catch (err) {
       setError(err.message || 'Checkout failed. Please check stock and try again.');
@@ -180,7 +251,7 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
                 Order Confirmed!
               </h3>
               <p style={{ fontSize: '14px', color: '#52635a', marginBottom: '16px' }}>
-                Thank you! Your order was processed through our Cloud PaaS API and published to the FaaS OrderEventProcessor.
+                Thank you! Your payment was confirmed by Razorpay and your order has been placed.
               </p>
               <div style={{
                 background: '#fbfbf9',
@@ -194,8 +265,8 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
                 <div style={{ fontWeight: 700, fontSize: '15px', color: '#E3266F' }}>
                   {successOrder.orderNumber || 'FD-ORDER-SAVED'}
                 </div>
-                <div style={{ fontSize: '12px', color: '#52635a', marginTop: '6px' }}>
-                  Simulated Payment: <strong style={{ color: '#0369a1' }}>Demo Provider (Idempotent OK)</strong>
+                <div style={{ fontSize: '12px', color: '#52635a', marginTop: '6px', overflowWrap: 'anywhere' }}>
+                  Razorpay payment: <strong style={{ color: '#0369a1' }}>{successOrder.paymentReference || 'Verified'}</strong>
                 </div>
               </div>
               <button
@@ -428,37 +499,18 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
                 }}>
                   <div style={{ fontWeight: 700, marginBottom: '4px' }}>Sign in required to checkout</div>
                   <p style={{ marginBottom: '10px' }}>
-                    You can use the 1-click Consumer Demo login below to test the checkout immediately.
+                    Sign in with your consumer account to continue checkout.
                   </p>
                   <button
-                    onClick={() => quickLogin('CONSUMER')}
+                    onClick={() => {
+                      setCartDrawerOpen(false);
+                      onNavigate?.('login');
+                    }}
                     className="btn btn-primary btn-sm"
                     style={{ width: '100%' }}
                   >
-                    1-Click Login as Consumer Alice
+                    Sign in to continue
                   </button>
-                  {onNavigate && (
-                    <button
-                      onClick={() => {
-                        setCartDrawerOpen(false);
-                        onNavigate('login');
-                      }}
-                      style={{
-                        width: '100%',
-                        background: 'transparent',
-                        border: 'none',
-                        color: 'var(--raspberry-primary)',
-                        fontSize: '12px',
-                        fontWeight: 700,
-                        marginTop: '8px',
-                        cursor: 'pointer',
-                        textAlign: 'center',
-                        textDecoration: 'underline'
-                      }}
-                    >
-                      Or sign in with another account
-                    </button>
-                  )}
                 </div>
               ) : user.role !== 'CONSUMER' ? (
                 <div style={{
@@ -469,9 +521,13 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
                   fontSize: '13px',
                   color: '#991b1b'
                 }}>
-                  You are signed in as <strong>{user.role}</strong>. Only <strong>CONSUMER</strong> accounts can place orders.
+                  You are signed in as <strong>{user.role}</strong>. Sign in with a consumer account to place an order.
                   <button
-                    onClick={() => quickLogin('CONSUMER')}
+                    onClick={async () => {
+                      await logout();
+                      setCartDrawerOpen(false);
+                      onNavigate?.('login');
+                    }}
                     style={{
                       display: 'block',
                       marginTop: '8px',
@@ -481,7 +537,7 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
                       cursor: 'pointer'
                     }}
                   >
-                    Switch to Consumer Alice Demo
+                    Sign in with a different account
                   </button>
                 </div>
               ) : null}
@@ -504,7 +560,7 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
           )}
         </div>
 
-        {/* Footer with totals & simulated checkout */}
+        {/* Footer with totals and secure checkout */}
         {!successOrder && items.length > 0 && (
           <div style={{
             padding: '20px 24px',
@@ -551,7 +607,7 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
               gap: '6px',
               marginBottom: '12px'
             }}>
-              <CreditCard size={14} /> Simulated Payment Gateway — Safe Demo Mode
+              <CreditCard size={14} /> Secure checkout by Razorpay{gatewayMode === 'test' ? ' · Test mode' : ''}
             </div>
 
             <button
@@ -564,7 +620,11 @@ export default function CartDrawer({ onOrderSuccess, onNavigate }) {
                 cursor: submitting ? 'not-allowed' : 'pointer'
               }}
             >
-              {submitting ? 'Processing Order...' : `Complete Order — ₹${total.toFixed(2)}`}
+              {submitting
+                ? (pendingPayment ? 'Confirming Payment...' : 'Opening Razorpay...')
+                : pendingPayment
+                  ? 'Retry Order Confirmation'
+                  : `Pay with Razorpay — ₹${total.toFixed(2)}`}
               {!submitting && <ArrowRight size={16} />}
             </button>
           </div>

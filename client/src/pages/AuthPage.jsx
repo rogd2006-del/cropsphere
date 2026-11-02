@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth, DEMO_ACCOUNTS } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import {
   Sprout,
   User,
@@ -8,11 +8,9 @@ import {
   Eye,
   EyeOff,
   ShoppingBag,
-  Sparkles,
   ArrowRight,
   ArrowLeft,
   CheckCircle2,
-  ShieldCheck,
   Building,
   Phone,
   MapPin,
@@ -23,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export default function AuthPage({ initialMode = 'login', onNavigate }) {
-  const { user, login, register, quickLogin, clerkBridge } = useAuth();
+  const { user, login, register, clerkBridge } = useAuth();
 
   const [mode, setMode] = useState(initialMode); // 'login' | 'register'
   const [role, setRole] = useState('CONSUMER'); // 'CONSUMER' | 'FARMER'
@@ -58,38 +56,6 @@ export default function AuthPage({ initialMode = 'login', onNavigate }) {
     setMode(newMode);
     setError(null);
     setSuccessMsg(null);
-  };
-
-  // Quick fill demo accounts
-  const handleFastFill = (roleKey) => {
-    const acc = DEMO_ACCOUNTS[roleKey];
-    if (acc) {
-      setEmail(acc.email);
-      setPassword(acc.password || 'Password123!');
-      setMode('login');
-      setError(null);
-    }
-  };
-
-  // Direct 1-click login with demo role
-  const handleInstantDemoLogin = async (roleKey) => {
-    setSubmitting(true);
-    setError(null);
-    try {
-      const res = await quickLogin(roleKey);
-      if (res && res.success) {
-        setSuccessMsg(`Logged in successfully as ${roleKey}! Redirecting...`);
-        setTimeout(() => {
-          if (roleKey === 'FARMER') onNavigate('farmer-dashboard');
-          else if (roleKey === 'ADMIN') onNavigate('admin-dashboard');
-          else onNavigate('marketplace');
-        }, 600);
-      }
-    } catch (err) {
-      setError(err.message || 'Quick login failed.');
-    } finally {
-      setSubmitting(false);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -234,7 +200,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate }) {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))'
       }}>
-        {/* Left Side: Brand Story & Demo Personas */}
+        {/* Left Side: Brand Story */}
         <div style={{
           background: 'linear-gradient(145deg, #0d3b24 0%, #061c12 100%)',
           color: '#ffffff',
@@ -385,104 +351,6 @@ export default function AuthPage({ initialMode = 'login', onNavigate }) {
             </div>
           </div>
 
-          {/* Academic Evaluation Fast Access */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.08)',
-            border: '1px solid rgba(255, 255, 255, 0.14)',
-            borderRadius: '16px',
-            padding: '18px',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: '10px'
-            }}>
-              <span style={{
-                fontSize: '12px',
-                fontWeight: 700,
-                color: 'var(--raspberry-light)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}>
-                <Sparkles size={14} /> 1-Click Evaluation Personas
-              </span>
-              <span style={{ fontSize: '11px', color: '#a7dfc2' }}>Instant Demo Login</span>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-              <button
-                type="button"
-                disabled={submitting}
-                onClick={() => handleInstantDemoLogin('ADMIN')}
-                style={{
-                  background: 'rgba(255,255,255,0.12)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  borderRadius: '8px',
-                  padding: '8px 4px',
-                  color: '#ffffff',
-                  fontSize: '11.5px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  textAlign: 'center',
-                  transition: 'background 0.15s ease'
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(227, 38, 111, 0.35)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}
-              >
-                <div style={{ fontWeight: 700, color: 'var(--raspberry-light)' }}>Admin</div>
-                <div style={{ fontSize: '10px', opacity: 0.8 }}>System Ops</div>
-              </button>
-
-              <button
-                type="button"
-                disabled={submitting}
-                onClick={() => handleInstantDemoLogin('FARMER')}
-                style={{
-                  background: 'rgba(255,255,255,0.12)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  borderRadius: '8px',
-                  padding: '8px 4px',
-                  color: '#ffffff',
-                  fontSize: '11.5px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  textAlign: 'center',
-                  transition: 'background 0.15s ease'
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(227, 38, 111, 0.35)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}
-              >
-                <div style={{ fontWeight: 700, color: '#F7A8C6' }}>Farmer Mary</div>
-                <div style={{ fontSize: '10px', opacity: 0.8 }}>Producer Studio</div>
-              </button>
-
-              <button
-                type="button"
-                disabled={submitting}
-                onClick={() => handleInstantDemoLogin('CONSUMER')}
-                style={{
-                  background: 'rgba(255,255,255,0.12)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  borderRadius: '8px',
-                  padding: '8px 4px',
-                  color: '#ffffff',
-                  fontSize: '11.5px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  textAlign: 'center',
-                  transition: 'background 0.15s ease'
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(227, 38, 111, 0.35)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}
-              >
-                <div style={{ fontWeight: 700, color: '#FCE4EE' }}>Consumer Alice</div>
-                <div style={{ fontSize: '10px', opacity: 0.8 }}>Marketplace</div>
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Right Side: Interactive Login / Register Form */}
@@ -768,24 +636,6 @@ export default function AuthPage({ initialMode = 'login', onNavigate }) {
                 <label style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--amazon-900)' }}>
                   Password <span style={{ color: 'var(--raspberry-primary)' }}>*</span>
                 </label>
-                {mode === 'login' && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      alert('For the evaluation demo, you can reset or fast-fill credentials using the demo buttons on the left.');
-                    }}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      fontSize: '12px',
-                      color: 'var(--raspberry-primary)',
-                      cursor: 'pointer',
-                      fontWeight: 600
-                    }}
-                  >
-                    Forgot password?
-                  </button>
-                )}
               </div>
               <div style={{ position: 'relative' }}>
                 <Lock size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#7e9187' }} />
@@ -903,69 +753,6 @@ export default function AuthPage({ initialMode = 'login', onNavigate }) {
               )}
             </button>
           </form>
-
-          {/* Fast Fill Demo Buttons on the Form */}
-          {mode === 'login' && (
-            <div style={{
-              marginTop: '22px',
-              paddingTop: '18px',
-              borderTop: '1px solid var(--cannoli-cream-dark)'
-            }}>
-              <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px', textAlign: 'center' }}>
-                Fill Form with Test Credentials:
-              </div>
-              <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <button
-                  type="button"
-                  onClick={() => handleFastFill('ADMIN')}
-                  style={{
-                    background: 'var(--earth-50)',
-                    border: '1px solid var(--cannoli-cream-dark)',
-                    borderRadius: '8px',
-                    padding: '5px 10px',
-                    fontSize: '11.5px',
-                    fontWeight: 600,
-                    color: 'var(--amazon-900)',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Admin
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleFastFill('FARMER')}
-                  style={{
-                    background: 'var(--earth-50)',
-                    border: '1px solid var(--cannoli-cream-dark)',
-                    borderRadius: '8px',
-                    padding: '5px 10px',
-                    fontSize: '11.5px',
-                    fontWeight: 600,
-                    color: 'var(--amazon-900)',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Farmer (Mary)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleFastFill('CONSUMER')}
-                  style={{
-                    background: 'var(--earth-50)',
-                    border: '1px solid var(--cannoli-cream-dark)',
-                    borderRadius: '8px',
-                    padding: '5px 10px',
-                    fontSize: '11.5px',
-                    fontWeight: 600,
-                    color: 'var(--amazon-900)',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Consumer (Alice)
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* Footer Switcher */}
           <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-muted)' }}>

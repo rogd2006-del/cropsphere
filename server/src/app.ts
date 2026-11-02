@@ -35,11 +35,13 @@ app.use(helmet({
 app.use(mongoSanitize());
 
 // CORS
-const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:5173',
-  'http://localhost:3000',
-  'http://localhost:4173',
-];
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [process.env.CLIENT_URL].filter((origin): origin is string => Boolean(origin))
+  : [
+    process.env.CLIENT_URL || 'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:4173',
+  ];
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) return callback(null, true);

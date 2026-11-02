@@ -16,7 +16,7 @@
   - ☁️ **Cloud Diagnostics Dashboard**: Live telemetry monitoring DBaaS (MongoDB Atlas), object storage providers (Azure Blob / AWS S3 / local), API endpoints, and uptime metrics.
 - **🤖 Built-in Gemini AI Assistant**: Context-aware assistant providing culinary storage tips, seasonal recipe ideas, and agricultural guidance.
 - **🔐 Flexible Authentication**:
-  - **1-Click Academic Evaluation Personas**: Instant login as **Mary Okonkwo (Farmer)**, **Alice Chen (Consumer)**, or **System Admin**.
+  - **Account-Based Sign-In**: Register as a consumer or farmer and sign in with your own credentials.
   - **Clerk OAuth & JWT**: Secure email and social sign-in integration.
 - **🎨 Curated Design Palette**: Built with modern typography, smooth crossfading carousels, and a cohesive palette:
   - **Pantone Raspberry Pink** (`#E3266F`): Primary interactive accent
@@ -131,7 +131,13 @@ cropsphere/
 
    # Google Gemini AI (Optional for AI Assistant)
    GEMINI_API_KEY=your_gemini_api_key_here
+
+   # Razorpay test credentials (required for checkout)
+   RAZORPAY_KEY_ID=rzp_test_your_key_id
+   RAZORPAY_KEY_SECRET=your_razorpay_test_key_secret
    ```
+
+   Obtain test API keys from the Razorpay Dashboard. Keep the key secret only in the server-side root `.env`; never add it to client environment files or commit it. The checkout uses Razorpay test mode with no live charges when configured with an `rzp_test_` key.
 
 4. **Seed Demo Data** *(Optional)*:
    Populate the database with sample farmers, verified produce, and initial orders:
@@ -150,15 +156,54 @@ cropsphere/
 
 ---
 
-## 🔑 Demo Personas for Quick Evaluation
+## ☁️ Deploy to Render and Vercel
 
-The application includes an instant **1-Click Persona Switcher** in the top navigation banner for rapid evaluation without manual signup:
+Deploy the Express API to **Render** and the React/Vite frontend to **Vercel**. MongoDB Atlas remains the database. A Render Blueprint is included in [`render.yaml`](./render.yaml), and Vercel's SPA rewrite is in [`client/vercel.json`](./client/vercel.json).
 
-| Persona | Role | Features Accessible |
-| :--- | :--- | :--- |
-| **Mary Okonkwo** | Farmer | Inventory management, harvest updates, order dispatching, revenue in ₹ |
-| **Alice Chen** | Consumer | Produce browsing, cart management, simulated checkout, order tracking |
-| **System Admin** | Admin | User status toggling, platform-wide metrics, system audit logs |
+### 1. Prepare MongoDB Atlas
+
+- Create a production database and a dedicated database user.
+- For a Render free web service, its outbound IP addresses are not fixed. For a quick deployment, Atlas may require allowing access from anywhere (`0.0.0.0/0`); restrict access to fixed IPs or use private networking for production where available.
+- Copy the Atlas connection string. Keep it private.
+
+### 2. Deploy the API to Render
+
+1. Push the repository to GitHub.
+2. In Render, choose **New → Blueprint**, connect the repository, and deploy using `render.yaml` at the repository root.
+3. Add the values for the Blueprint's `CLIENT_URL`, `MONGODB_URI`, `RAZORPAY_KEY_ID`, and `RAZORPAY_KEY_SECRET` environment variables in the Render dashboard. Use Razorpay **test** keys first. The Blueprint generates `JWT_SECRET` and `COOKIE_SECRET`.
+4. Wait for the service to become healthy. Its API URL will look like `https://cropsphere-api.onrender.com`; verify `https://<render-service>.onrender.com/api/health`.
+
+The Blueprint builds with `npm ci && npm run build --workspace=@farmdirect/server` and starts with `npm run start --workspace=@farmdirect/server`. Render supplies the port automatically. Its free plan may spin down when idle, so the first request after inactivity can be slow.
+
+### 3. Deploy the frontend to Vercel
+
+1. In Vercel, import the same GitHub repository.
+2. Set **Root Directory** to `client` and select Vite if prompted. The build command is `npm run build`; the output directory is `dist`.
+3. Add the environment variable `VITE_API_BASE_URL` for **Production** and **Preview**:
+
+   ```text
+   https://<render-service>.onrender.com/api
+   ```
+
+4. Deploy. Vercel uses `client/vercel.json` to send client-side routes back to `index.html`.
+5. Copy the deployed Vercel origin (for example `https://cropsphere.vercel.app`) and set it as `CLIENT_URL` in Render. Redeploy the API after changing the value.
+
+`VITE_API_BASE_URL` is public and embedded in the frontend build; never put secrets in `VITE_` variables. If Clerk is enabled, configure its frontend publishable key in Vercel and its server-side secret in Render, and add your Vercel domain to Clerk's allowed origins.
+
+### 4. Verify production
+
+- Test account registration/login, product browsing, and cart behavior.
+- Complete a Razorpay test-mode payment and confirm the order is stored as paid.
+- Check Render logs and browser developer tools if API calls fail.
+- Switch to Razorpay live keys only after test checkout succeeds and your Razorpay account is activated for live payments.
+
+Production mode disables the in-memory local fallback. The API requires MongoDB to be available for database-backed routes and checkout.
+
+---
+
+## 🔑 Sign In and Create an Account
+
+Sign in with the email address and password for an account already registered in the database, or choose **Create an account** on the sign-in page to register as a consumer or farmer. Admin accounts must be provisioned by an administrator; they cannot be created through public registration.
 
 ---
 
