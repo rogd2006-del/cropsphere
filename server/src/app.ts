@@ -42,13 +42,22 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
     'http://localhost:3000',
     'http://localhost:4173',
   ];
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-    callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true,
-}));
+app.use((req, res, next) => {
+  const origin = req.get('origin');
+  const host = req.get('host');
+  const protocol = req.get('x-forwarded-proto')?.split(',')[0].trim() || req.protocol;
+  const isSameOrigin = Boolean(origin && host && origin === `${protocol}://${host}`);
+  const corsOptions = {
+    origin: isSameOrigin
+      ? true
+      : (requestOrigin: string | undefined, callback: (error: Error | null, allowed?: boolean) => void) => {
+        if (!requestOrigin || allowedOrigins.includes(requestOrigin)) return callback(null, true);
+        callback(new Error('Not allowed by CORS'));
+      },
+    credentials: true,
+  };
+  cors(corsOptions)(req, res, next);
+});
 
 // Global rate limit
 app.use(rateLimit({
