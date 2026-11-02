@@ -177,7 +177,7 @@ The Blueprint builds with `npm ci && npm run build --workspace=@farmdirect/serve
 
 ### 3. Deploy with Vercel services
 
-1. In Vercel, import the repository and keep the project's **Root Directory** at the repository root (`.`), not `client`. The root [`vercel.json`](./vercel.json) defines the `client` Vite service and the `server` Express service. Setting the project root to `client` can make npm look for the workspace manifest outside Vercel's checked-out project (for example, `/vercel/package.json`).
+1. In Vercel, import the repository and keep the project's **Root Directory** at the repository root (`.`), not `client`. The root [`vercel.json`](./vercel.json) defines the `client` Vite service and the `server` Express service. Each service installs from its own `package.json` to avoid Vercel running `npm install --prefix=..` for a service subdirectory.
 2. Vercel routes `/api/*` to the Express service and all other paths to the client service. The client already uses relative `/api` requests, so it needs no `VITE_API_BASE_URL` override; remove any old `VITE_API_BASE_URL` setting from this Vercel project.
 3. Configure the API's production environment variables in Vercel, including `CLIENT_URL` (the deployed Vercel origin), `MONGODB_URI`, `JWT_SECRET`, `COOKIE_SECRET`, and the Razorpay test credentials. Keep secrets out of the client build and never use `VITE_` variables for secrets.
 4. Deploy and verify `https://<your-vercel-domain>/api/health`, then test sign-in, product browsing, and Razorpay test checkout.
