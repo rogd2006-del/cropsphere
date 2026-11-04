@@ -3,7 +3,7 @@ services:
     name: cropsphere-api
     runtime: node
     plan: free
-    buildCommand: npm ci && npm run build --workspace=@farmdirect/server
+    buildCommand: npm install --include=dev && npm run build --workspace=@farmdirect/server
     startCommand: npm run start --workspace=@farmdirect/server
     healthCheckPath: /api/health
     envVars:
