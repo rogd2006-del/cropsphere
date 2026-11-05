@@ -59,6 +59,12 @@ export default function ProductCard({ product, onSelect }) {
         <img
           src={imageUrl}
           alt={product.name}
+          onError={(e) => {
+            const fallback = FALLBACK_IMAGES[product.category] || FALLBACK_IMAGES.other;
+            if (e.currentTarget.src !== fallback) {
+              e.currentTarget.src = fallback;
+            }
+          }}
           style={{
             width: '100%',
             height: '100%',
